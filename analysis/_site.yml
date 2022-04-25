@@ -1,12 +1,12 @@
 name: diamantopoulou-ctc-circadian
 output_dir: ../docs
 navbar:
-  title: CIRCADIAN-CTC
+  title: CIRCADIAN-CTCs
   left: ~
   right:
   - icon: fa-github
     text: Source code
-    href: https://github.com/TheAcetoLab/diamantopoulou-ctc-circadian
+    href: https://github.com/TheAcetoLab/diamantopoulou-ctc-dynamics
 output:
   workflowr::wflow_html:
     keep_md: yes
