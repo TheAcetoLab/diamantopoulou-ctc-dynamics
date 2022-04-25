@@ -1,4 +1,4 @@
-# diamantopoulou-ctc-circadian
+# Transcriptomic analysis of CTC at different timepoints
 
 A [workflowr][] project.
 
