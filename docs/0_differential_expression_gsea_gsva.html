@@ -1,0 +1,1372 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+
+<meta charset="utf-8" />
+<meta name="generator" content="pandoc" />
+<meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
+
+
+<meta name="author" content="Francesc Castro-Giner" />
+
+<meta name="date" content="2022-02-23" />
+
+<title>Run differential gene expression and gene-sets analysis</title>
+
+<script src="site_libs/header-attrs-2.11/header-attrs.js"></script>
+<script src="site_libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<link href="site_libs/bootstrap-3.3.5/css/journal.min.css" rel="stylesheet" />
+<script src="site_libs/bootstrap-3.3.5/js/bootstrap.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/html5shiv.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/respond.min.js"></script>
+<style>h1 {font-size: 34px;}
+       h1.title {font-size: 38px;}
+       h2 {font-size: 30px;}
+       h3 {font-size: 24px;}
+       h4 {font-size: 18px;}
+       h5 {font-size: 16px;}
+       h6 {font-size: 12px;}
+       code {color: inherit; background-color: rgba(0, 0, 0, 0.04);}
+       pre:not([class]) { background-color: white }</style>
+<script src="site_libs/jqueryui-1.11.4/jquery-ui.min.js"></script>
+<link href="site_libs/tocify-1.9.1/jquery.tocify.css" rel="stylesheet" />
+<script src="site_libs/tocify-1.9.1/jquery.tocify.js"></script>
+<script src="site_libs/navigation-1.1/tabsets.js"></script>
+<script src="site_libs/navigation-1.1/codefolding.js"></script>
+<link href="site_libs/font-awesome-5.1.0/css/all.css" rel="stylesheet" />
+<link href="site_libs/font-awesome-5.1.0/css/v4-shims.css" rel="stylesheet" />
+
+<link rel="icon" href="https://github.com/workflowr/workflowr-assets/raw/master/img/reproducible.png">
+<!-- Add a small amount of space between sections. -->
+<style type="text/css">
+div.section {
+  padding-top: 12px;
+}
+</style>
+
+
+
+<style type="text/css">
+  code{white-space: pre-wrap;}
+  span.smallcaps{font-variant: small-caps;}
+  span.underline{text-decoration: underline;}
+  div.column{display: inline-block; vertical-align: top; width: 50%;}
+  div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+  ul.task-list{list-style: none;}
+    </style>
+
+
+<style type="text/css">
+  code {
+    white-space: pre;
+  }
+  .sourceCode {
+    overflow: visible;
+  }
+</style>
+<style type="text/css" data-origin="pandoc">
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+    color: #aaaaaa;
+  }
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code span.at { color: #7d9029; } /* Attribute */
+code span.bn { color: #40a070; } /* BaseN */
+code span.bu { } /* BuiltIn */
+code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code span.ch { color: #4070a0; } /* Char */
+code span.cn { color: #880000; } /* Constant */
+code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code span.dt { color: #902000; } /* DataType */
+code span.dv { color: #40a070; } /* DecVal */
+code span.er { color: #ff0000; font-weight: bold; } /* Error */
+code span.ex { } /* Extension */
+code span.fl { color: #40a070; } /* Float */
+code span.fu { color: #06287e; } /* Function */
+code span.im { } /* Import */
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code span.op { color: #666666; } /* Operator */
+code span.ot { color: #007020; } /* Other */
+code span.pp { color: #bc7a00; } /* Preprocessor */
+code span.sc { color: #4070a0; } /* SpecialChar */
+code span.ss { color: #bb6688; } /* SpecialString */
+code span.st { color: #4070a0; } /* String */
+code span.va { color: #19177c; } /* Variable */
+code span.vs { color: #4070a0; } /* VerbatimString */
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+
+.sourceCode .row {
+  width: 100%;
+}
+.sourceCode {
+  overflow-x: auto;
+}
+.code-folding-btn {
+  margin-right: -30px;
+}
+</style>
+<script>
+// apply pandoc div.sourceCode style to pre.sourceCode instead
+(function() {
+  var sheets = document.styleSheets;
+  for (var i = 0; i < sheets.length; i++) {
+    if (sheets[i].ownerNode.dataset["origin"] !== "pandoc") continue;
+    try { var rules = sheets[i].cssRules; } catch (e) { continue; }
+    for (var j = 0; j < rules.length; j++) {
+      var rule = rules[j];
+      // check if there is a div.sourceCode rule
+      if (rule.type !== rule.STYLE_RULE || rule.selectorText !== "div.sourceCode") continue;
+      var style = rule.style.cssText;
+      // check if color or background-color is set
+      if (rule.style.color === '' && rule.style.backgroundColor === '') continue;
+      // replace div.sourceCode by a pre.sourceCode rule
+      sheets[i].deleteRule(j);
+      sheets[i].insertRule('pre.sourceCode{' + style + '}', j);
+    }
+  }
+})();
+</script>
+
+
+
+
+<link rel="stylesheet" href="style.css" type="text/css" />
+
+
+
+<style type = "text/css">
+.main-container {
+  max-width: 940px;
+  margin-left: auto;
+  margin-right: auto;
+}
+img {
+  max-width:100%;
+}
+.tabbed-pane {
+  padding-top: 12px;
+}
+.html-widget {
+  margin-bottom: 20px;
+}
+button.code-folding-btn:focus {
+  outline: none;
+}
+summary {
+  display: list-item;
+}
+pre code {
+  padding: 0;
+}
+</style>
+
+
+<style type="text/css">
+.dropdown-submenu {
+  position: relative;
+}
+.dropdown-submenu>.dropdown-menu {
+  top: 0;
+  left: 100%;
+  margin-top: -6px;
+  margin-left: -1px;
+  border-radius: 0 6px 6px 6px;
+}
+.dropdown-submenu:hover>.dropdown-menu {
+  display: block;
+}
+.dropdown-submenu>a:after {
+  display: block;
+  content: " ";
+  float: right;
+  width: 0;
+  height: 0;
+  border-color: transparent;
+  border-style: solid;
+  border-width: 5px 0 5px 5px;
+  border-left-color: #cccccc;
+  margin-top: 5px;
+  margin-right: -10px;
+}
+.dropdown-submenu:hover>a:after {
+  border-left-color: #adb5bd;
+}
+.dropdown-submenu.pull-left {
+  float: none;
+}
+.dropdown-submenu.pull-left>.dropdown-menu {
+  left: -100%;
+  margin-left: 10px;
+  border-radius: 6px 0 6px 6px;
+}
+</style>
+
+<script type="text/javascript">
+// manage active state of menu based on current page
+$(document).ready(function () {
+  // active menu anchor
+  href = window.location.pathname
+  href = href.substr(href.lastIndexOf('/') + 1)
+  if (href === "")
+    href = "index.html";
+  var menuAnchor = $('a[href="' + href + '"]');
+
+  // mark it active
+  menuAnchor.tab('show');
+
+  // if it's got a parent navbar menu mark it active as well
+  menuAnchor.closest('li.dropdown').addClass('active');
+
+  // Navbar adjustments
+  var navHeight = $(".navbar").first().height() + 15;
+  var style = document.createElement('style');
+  var pt = "padding-top: " + navHeight + "px; ";
+  var mt = "margin-top: -" + navHeight + "px; ";
+  var css = "";
+  // offset scroll position for anchor links (for fixed navbar)
+  for (var i = 1; i <= 6; i++) {
+    css += ".section h" + i + "{ " + pt + mt + "}\n";
+  }
+  style.innerHTML = "body {" + pt + "padding-bottom: 40px; }\n" + css;
+  document.head.appendChild(style);
+});
+</script>
+
+<!-- tabsets -->
+
+<style type="text/css">
+.tabset-dropdown > .nav-tabs {
+  display: inline-table;
+  max-height: 500px;
+  min-height: 44px;
+  overflow-y: auto;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+}
+
+.tabset-dropdown > .nav-tabs > li.active:before {
+  content: "";
+  font-family: 'Glyphicons Halflings';
+  display: inline-block;
+  padding: 10px;
+  border-right: 1px solid #ddd;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li.active:before {
+  content: "&#xe258;";
+  border: none;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open:before {
+  content: "";
+  font-family: 'Glyphicons Halflings';
+  display: inline-block;
+  padding: 10px;
+  border-right: 1px solid #ddd;
+}
+
+.tabset-dropdown > .nav-tabs > li.active {
+  display: block;
+}
+
+.tabset-dropdown > .nav-tabs > li > a,
+.tabset-dropdown > .nav-tabs > li > a:focus,
+.tabset-dropdown > .nav-tabs > li > a:hover {
+  border: none;
+  display: inline-block;
+  border-radius: 4px;
+  background-color: transparent;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li {
+  display: block;
+  float: none;
+}
+
+.tabset-dropdown > .nav-tabs > li {
+  display: none;
+}
+</style>
+
+<!-- code folding -->
+<style type="text/css">
+.code-folding-btn { margin-bottom: 4px; }
+</style>
+
+
+
+<style type="text/css">
+
+#TOC {
+  margin: 25px 0px 20px 0px;
+}
+@media (max-width: 768px) {
+#TOC {
+  position: relative;
+  width: 100%;
+}
+}
+
+@media print {
+.toc-content {
+  /* see https://github.com/w3c/csswg-drafts/issues/4434 */
+  float: right;
+}
+}
+
+.toc-content {
+  padding-left: 30px;
+  padding-right: 40px;
+}
+
+div.main-container {
+  max-width: 1200px;
+}
+
+div.tocify {
+  width: 20%;
+  max-width: 260px;
+  max-height: 85%;
+}
+
+@media (min-width: 768px) and (max-width: 991px) {
+  div.tocify {
+    width: 25%;
+  }
+}
+
+@media (max-width: 767px) {
+  div.tocify {
+    width: 100%;
+    max-width: none;
+  }
+}
+
+.tocify ul, .tocify li {
+  line-height: 20px;
+}
+
+.tocify-subheader .tocify-item {
+  font-size: 0.90em;
+}
+
+.tocify .list-group-item {
+  border-radius: 0px;
+}
+
+
+</style>
+
+
+
+</head>
+
+<body>
+
+
+<div class="container-fluid main-container">
+
+
+<!-- setup 3col/9col grid for toc_float and main content  -->
+<div class="row">
+<div class="col-xs-12 col-sm-4 col-md-3">
+<div id="TOC" class="tocify">
+</div>
+</div>
+
+<div class="toc-content col-xs-12 col-sm-8 col-md-9">
+
+
+
+
+<div class="navbar navbar-default  navbar-fixed-top" role="navigation">
+  <div class="container">
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar">
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      <a class="navbar-brand" href="index.html">CIRCADIAN-CTCs</a>
+    </div>
+    <div id="navbar" class="navbar-collapse collapse">
+      <ul class="nav navbar-nav">
+        
+      </ul>
+      <ul class="nav navbar-nav navbar-right">
+        <li>
+  <a href="https://github.com/TheAcetoLab/diamantopoulou-ctc-dynamics">
+    <span class="fa fa-github"></span>
+     
+    Source code
+  </a>
+</li>
+      </ul>
+    </div><!--/.nav-collapse -->
+  </div><!--/.container -->
+</div><!--/.navbar -->
+
+<div id="header">
+
+<div class="btn-group pull-right float-right">
+<button type="button" class="btn btn-default btn-xs btn-secondary btn-sm dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><span>Code</span> <span class="caret"></span></button>
+<ul class="dropdown-menu dropdown-menu-right" style="min-width: 50px;">
+<li><a id="rmd-show-all-code" href="#">Show All Code</a></li>
+<li><a id="rmd-hide-all-code" href="#">Hide All Code</a></li>
+</ul>
+</div>
+
+
+
+<h1 class="title toc-ignore">Run differential gene expression and
+gene-sets analysis</h1>
+<h4 class="author">Francesc Castro-Giner</h4>
+<h4 class="date">2022-02-23</h4>
+
+</div>
+
+
+<p>
+<button type="button" class="btn btn-default btn-workflowr btn-workflowr-report" data-toggle="collapse" data-target="#workflowr-report">
+<span class="glyphicon glyphicon-list" aria-hidden="true"></span>
+workflowr <span class="glyphicon glyphicon-ok text-success"
+aria-hidden="true"></span>
+</button>
+</p>
+<div id="workflowr-report" class="collapse">
+<ul class="nav nav-tabs">
+<li class="active">
+<a data-toggle="tab" href="#summary">Summary</a>
+</li>
+<li>
+<a data-toggle="tab" href="#checks"> Checks <span
+class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span>
+</a>
+</li>
+<li>
+<a data-toggle="tab" href="#versions">Past versions</a>
+</li>
+</ul>
+<div class="tab-content">
+<div id="summary" class="tab-pane fade in active">
+<p>
+<strong>Last updated:</strong> 2022-04-26
+</p>
+<p>
+<strong>Checks:</strong> <span
+class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> 7
+<span class="glyphicon glyphicon-exclamation-sign text-danger"
+aria-hidden="true"></span> 0
+</p>
+<p>
+<strong>Knit directory:</strong>
+<code>diamantopoulou-ctc-dynamics/</code> <span
+class="glyphicon glyphicon-question-sign" aria-hidden="true"
+title="This is the local directory in which the code in this file was executed.">
+</span>
+</p>
+<p>
+This reproducible <a href="http://rmarkdown.rstudio.com">R Markdown</a>
+analysis was created with <a
+  href="https://github.com/jdblischak/workflowr">workflowr</a> (version
+1.6.2). The <em>Checks</em> tab describes the reproducibility checks
+that were applied when the results were created. The <em>Past
+versions</em> tab lists the development history.
+</p>
+<hr>
+</div>
+<div id="checks" class="tab-pane fade">
+<div id="workflowr-checks" class="panel-group">
+<div class="panel panel-default">
+<div class="panel-heading">
+<p class="panel-title">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRMarkdownfilestronguptodate">
+<span class="glyphicon glyphicon-ok text-success"
+aria-hidden="true"></span> <strong>R Markdown file:</strong> up-to-date
+</a>
+</p>
+</div>
+<div id="strongRMarkdownfilestronguptodate"
+class="panel-collapse collapse">
+<div class="panel-body">
+<p>Great! Since the R Markdown file has been committed to the Git
+repository, you know the exact version of the code that produced these
+results.</p>
+</div>
+</div>
+</div>
+<div class="panel panel-default">
+<div class="panel-heading">
+<p class="panel-title">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongEnvironmentstrongempty">
+<span class="glyphicon glyphicon-ok text-success"
+aria-hidden="true"></span> <strong>Environment:</strong> empty </a>
+</p>
+</div>
+<div id="strongEnvironmentstrongempty" class="panel-collapse collapse">
+<div class="panel-body">
+<p>Great job! The global environment was empty. Objects defined in the
+global environment can affect the analysis in your R Markdown file in
+unknown ways. For reproduciblity it’s best to always run the code in an
+empty environment.</p>
+</div>
+</div>
+</div>
+<div class="panel panel-default">
+<div class="panel-heading">
+<p class="panel-title">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongSeedstrongcodesetseed20220425code">
+<span class="glyphicon glyphicon-ok text-success"
+aria-hidden="true"></span> <strong>Seed:</strong>
+<code>set.seed(20220425)</code> </a>
+</p>
+</div>
+<div id="strongSeedstrongcodesetseed20220425code"
+class="panel-collapse collapse">
+<div class="panel-body">
+<p>The command <code>set.seed(20220425)</code> was run prior to running
+the code in the R Markdown file. Setting a seed ensures that any results
+that rely on randomness, e.g. subsampling or permutations, are
+reproducible.</p>
+</div>
+</div>
+</div>
+<div class="panel panel-default">
+<div class="panel-heading">
+<p class="panel-title">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongSessioninformationstrongrecorded">
+<span class="glyphicon glyphicon-ok text-success"
+aria-hidden="true"></span> <strong>Session information:</strong>
+recorded </a>
+</p>
+</div>
+<div id="strongSessioninformationstrongrecorded"
+class="panel-collapse collapse">
+<div class="panel-body">
+<p>Great job! Recording the operating system, R version, and package
+versions is critical for reproducibility.</p>
+</div>
+</div>
+</div>
+<div class="panel panel-default">
+<div class="panel-heading">
+<p class="panel-title">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongCachestrongnone">
+<span class="glyphicon glyphicon-ok text-success"
+aria-hidden="true"></span> <strong>Cache:</strong> none </a>
+</p>
+</div>
+<div id="strongCachestrongnone" class="panel-collapse collapse">
+<div class="panel-body">
+<p>Nice! There were no cached chunks for this analysis, so you can be
+confident that you successfully produced the results during this
+run.</p>
+</div>
+</div>
+</div>
+<div class="panel panel-default">
+<div class="panel-heading">
+<p class="panel-title">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongFilepathsstrongrelative">
+<span class="glyphicon glyphicon-ok text-success"
+aria-hidden="true"></span> <strong>File paths:</strong> relative </a>
+</p>
+</div>
+<div id="strongFilepathsstrongrelative" class="panel-collapse collapse">
+<div class="panel-body">
+<p>Great job! Using relative paths to the files within your workflowr
+project makes it easier to run your code on other machines.</p>
+</div>
+</div>
+</div>
+<div class="panel panel-default">
+<div class="panel-heading">
+<p class="panel-title">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRepositoryversionstrongahrefhttpsgithubcomTheAcetoLabdiamantopoulouctcdynamicstree0ded9f5eb929c7853186f31da3ed481e57e151e9targetblank0ded9f5a">
+<span class="glyphicon glyphicon-ok text-success"
+aria-hidden="true"></span> <strong>Repository version:</strong>
+<a href="https://github.com/TheAcetoLab/diamantopoulou-ctc-dynamics/tree/0ded9f5eb929c7853186f31da3ed481e57e151e9" target="_blank">0ded9f5</a>
+</a>
+</p>
+</div>
+<div
+id="strongRepositoryversionstrongahrefhttpsgithubcomTheAcetoLabdiamantopoulouctcdynamicstree0ded9f5eb929c7853186f31da3ed481e57e151e9targetblank0ded9f5a"
+class="panel-collapse collapse">
+<div class="panel-body">
+<p>
+Great! You are using Git for version control. Tracking code development
+and connecting the code version to the results is critical for
+reproducibility.
+</p>
+<p>
+The results in this page were generated with repository version
+<a href="https://github.com/TheAcetoLab/diamantopoulou-ctc-dynamics/tree/0ded9f5eb929c7853186f31da3ed481e57e151e9" target="_blank">0ded9f5</a>.
+See the <em>Past versions</em> tab to see a history of the changes made
+to the R Markdown and HTML files.
+</p>
+<p>
+Note that you need to be careful to ensure that all relevant files for
+the analysis have been committed to Git prior to generating the results
+(you can use <code>wflow_publish</code> or
+<code>wflow_git_commit</code>). workflowr only checks the R Markdown
+file, but you know if there are other scripts or data files that it
+depends on. Below is the status of the Git repository when the results
+were generated:
+</p>
+<pre><code>
+Ignored files:
+    Ignored:    .Rhistory
+    Ignored:    .Rproj.user/
+
+Untracked files:
+    Untracked:  analysis/0_differential_expression_gsea_gsva.md
+    Untracked:  analysis/about.md
+    Untracked:  analysis/br16_dge.md
+    Untracked:  analysis/br16_pca.md
+    Untracked:  analysis/core_gene_sets.md
+    Untracked:  analysis/gsea_across_models.md
+    Untracked:  analysis/index.md
+    Untracked:  analysis/license.md
+    Untracked:  analysis/patients_ctc_counts_distribution.md
+    Untracked:  data/differential_expression/
+    Untracked:  data/patients/
+    Untracked:  data/resources/
+    Untracked:  data/sce/
+
+</code></pre>
+<p>
+Note that any generated files, e.g. HTML, png, CSS, etc., are not
+included in this status report because it is ok for generated content to
+have uncommitted changes.
+</p>
+</div>
+</div>
+</div>
+</div>
+<hr>
+</div>
+<div id="versions" class="tab-pane fade">
+
+<p>
+These are the previous versions of the repository in which changes were
+made to the R Markdown
+(<code>analysis/0_differential_expression_gsea_gsva.Rmd</code>) and HTML
+(<code>docs/0_differential_expression_gsea_gsva.html</code>) files. If
+you’ve configured a remote Git repository (see
+<code>?wflow_git_remote</code>), click on the hyperlinks in the table
+below to view the files as they were in that past version.
+</p>
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+File
+</th>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+<th>
+Message
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+Rmd
+</td>
+<td>
+<a href="https://github.com/TheAcetoLab/diamantopoulou-ctc-dynamics/blob/0ded9f5eb929c7853186f31da3ed481e57e151e9/analysis/0_differential_expression_gsea_gsva.Rmd" target="_blank">0ded9f5</a>
+</td>
+<td>
+fcg-bio
+</td>
+<td>
+2022-04-26
+</td>
+<td>
+added final code
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+<hr>
+</div>
+</div>
+</div>
+<div id="load-libraries-additional-functions-and-data"
+class="section level2">
+<h2>Load libraries, additional functions and data</h2>
+<p>Setup environment</p>
+<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a>knitr<span class="sc">::</span>opts_chunk<span class="sc">$</span><span class="fu">set</span>(<span class="at">results=</span><span class="st">&#39;asis&#39;</span>, <span class="at">echo=</span><span class="cn">TRUE</span>, <span class="at">message=</span><span class="cn">FALSE</span>, <span class="at">warning=</span><span class="cn">FALSE</span>, <span class="at">error=</span><span class="cn">FALSE</span>, <span class="at">fig.align =</span> <span class="st">&#39;center&#39;</span>, <span class="at">fig.width =</span> <span class="fl">3.5</span>, <span class="at">fig.asp =</span> <span class="fl">0.618</span>, <span class="at">dpi =</span> <span class="dv">600</span>, <span class="at">dev =</span> <span class="fu">c</span>(<span class="st">&quot;png&quot;</span>, <span class="st">&quot;pdf&quot;</span>), <span class="at">fig.showtext =</span> <span class="cn">TRUE</span>)</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="fu">options</span>(<span class="at">stringsAsFactors =</span> <span class="cn">FALSE</span>)</span></code></pre></div>
+<p>Load packages</p>
+<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tidyverse)</span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(scater)</span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(scran)</span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(edgeR)</span>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(clusterProfiler)</span>
+<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(GSVA)</span>
+<span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(foreach)</span></code></pre></div>
+<p>Load shared variables</p>
+<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="fu">source</span>(<span class="st">&quot;./configuration/rmarkdown/shared_variables.R&quot;</span>)</span></code></pre></div>
+<p>Load custom functions</p>
+<div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="fu">source</span>(<span class="st">&#39;./code/R-functions/dge_wrappers.r&#39;</span>)</span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a><span class="fu">source</span>(<span class="st">&#39;./code/R-functions/gse_omnibus.r&#39;</span>)</span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a><span class="fu">source</span>(<span class="st">&#39;./code/R-functions/gse_report.r&#39;</span>)</span>
+<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a>clean_msigdb_names <span class="ot">&lt;-</span> <span class="cf">function</span>(x) x <span class="sc">%&gt;%</span> <span class="fu">gsub</span>(<span class="st">&#39;REACTOME_&#39;</span>, <span class="st">&#39;&#39;</span>, .) <span class="sc">%&gt;%</span> <span class="fu">gsub</span>(<span class="st">&#39;WP_&#39;</span>, <span class="st">&#39;&#39;</span>, .) <span class="sc">%&gt;%</span> <span class="fu">gsub</span>(<span class="st">&#39;BIOCARTA_&#39;</span>, <span class="st">&#39;&#39;</span>, .) <span class="sc">%&gt;%</span> <span class="fu">gsub</span>(<span class="st">&#39;KEGG_&#39;</span>, <span class="st">&#39;&#39;</span>, .) <span class="sc">%&gt;%</span> <span class="fu">gsub</span>(<span class="st">&#39;PID_&#39;</span>, <span class="st">&#39;&#39;</span>, .) <span class="sc">%&gt;%</span> <span class="fu">gsub</span>(<span class="st">&#39;GOBP_&#39;</span>, <span class="st">&#39;&#39;</span>, .) <span class="sc">%&gt;%</span> <span class="fu">gsub</span>(<span class="st">&#39;_&#39;</span>, <span class="st">&#39; &#39;</span>, .)</span></code></pre></div>
+<p>Load MSigDB gene sets</p>
+<div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>gmt_files_symbols <span class="ot">&lt;-</span> <span class="fu">list</span>(</span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>  <span class="at">msigdb.c2.cp =</span> <span class="st">&#39;./data/resources/MSigDB/v7.4/c2.cp.v7.4.symbols.gmt&#39;</span>,</span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a>  <span class="at">msigdb.c5.bp =</span> <span class="st">&#39;./data/resources/MSigDB/v7.4/c5.go.bp.v7.4.symbols.gmt&#39;</span></span>
+<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-6"><a href="#cb5-6" aria-hidden="true" tabindex="-1"></a>gmt_files_entrez <span class="ot">&lt;-</span> <span class="fu">list</span>(</span>
+<span id="cb5-7"><a href="#cb5-7" aria-hidden="true" tabindex="-1"></a>  <span class="at">msigdb.c2.cp =</span> <span class="st">&#39;./data/resources/MSigDB/v7.4/c2.cp.v7.4.entrez.gmt&#39;</span>,</span>
+<span id="cb5-8"><a href="#cb5-8" aria-hidden="true" tabindex="-1"></a>  <span class="at">msigdb.c5.bp =</span> <span class="st">&#39;./data/resources/MSigDB/v7.4/c5.go.bp.v7.4.entrez.gmt&#39;</span></span>
+<span id="cb5-9"><a href="#cb5-9" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb5-10"><a href="#cb5-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-11"><a href="#cb5-11" aria-hidden="true" tabindex="-1"></a><span class="co"># combine MSigDB.C2.CP and GO:BP</span></span>
+<span id="cb5-12"><a href="#cb5-12" aria-hidden="true" tabindex="-1"></a>new_file <span class="ot">&lt;-</span> <span class="fu">gsub</span>(<span class="st">&#39;c2.cp&#39;</span>, <span class="st">&#39;c2.cp.c5.bp&#39;</span>, gmt_files_symbols<span class="sc">$</span>msigdb.c2.cp)</span>
+<span id="cb5-13"><a href="#cb5-13" aria-hidden="true" tabindex="-1"></a>cat_cmd <span class="ot">&lt;-</span> <span class="fu">paste</span>(<span class="st">&#39;cat&#39;</span>, gmt_files_symbols<span class="sc">$</span>msigdb.c5.bp,  gmt_files_symbols<span class="sc">$</span>msigdb.c2.cp, <span class="st">&#39;&gt;&#39;</span>,new_file)</span>
+<span id="cb5-14"><a href="#cb5-14" aria-hidden="true" tabindex="-1"></a><span class="fu">system</span>(cat_cmd)</span>
+<span id="cb5-15"><a href="#cb5-15" aria-hidden="true" tabindex="-1"></a>gmt_files_symbols<span class="sc">$</span>msigdb.c2.cp.c5.bp <span class="ot">&lt;-</span> new_file</span>
+<span id="cb5-16"><a href="#cb5-16" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-17"><a href="#cb5-17" aria-hidden="true" tabindex="-1"></a>gmt_sets <span class="ot">&lt;-</span> <span class="fu">lapply</span>(gmt_files_symbols, <span class="cf">function</span>(x) <span class="fu">read.gmt</span>(x) <span class="sc">%&gt;%</span> collect <span class="sc">%&gt;%</span> .[[<span class="st">&#39;term&#39;</span>]] <span class="sc">%&gt;%</span> levels)</span></code></pre></div>
+</div>
+<div id="nsg-cdx-br16-all-samples" class="section level2">
+<h2>NSG-CDX-BR16 : all samples</h2>
+<p>Configuration</p>
+<div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a>use_sce <span class="ot">&lt;-</span> <span class="fu">readRDS</span>(<span class="at">file =</span> <span class="fu">file.path</span>(params<span class="sc">$</span>sce_dir, <span class="st">&#39;sce_br16.rds&#39;</span>))</span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>output_dir <span class="ot">&lt;-</span> <span class="st">&#39;./data/differential_expression/br16&#39;</span></span>
+<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a><span class="cf">if</span>(<span class="sc">!</span><span class="fu">file.exists</span>(output_dir))</span>
+<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">dir.create</span>(output_dir, <span class="at">recursive =</span> <span class="cn">TRUE</span>)</span></code></pre></div>
+<p>Run DGE analysis</p>
+<div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a>dge <span class="ot">&lt;-</span> <span class="fu">edgeR_dge</span>(</span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a>  use_sce,</span>
+<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Desing configuration for differential expression</span></span>
+<span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a>  <span class="at">group_var =</span>  <span class="st">&#39;timepoint&#39;</span>,</span>
+<span id="cb7-5"><a href="#cb7-5" aria-hidden="true" tabindex="-1"></a>  <span class="at">group_sample =</span> <span class="st">&#39;resting&#39;</span>,</span>
+<span id="cb7-6"><a href="#cb7-6" aria-hidden="true" tabindex="-1"></a>  <span class="at">group_ref =</span> <span class="st">&#39;active&#39;</span>,</span>
+<span id="cb7-7"><a href="#cb7-7" aria-hidden="true" tabindex="-1"></a>  <span class="at">numeric_covar =</span> <span class="cn">NULL</span>,</span>
+<span id="cb7-8"><a href="#cb7-8" aria-hidden="true" tabindex="-1"></a>  <span class="at">batch_vars =</span> <span class="cn">NULL</span>,</span>
+<span id="cb7-9"><a href="#cb7-9" aria-hidden="true" tabindex="-1"></a>  <span class="at">design_formula =</span> <span class="st">&quot;~ 0 + timepoint&quot;</span>,</span>
+<span id="cb7-10"><a href="#cb7-10" aria-hidden="true" tabindex="-1"></a>  <span class="at">coef =</span> <span class="st">&#39;last&#39;</span>,</span>
+<span id="cb7-11"><a href="#cb7-11" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Conversion from SingleCellExperiment to DGEList</span></span>
+<span id="cb7-12"><a href="#cb7-12" aria-hidden="true" tabindex="-1"></a>  <span class="at">spike_normalization =</span> <span class="cn">FALSE</span>,</span>
+<span id="cb7-13"><a href="#cb7-13" aria-hidden="true" tabindex="-1"></a>  <span class="at">assay_to_DGEList =</span> <span class="st">&#39;counts&#39;</span>,</span>
+<span id="cb7-14"><a href="#cb7-14" aria-hidden="true" tabindex="-1"></a>  <span class="at">assay_to_row_filter =</span> <span class="st">&quot;counts&quot;</span>,</span>
+<span id="cb7-15"><a href="#cb7-15" aria-hidden="true" tabindex="-1"></a>  <span class="at">use_colData =</span> <span class="cn">NULL</span>,</span>
+<span id="cb7-16"><a href="#cb7-16" aria-hidden="true" tabindex="-1"></a>  <span class="at">use_rowData =</span> <span class="cn">NULL</span>,</span>
+<span id="cb7-17"><a href="#cb7-17" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Feature filtering parameters</span></span>
+<span id="cb7-18"><a href="#cb7-18" aria-hidden="true" tabindex="-1"></a>  <span class="at">use_filterByExpr =</span> <span class="cn">TRUE</span>,</span>
+<span id="cb7-19"><a href="#cb7-19" aria-hidden="true" tabindex="-1"></a>  <span class="at">min_counts =</span> params<span class="sc">$</span>min_counts,</span>
+<span id="cb7-20"><a href="#cb7-20" aria-hidden="true" tabindex="-1"></a>  <span class="at">min_present_prop =</span> params<span class="sc">$</span>min_present_prop,</span>
+<span id="cb7-21"><a href="#cb7-21" aria-hidden="true" tabindex="-1"></a>  <span class="co"># EdgeR workflow configuration</span></span>
+<span id="cb7-22"><a href="#cb7-22" aria-hidden="true" tabindex="-1"></a>  <span class="at">run_calcNormFactors =</span> <span class="st">&#39;TMM&#39;</span>,</span>
+<span id="cb7-23"><a href="#cb7-23" aria-hidden="true" tabindex="-1"></a>  <span class="at">estimateDisp_robust =</span> <span class="cn">FALSE</span>,</span>
+<span id="cb7-24"><a href="#cb7-24" aria-hidden="true" tabindex="-1"></a>  <span class="at">estimateDisp_trend.method =</span> <span class="st">&quot;locfit&quot;</span>,</span>
+<span id="cb7-25"><a href="#cb7-25" aria-hidden="true" tabindex="-1"></a>  <span class="at">glmQLFit_robust =</span> <span class="cn">TRUE</span>,</span>
+<span id="cb7-26"><a href="#cb7-26" aria-hidden="true" tabindex="-1"></a>  <span class="at">glm_approach =</span> <span class="st">&quot;QLF&quot;</span>,</span>
+<span id="cb7-27"><a href="#cb7-27" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Output configuration</span></span>
+<span id="cb7-28"><a href="#cb7-28" aria-hidden="true" tabindex="-1"></a>  <span class="at">adjust_method =</span> <span class="st">&#39;BH&#39;</span>,</span>
+<span id="cb7-29"><a href="#cb7-29" aria-hidden="true" tabindex="-1"></a>  <span class="at">assays_from_SingleCellExperiment =</span> <span class="cn">NULL</span></span>
+<span id="cb7-30"><a href="#cb7-30" aria-hidden="true" tabindex="-1"></a>  )</span>
+<span id="cb7-31"><a href="#cb7-31" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-32"><a href="#cb7-32" aria-hidden="true" tabindex="-1"></a><span class="co"># Add gene description</span></span>
+<span id="cb7-33"><a href="#cb7-33" aria-hidden="true" tabindex="-1"></a>httr<span class="sc">::</span><span class="fu">set_config</span>(httr<span class="sc">::</span><span class="fu">config</span>(<span class="at">ssl_verifypeer =</span> <span class="cn">FALSE</span>))</span>
+<span id="cb7-34"><a href="#cb7-34" aria-hidden="true" tabindex="-1"></a>ensembl <span class="ot">&lt;-</span>  biomaRt<span class="sc">::</span><span class="fu">useEnsembl</span>(<span class="at">biomart=</span><span class="st">&quot;ensembl&quot;</span>, <span class="at">dataset=</span><span class="st">&quot;hsapiens_gene_ensembl&quot;</span>)</span>
+<span id="cb7-35"><a href="#cb7-35" aria-hidden="true" tabindex="-1"></a>gene_desc <span class="ot">&lt;-</span> biomaRt<span class="sc">::</span><span class="fu">getBM</span>(<span class="at">attributes=</span><span class="fu">c</span>(<span class="st">&#39;external_gene_name&#39;</span>,<span class="st">&#39;description&#39;</span>), <span class="at">filters =</span> <span class="st">&#39;external_gene_name&#39;</span>, <span class="at">values =</span> dge<span class="sc">$</span>results<span class="sc">$</span>gene_name, <span class="at">mart =</span>ensembl) <span class="sc">%&gt;%</span> </span>
+<span id="cb7-36"><a href="#cb7-36" aria-hidden="true" tabindex="-1"></a>  dplyr<span class="sc">::</span><span class="fu">rename</span>(<span class="st">&#39;gene_name&#39;</span> <span class="ot">=</span> <span class="st">&#39;external_gene_name&#39;</span>)</span>
+<span id="cb7-37"><a href="#cb7-37" aria-hidden="true" tabindex="-1"></a>use_res <span class="ot">&lt;-</span> dge<span class="sc">$</span>results <span class="sc">%&gt;%</span>  <span class="fu">left_join</span>(., gene_desc)</span>
+<span id="cb7-38"><a href="#cb7-38" aria-hidden="true" tabindex="-1"></a>dge<span class="sc">$</span>results <span class="ot">&lt;-</span> use_res <span class="sc">%&gt;%</span> </span>
+<span id="cb7-39"><a href="#cb7-39" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(<span class="sc">!</span><span class="fu">duplicated</span>(feature)) <span class="sc">%&gt;%</span> </span>
+<span id="cb7-40"><a href="#cb7-40" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">rownames =</span> feature) <span class="sc">%&gt;%</span> </span>
+<span id="cb7-41"><a href="#cb7-41" aria-hidden="true" tabindex="-1"></a>  <span class="fu">column_to_rownames</span>(<span class="st">&#39;rownames&#39;</span>)</span>
+<span id="cb7-42"><a href="#cb7-42" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-43"><a href="#cb7-43" aria-hidden="true" tabindex="-1"></a><span class="fu">detach</span>(<span class="st">&quot;package:biomaRt&quot;</span>, <span class="at">unload=</span><span class="cn">TRUE</span>)</span>
+<span id="cb7-44"><a href="#cb7-44" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-45"><a href="#cb7-45" aria-hidden="true" tabindex="-1"></a><span class="fu">saveRDS</span>(dge, <span class="at">file =</span> <span class="fu">file.path</span>(output_dir, <span class="st">&#39;dge_edgeR_QLF_robust.rds&#39;</span>))</span></code></pre></div>
+<p>Run GSEA</p>
+<div class="sourceCode" id="cb8"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a>dge <span class="ot">&lt;-</span> <span class="fu">readRDS</span>(<span class="fu">file.path</span>(output_dir, <span class="st">&#39;dge_edgeR_QLF_robust.rds&#39;</span>))</span>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a>res_gse <span class="ot">&lt;-</span> <span class="fu">gse_omnibus</span>(</span>
+<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a>    <span class="at">feature_names =</span> dge<span class="sc">$</span>results<span class="sc">$</span>gene_name,</span>
+<span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a>    <span class="at">p =</span> dge<span class="sc">$</span>results<span class="sc">$</span>FDR,</span>
+<span id="cb8-5"><a href="#cb8-5" aria-hidden="true" tabindex="-1"></a>    <span class="at">fc =</span> dge<span class="sc">$</span>results<span class="sc">$</span>logFC,</span>
+<span id="cb8-6"><a href="#cb8-6" aria-hidden="true" tabindex="-1"></a>    <span class="at">gmt_files =</span> gmt_files_symbols, </span>
+<span id="cb8-7"><a href="#cb8-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-8"><a href="#cb8-8" aria-hidden="true" tabindex="-1"></a>    <span class="at">save_intermediates =</span> <span class="fu">file.path</span>(output_dir, <span class="st">&#39;gse_omnibus&#39;</span>),</span>
+<span id="cb8-9"><a href="#cb8-9" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb8-10"><a href="#cb8-10" aria-hidden="true" tabindex="-1"></a>    <span class="at">run_all_ora =</span> <span class="cn">FALSE</span>,</span>
+<span id="cb8-11"><a href="#cb8-11" aria-hidden="true" tabindex="-1"></a>    <span class="at">run_all_gsea =</span> <span class="cn">FALSE</span>,</span>
+<span id="cb8-12"><a href="#cb8-12" aria-hidden="true" tabindex="-1"></a>    <span class="at">run_GSEA =</span> <span class="cn">TRUE</span>,</span>
+<span id="cb8-13"><a href="#cb8-13" aria-hidden="true" tabindex="-1"></a>    <span class="at">run_gseGO =</span> <span class="cn">FALSE</span>,</span>
+<span id="cb8-14"><a href="#cb8-14" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-15"><a href="#cb8-15" aria-hidden="true" tabindex="-1"></a>    <span class="at">args_gse =</span> <span class="fu">list</span>(<span class="at">minGSSize =</span> <span class="dv">10</span>, <span class="at">maxGSSize =</span> <span class="dv">500</span>, <span class="at">pvalueCutoff =</span> <span class="dv">1</span>),</span>
+<span id="cb8-16"><a href="#cb8-16" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-17"><a href="#cb8-17" aria-hidden="true" tabindex="-1"></a>    )</span>
+<span id="cb8-18"><a href="#cb8-18" aria-hidden="true" tabindex="-1"></a><span class="fu">saveRDS</span>(res_gse, <span class="at">file =</span> <span class="fu">file.path</span>(output_dir, <span class="st">&#39;gse_gsea.rds&#39;</span>))</span></code></pre></div>
+<p>Clean data</p>
+<div class="sourceCode" id="cb9"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="fu">rm</span>(use_sce)</span>
+<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a><span class="fu">rm</span>(dge)</span>
+<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a><span class="fu">rm</span>(res_gse)</span></code></pre></div>
+</div>
+<div id="nsg-cdx-br16-ctc-cluster-and-ctc-wbc" class="section level2">
+<h2>NSG-CDX-BR16 : CTC-Cluster and CTC-WBC</h2>
+<p>Configuration</p>
+<div class="sourceCode" id="cb10"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a>use_sce <span class="ot">&lt;-</span> use_sce[,use_sce<span class="sc">$</span>sample_type_g <span class="sc">==</span> <span class="st">&#39;ctc_cluster&#39;</span>]</span>
+<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a>output_dir <span class="ot">&lt;-</span> <span class="st">&#39;./data/differential_expression/br16-ctc_cluster_and_wbc&#39;</span></span>
+<span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a><span class="cf">if</span>(<span class="sc">!</span><span class="fu">file.exists</span>(output_dir))</span>
+<span id="cb10-4"><a href="#cb10-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">dir.create</span>(output_dir, <span class="at">recursive =</span> <span class="cn">TRUE</span>)</span></code></pre></div>
+<p>Run DGE analysis</p>
+<div class="sourceCode" id="cb11"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a>dge <span class="ot">&lt;-</span> <span class="fu">edgeR_dge</span>(</span>
+<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a>  use_sce,</span>
+<span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Desing configuration for differential expression</span></span>
+<span id="cb11-4"><a href="#cb11-4" aria-hidden="true" tabindex="-1"></a>  <span class="at">group_var =</span>  <span class="st">&#39;timepoint&#39;</span>,</span>
+<span id="cb11-5"><a href="#cb11-5" aria-hidden="true" tabindex="-1"></a>  <span class="at">group_sample =</span> <span class="st">&#39;resting&#39;</span>,</span>
+<span id="cb11-6"><a href="#cb11-6" aria-hidden="true" tabindex="-1"></a>  <span class="at">group_ref =</span> <span class="st">&#39;active&#39;</span>,</span>
+<span id="cb11-7"><a href="#cb11-7" aria-hidden="true" tabindex="-1"></a>  <span class="at">numeric_covar =</span> <span class="cn">NULL</span>,</span>
+<span id="cb11-8"><a href="#cb11-8" aria-hidden="true" tabindex="-1"></a>  <span class="at">batch_vars =</span> <span class="cn">NULL</span>,</span>
+<span id="cb11-9"><a href="#cb11-9" aria-hidden="true" tabindex="-1"></a>  <span class="at">design_formula =</span> <span class="st">&quot;~ 0 + timepoint&quot;</span>,</span>
+<span id="cb11-10"><a href="#cb11-10" aria-hidden="true" tabindex="-1"></a>  <span class="at">coef =</span> <span class="st">&#39;last&#39;</span>,</span>
+<span id="cb11-11"><a href="#cb11-11" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Conversion from SingleCellExperiment to DGEList</span></span>
+<span id="cb11-12"><a href="#cb11-12" aria-hidden="true" tabindex="-1"></a>  <span class="at">spike_normalization =</span> <span class="cn">FALSE</span>,</span>
+<span id="cb11-13"><a href="#cb11-13" aria-hidden="true" tabindex="-1"></a>  <span class="at">assay_to_DGEList =</span> <span class="st">&#39;counts&#39;</span>,</span>
+<span id="cb11-14"><a href="#cb11-14" aria-hidden="true" tabindex="-1"></a>  <span class="at">assay_to_row_filter =</span> <span class="st">&quot;counts&quot;</span>,</span>
+<span id="cb11-15"><a href="#cb11-15" aria-hidden="true" tabindex="-1"></a>  <span class="at">use_colData =</span> <span class="cn">NULL</span>,</span>
+<span id="cb11-16"><a href="#cb11-16" aria-hidden="true" tabindex="-1"></a>  <span class="at">use_rowData =</span> <span class="cn">NULL</span>,</span>
+<span id="cb11-17"><a href="#cb11-17" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Feature filtering parameters</span></span>
+<span id="cb11-18"><a href="#cb11-18" aria-hidden="true" tabindex="-1"></a>  <span class="at">use_filterByExpr =</span> <span class="cn">TRUE</span>,</span>
+<span id="cb11-19"><a href="#cb11-19" aria-hidden="true" tabindex="-1"></a>  <span class="at">min_counts =</span> params<span class="sc">$</span>min_counts,</span>
+<span id="cb11-20"><a href="#cb11-20" aria-hidden="true" tabindex="-1"></a>  <span class="at">min_present_prop =</span> params<span class="sc">$</span>min_present_prop,</span>
+<span id="cb11-21"><a href="#cb11-21" aria-hidden="true" tabindex="-1"></a>  <span class="co"># EdgeR workflow configuration</span></span>
+<span id="cb11-22"><a href="#cb11-22" aria-hidden="true" tabindex="-1"></a>  <span class="at">run_calcNormFactors =</span> <span class="st">&#39;TMM&#39;</span>,</span>
+<span id="cb11-23"><a href="#cb11-23" aria-hidden="true" tabindex="-1"></a>  <span class="at">estimateDisp_robust =</span> <span class="cn">FALSE</span>,</span>
+<span id="cb11-24"><a href="#cb11-24" aria-hidden="true" tabindex="-1"></a>  <span class="at">estimateDisp_trend.method =</span> <span class="st">&quot;locfit&quot;</span>,</span>
+<span id="cb11-25"><a href="#cb11-25" aria-hidden="true" tabindex="-1"></a>  <span class="at">glmQLFit_robust =</span> <span class="cn">TRUE</span>,</span>
+<span id="cb11-26"><a href="#cb11-26" aria-hidden="true" tabindex="-1"></a>  <span class="at">glm_approach =</span> <span class="st">&quot;QLF&quot;</span>,</span>
+<span id="cb11-27"><a href="#cb11-27" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Output configuration</span></span>
+<span id="cb11-28"><a href="#cb11-28" aria-hidden="true" tabindex="-1"></a>  <span class="at">adjust_method =</span> <span class="st">&#39;BH&#39;</span>,</span>
+<span id="cb11-29"><a href="#cb11-29" aria-hidden="true" tabindex="-1"></a>  <span class="at">assays_from_SingleCellExperiment =</span> <span class="cn">NULL</span></span>
+<span id="cb11-30"><a href="#cb11-30" aria-hidden="true" tabindex="-1"></a>  )</span>
+<span id="cb11-31"><a href="#cb11-31" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-32"><a href="#cb11-32" aria-hidden="true" tabindex="-1"></a><span class="co"># Add gene description</span></span>
+<span id="cb11-33"><a href="#cb11-33" aria-hidden="true" tabindex="-1"></a>httr<span class="sc">::</span><span class="fu">set_config</span>(httr<span class="sc">::</span><span class="fu">config</span>(<span class="at">ssl_verifypeer =</span> <span class="cn">FALSE</span>))</span>
+<span id="cb11-34"><a href="#cb11-34" aria-hidden="true" tabindex="-1"></a>ensembl <span class="ot">&lt;-</span>  biomaRt<span class="sc">::</span><span class="fu">useEnsembl</span>(<span class="at">biomart=</span><span class="st">&quot;ensembl&quot;</span>, <span class="at">dataset=</span><span class="st">&quot;hsapiens_gene_ensembl&quot;</span>)</span>
+<span id="cb11-35"><a href="#cb11-35" aria-hidden="true" tabindex="-1"></a>gene_desc <span class="ot">&lt;-</span> biomaRt<span class="sc">::</span><span class="fu">getBM</span>(<span class="at">attributes=</span><span class="fu">c</span>(<span class="st">&#39;external_gene_name&#39;</span>,<span class="st">&#39;description&#39;</span>), <span class="at">filters =</span> <span class="st">&#39;external_gene_name&#39;</span>, <span class="at">values =</span> dge<span class="sc">$</span>results<span class="sc">$</span>gene_name, <span class="at">mart =</span>ensembl) <span class="sc">%&gt;%</span> </span>
+<span id="cb11-36"><a href="#cb11-36" aria-hidden="true" tabindex="-1"></a>  dplyr<span class="sc">::</span><span class="fu">rename</span>(<span class="st">&#39;gene_name&#39;</span> <span class="ot">=</span> <span class="st">&#39;external_gene_name&#39;</span>)</span>
+<span id="cb11-37"><a href="#cb11-37" aria-hidden="true" tabindex="-1"></a>use_res <span class="ot">&lt;-</span> dge<span class="sc">$</span>results <span class="sc">%&gt;%</span>  <span class="fu">left_join</span>(., gene_desc)</span>
+<span id="cb11-38"><a href="#cb11-38" aria-hidden="true" tabindex="-1"></a>dge<span class="sc">$</span>results <span class="ot">&lt;-</span> use_res <span class="sc">%&gt;%</span> </span>
+<span id="cb11-39"><a href="#cb11-39" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(<span class="sc">!</span><span class="fu">duplicated</span>(feature)) <span class="sc">%&gt;%</span> </span>
+<span id="cb11-40"><a href="#cb11-40" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">rownames =</span> feature) <span class="sc">%&gt;%</span> </span>
+<span id="cb11-41"><a href="#cb11-41" aria-hidden="true" tabindex="-1"></a>  <span class="fu">column_to_rownames</span>(<span class="st">&#39;rownames&#39;</span>)</span>
+<span id="cb11-42"><a href="#cb11-42" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-43"><a href="#cb11-43" aria-hidden="true" tabindex="-1"></a><span class="fu">detach</span>(<span class="st">&quot;package:biomaRt&quot;</span>, <span class="at">unload=</span><span class="cn">TRUE</span>)</span>
+<span id="cb11-44"><a href="#cb11-44" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-45"><a href="#cb11-45" aria-hidden="true" tabindex="-1"></a><span class="fu">saveRDS</span>(dge, <span class="at">file =</span> <span class="fu">file.path</span>(output_dir, <span class="st">&#39;dge_edgeR_QLF_robust.rds&#39;</span>))</span></code></pre></div>
+<p>Run GSEA</p>
+<div class="sourceCode" id="cb12"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a>dge <span class="ot">&lt;-</span> <span class="fu">readRDS</span>(<span class="fu">file.path</span>(output_dir, <span class="st">&#39;dge_edgeR_QLF_robust.rds&#39;</span>))</span>
+<span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a>res_gse <span class="ot">&lt;-</span> <span class="fu">gse_omnibus</span>(</span>
+<span id="cb12-3"><a href="#cb12-3" aria-hidden="true" tabindex="-1"></a>    <span class="at">feature_names =</span> dge<span class="sc">$</span>results<span class="sc">$</span>gene_name,</span>
+<span id="cb12-4"><a href="#cb12-4" aria-hidden="true" tabindex="-1"></a>    <span class="at">p =</span> dge<span class="sc">$</span>results<span class="sc">$</span>FDR,</span>
+<span id="cb12-5"><a href="#cb12-5" aria-hidden="true" tabindex="-1"></a>    <span class="at">fc =</span> dge<span class="sc">$</span>results<span class="sc">$</span>logFC,</span>
+<span id="cb12-6"><a href="#cb12-6" aria-hidden="true" tabindex="-1"></a>    <span class="at">gmt_files =</span> gmt_files_symbols, </span>
+<span id="cb12-7"><a href="#cb12-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-8"><a href="#cb12-8" aria-hidden="true" tabindex="-1"></a>    <span class="at">save_intermediates =</span> <span class="fu">file.path</span>(output_dir, <span class="st">&#39;gse_omnibus&#39;</span>),</span>
+<span id="cb12-9"><a href="#cb12-9" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb12-10"><a href="#cb12-10" aria-hidden="true" tabindex="-1"></a>    <span class="at">run_all_ora =</span> <span class="cn">FALSE</span>,</span>
+<span id="cb12-11"><a href="#cb12-11" aria-hidden="true" tabindex="-1"></a>    <span class="at">run_all_gsea =</span> <span class="cn">FALSE</span>,</span>
+<span id="cb12-12"><a href="#cb12-12" aria-hidden="true" tabindex="-1"></a>    <span class="at">run_GSEA =</span> <span class="cn">TRUE</span>,</span>
+<span id="cb12-13"><a href="#cb12-13" aria-hidden="true" tabindex="-1"></a>    <span class="at">run_gseGO =</span> <span class="cn">FALSE</span>,</span>
+<span id="cb12-14"><a href="#cb12-14" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-15"><a href="#cb12-15" aria-hidden="true" tabindex="-1"></a>    <span class="at">args_gse =</span> <span class="fu">list</span>(<span class="at">minGSSize =</span> <span class="dv">10</span>, <span class="at">maxGSSize =</span> <span class="dv">500</span>, <span class="at">pvalueCutoff =</span> <span class="dv">1</span>),</span>
+<span id="cb12-16"><a href="#cb12-16" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-17"><a href="#cb12-17" aria-hidden="true" tabindex="-1"></a>    )</span>
+<span id="cb12-18"><a href="#cb12-18" aria-hidden="true" tabindex="-1"></a><span class="fu">saveRDS</span>(res_gse, <span class="at">file =</span> <span class="fu">file.path</span>(output_dir, <span class="st">&#39;gse_gsea.rds&#39;</span>))</span></code></pre></div>
+<p>Clean data</p>
+<div class="sourceCode" id="cb13"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a><span class="fu">rm</span>(use_sce)</span>
+<span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a><span class="fu">rm</span>(dge)</span>
+<span id="cb13-3"><a href="#cb13-3" aria-hidden="true" tabindex="-1"></a><span class="fu">rm</span>(res_gse)</span></code></pre></div>
+</div>
+<div id="nsg-cdx-br16-ctc-single" class="section level2">
+<h2>NSG-CDX-BR16 : CTC-Single</h2>
+<p>Configuration</p>
+<div class="sourceCode" id="cb14"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a>use_sce <span class="ot">&lt;-</span> use_sce[,use_sce<span class="sc">$</span>sample_type_g <span class="sc">==</span> <span class="st">&#39;ctc_single&#39;</span>]</span>
+<span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a>output_dir <span class="ot">&lt;-</span> <span class="st">&#39;./data/differential_expression/br16-ctc_single&#39;</span></span>
+<span id="cb14-3"><a href="#cb14-3" aria-hidden="true" tabindex="-1"></a><span class="cf">if</span>(<span class="sc">!</span><span class="fu">file.exists</span>(output_dir))</span>
+<span id="cb14-4"><a href="#cb14-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">dir.create</span>(output_dir, <span class="at">recursive =</span> <span class="cn">TRUE</span>)</span></code></pre></div>
+<p>Run DGE analysis</p>
+<div class="sourceCode" id="cb15"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a>dge <span class="ot">&lt;-</span> <span class="fu">edgeR_dge</span>(</span>
+<span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a>  use_sce,</span>
+<span id="cb15-3"><a href="#cb15-3" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Desing configuration for differential expression</span></span>
+<span id="cb15-4"><a href="#cb15-4" aria-hidden="true" tabindex="-1"></a>  <span class="at">group_var =</span>  <span class="st">&#39;timepoint&#39;</span>,</span>
+<span id="cb15-5"><a href="#cb15-5" aria-hidden="true" tabindex="-1"></a>  <span class="at">group_sample =</span> <span class="st">&#39;resting&#39;</span>,</span>
+<span id="cb15-6"><a href="#cb15-6" aria-hidden="true" tabindex="-1"></a>  <span class="at">group_ref =</span> <span class="st">&#39;active&#39;</span>,</span>
+<span id="cb15-7"><a href="#cb15-7" aria-hidden="true" tabindex="-1"></a>  <span class="at">numeric_covar =</span> <span class="cn">NULL</span>,</span>
+<span id="cb15-8"><a href="#cb15-8" aria-hidden="true" tabindex="-1"></a>  <span class="at">batch_vars =</span> <span class="cn">NULL</span>,</span>
+<span id="cb15-9"><a href="#cb15-9" aria-hidden="true" tabindex="-1"></a>  <span class="at">design_formula =</span> <span class="st">&quot;~ 0 + timepoint&quot;</span>,</span>
+<span id="cb15-10"><a href="#cb15-10" aria-hidden="true" tabindex="-1"></a>  <span class="at">coef =</span> <span class="st">&#39;last&#39;</span>,</span>
+<span id="cb15-11"><a href="#cb15-11" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Conversion from SingleCellExperiment to DGEList</span></span>
+<span id="cb15-12"><a href="#cb15-12" aria-hidden="true" tabindex="-1"></a>  <span class="at">spike_normalization =</span> <span class="cn">FALSE</span>,</span>
+<span id="cb15-13"><a href="#cb15-13" aria-hidden="true" tabindex="-1"></a>  <span class="at">assay_to_DGEList =</span> <span class="st">&#39;counts&#39;</span>,</span>
+<span id="cb15-14"><a href="#cb15-14" aria-hidden="true" tabindex="-1"></a>  <span class="at">assay_to_row_filter =</span> <span class="st">&quot;counts&quot;</span>,</span>
+<span id="cb15-15"><a href="#cb15-15" aria-hidden="true" tabindex="-1"></a>  <span class="at">use_colData =</span> <span class="cn">NULL</span>,</span>
+<span id="cb15-16"><a href="#cb15-16" aria-hidden="true" tabindex="-1"></a>  <span class="at">use_rowData =</span> <span class="cn">NULL</span>,</span>
+<span id="cb15-17"><a href="#cb15-17" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Feature filtering parameters</span></span>
+<span id="cb15-18"><a href="#cb15-18" aria-hidden="true" tabindex="-1"></a>  <span class="at">use_filterByExpr =</span> <span class="cn">TRUE</span>,</span>
+<span id="cb15-19"><a href="#cb15-19" aria-hidden="true" tabindex="-1"></a>  <span class="at">min_counts =</span> params<span class="sc">$</span>min_counts,</span>
+<span id="cb15-20"><a href="#cb15-20" aria-hidden="true" tabindex="-1"></a>  <span class="at">min_present_prop =</span> params<span class="sc">$</span>min_present_prop,</span>
+<span id="cb15-21"><a href="#cb15-21" aria-hidden="true" tabindex="-1"></a>  <span class="co"># EdgeR workflow configuration</span></span>
+<span id="cb15-22"><a href="#cb15-22" aria-hidden="true" tabindex="-1"></a>  <span class="at">run_calcNormFactors =</span> <span class="st">&#39;TMM&#39;</span>,</span>
+<span id="cb15-23"><a href="#cb15-23" aria-hidden="true" tabindex="-1"></a>  <span class="at">estimateDisp_robust =</span> <span class="cn">FALSE</span>,</span>
+<span id="cb15-24"><a href="#cb15-24" aria-hidden="true" tabindex="-1"></a>  <span class="at">estimateDisp_trend.method =</span> <span class="st">&quot;locfit&quot;</span>,</span>
+<span id="cb15-25"><a href="#cb15-25" aria-hidden="true" tabindex="-1"></a>  <span class="at">glmQLFit_robust =</span> <span class="cn">TRUE</span>,</span>
+<span id="cb15-26"><a href="#cb15-26" aria-hidden="true" tabindex="-1"></a>  <span class="at">glm_approach =</span> <span class="st">&quot;QLF&quot;</span>,</span>
+<span id="cb15-27"><a href="#cb15-27" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Output configuration</span></span>
+<span id="cb15-28"><a href="#cb15-28" aria-hidden="true" tabindex="-1"></a>  <span class="at">adjust_method =</span> <span class="st">&#39;BH&#39;</span>,</span>
+<span id="cb15-29"><a href="#cb15-29" aria-hidden="true" tabindex="-1"></a>  <span class="at">assays_from_SingleCellExperiment =</span> <span class="cn">NULL</span></span>
+<span id="cb15-30"><a href="#cb15-30" aria-hidden="true" tabindex="-1"></a>  )</span>
+<span id="cb15-31"><a href="#cb15-31" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb15-32"><a href="#cb15-32" aria-hidden="true" tabindex="-1"></a><span class="co"># Add gene description</span></span>
+<span id="cb15-33"><a href="#cb15-33" aria-hidden="true" tabindex="-1"></a>httr<span class="sc">::</span><span class="fu">set_config</span>(httr<span class="sc">::</span><span class="fu">config</span>(<span class="at">ssl_verifypeer =</span> <span class="cn">FALSE</span>))</span>
+<span id="cb15-34"><a href="#cb15-34" aria-hidden="true" tabindex="-1"></a>ensembl <span class="ot">&lt;-</span>  biomaRt<span class="sc">::</span><span class="fu">useEnsembl</span>(<span class="at">biomart=</span><span class="st">&quot;ensembl&quot;</span>, <span class="at">dataset=</span><span class="st">&quot;hsapiens_gene_ensembl&quot;</span>)</span>
+<span id="cb15-35"><a href="#cb15-35" aria-hidden="true" tabindex="-1"></a>gene_desc <span class="ot">&lt;-</span> biomaRt<span class="sc">::</span><span class="fu">getBM</span>(<span class="at">attributes=</span><span class="fu">c</span>(<span class="st">&#39;external_gene_name&#39;</span>,<span class="st">&#39;description&#39;</span>), <span class="at">filters =</span> <span class="st">&#39;external_gene_name&#39;</span>, <span class="at">values =</span> dge<span class="sc">$</span>results<span class="sc">$</span>gene_name, <span class="at">mart =</span>ensembl) <span class="sc">%&gt;%</span> </span>
+<span id="cb15-36"><a href="#cb15-36" aria-hidden="true" tabindex="-1"></a>  dplyr<span class="sc">::</span><span class="fu">rename</span>(<span class="st">&#39;gene_name&#39;</span> <span class="ot">=</span> <span class="st">&#39;external_gene_name&#39;</span>)</span>
+<span id="cb15-37"><a href="#cb15-37" aria-hidden="true" tabindex="-1"></a>use_res <span class="ot">&lt;-</span> dge<span class="sc">$</span>results <span class="sc">%&gt;%</span>  <span class="fu">left_join</span>(., gene_desc)</span>
+<span id="cb15-38"><a href="#cb15-38" aria-hidden="true" tabindex="-1"></a>dge<span class="sc">$</span>results <span class="ot">&lt;-</span> use_res <span class="sc">%&gt;%</span> </span>
+<span id="cb15-39"><a href="#cb15-39" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(<span class="sc">!</span><span class="fu">duplicated</span>(feature)) <span class="sc">%&gt;%</span> </span>
+<span id="cb15-40"><a href="#cb15-40" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">rownames =</span> feature) <span class="sc">%&gt;%</span> </span>
+<span id="cb15-41"><a href="#cb15-41" aria-hidden="true" tabindex="-1"></a>  <span class="fu">column_to_rownames</span>(<span class="st">&#39;rownames&#39;</span>)</span>
+<span id="cb15-42"><a href="#cb15-42" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb15-43"><a href="#cb15-43" aria-hidden="true" tabindex="-1"></a><span class="fu">detach</span>(<span class="st">&quot;package:biomaRt&quot;</span>, <span class="at">unload=</span><span class="cn">TRUE</span>)</span>
+<span id="cb15-44"><a href="#cb15-44" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb15-45"><a href="#cb15-45" aria-hidden="true" tabindex="-1"></a><span class="fu">saveRDS</span>(dge, <span class="at">file =</span> <span class="fu">file.path</span>(output_dir, <span class="st">&#39;dge_edgeR_QLF_robust.rds&#39;</span>))</span></code></pre></div>
+<p>Run GSEA</p>
+<div class="sourceCode" id="cb16"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a>dge <span class="ot">&lt;-</span> <span class="fu">readRDS</span>(<span class="fu">file.path</span>(output_dir, <span class="st">&#39;dge_edgeR_QLF_robust.rds&#39;</span>))</span>
+<span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a>res_gse <span class="ot">&lt;-</span> <span class="fu">gse_omnibus</span>(</span>
+<span id="cb16-3"><a href="#cb16-3" aria-hidden="true" tabindex="-1"></a>    <span class="at">feature_names =</span> dge<span class="sc">$</span>results<span class="sc">$</span>gene_name,</span>
+<span id="cb16-4"><a href="#cb16-4" aria-hidden="true" tabindex="-1"></a>    <span class="at">p =</span> dge<span class="sc">$</span>results<span class="sc">$</span>FDR,</span>
+<span id="cb16-5"><a href="#cb16-5" aria-hidden="true" tabindex="-1"></a>    <span class="at">fc =</span> dge<span class="sc">$</span>results<span class="sc">$</span>logFC,</span>
+<span id="cb16-6"><a href="#cb16-6" aria-hidden="true" tabindex="-1"></a>    <span class="at">gmt_files =</span> gmt_files_symbols, </span>
+<span id="cb16-7"><a href="#cb16-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-8"><a href="#cb16-8" aria-hidden="true" tabindex="-1"></a>    <span class="at">save_intermediates =</span> <span class="fu">file.path</span>(output_dir, <span class="st">&#39;gse_omnibus&#39;</span>),</span>
+<span id="cb16-9"><a href="#cb16-9" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb16-10"><a href="#cb16-10" aria-hidden="true" tabindex="-1"></a>    <span class="at">run_all_ora =</span> <span class="cn">FALSE</span>,</span>
+<span id="cb16-11"><a href="#cb16-11" aria-hidden="true" tabindex="-1"></a>    <span class="at">run_all_gsea =</span> <span class="cn">FALSE</span>,</span>
+<span id="cb16-12"><a href="#cb16-12" aria-hidden="true" tabindex="-1"></a>    <span class="at">run_GSEA =</span> <span class="cn">TRUE</span>,</span>
+<span id="cb16-13"><a href="#cb16-13" aria-hidden="true" tabindex="-1"></a>    <span class="at">run_gseGO =</span> <span class="cn">FALSE</span>,</span>
+<span id="cb16-14"><a href="#cb16-14" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-15"><a href="#cb16-15" aria-hidden="true" tabindex="-1"></a>    <span class="at">args_gse =</span> <span class="fu">list</span>(<span class="at">minGSSize =</span> <span class="dv">10</span>, <span class="at">maxGSSize =</span> <span class="dv">500</span>, <span class="at">pvalueCutoff =</span> <span class="dv">1</span>),</span>
+<span id="cb16-16"><a href="#cb16-16" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-17"><a href="#cb16-17" aria-hidden="true" tabindex="-1"></a>    )</span>
+<span id="cb16-18"><a href="#cb16-18" aria-hidden="true" tabindex="-1"></a><span class="fu">saveRDS</span>(res_gse, <span class="at">file =</span> <span class="fu">file.path</span>(output_dir, <span class="st">&#39;gse_gsea.rds&#39;</span>))</span></code></pre></div>
+<p>Clean data</p>
+<div class="sourceCode" id="cb17"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a><span class="fu">rm</span>(use_sce)</span>
+<span id="cb17-2"><a href="#cb17-2" aria-hidden="true" tabindex="-1"></a><span class="fu">rm</span>(dge)</span>
+<span id="cb17-3"><a href="#cb17-3" aria-hidden="true" tabindex="-1"></a><span class="fu">rm</span>(res_gse)</span></code></pre></div>
+</div>
+<div id="nsg-lm2" class="section level2">
+<h2>NSG-LM2</h2>
+<p>Configuration</p>
+<div class="sourceCode" id="cb18"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a>use_sce <span class="ot">&lt;-</span> <span class="fu">readRDS</span>(<span class="at">file =</span> <span class="fu">file.path</span>(params<span class="sc">$</span>sce_dir, <span class="st">&#39;sce_lm2.rds&#39;</span>))</span>
+<span id="cb18-2"><a href="#cb18-2" aria-hidden="true" tabindex="-1"></a>output_dir <span class="ot">&lt;-</span> <span class="st">&#39;./data/differential_expression/lm2&#39;</span></span>
+<span id="cb18-3"><a href="#cb18-3" aria-hidden="true" tabindex="-1"></a><span class="cf">if</span>(<span class="sc">!</span><span class="fu">file.exists</span>(output_dir))</span>
+<span id="cb18-4"><a href="#cb18-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">dir.create</span>(output_dir, <span class="at">recursive =</span> <span class="cn">TRUE</span>)</span></code></pre></div>
+<p>Run DGE analysis</p>
+<div class="sourceCode" id="cb19"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a>dge <span class="ot">&lt;-</span> <span class="fu">edgeR_dge</span>(</span>
+<span id="cb19-2"><a href="#cb19-2" aria-hidden="true" tabindex="-1"></a>  use_sce,</span>
+<span id="cb19-3"><a href="#cb19-3" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Desing configuration for differential expression</span></span>
+<span id="cb19-4"><a href="#cb19-4" aria-hidden="true" tabindex="-1"></a>  <span class="at">group_var =</span>  <span class="st">&#39;timepoint&#39;</span>,</span>
+<span id="cb19-5"><a href="#cb19-5" aria-hidden="true" tabindex="-1"></a>  <span class="at">group_sample =</span> <span class="st">&#39;resting&#39;</span>,</span>
+<span id="cb19-6"><a href="#cb19-6" aria-hidden="true" tabindex="-1"></a>  <span class="at">group_ref =</span> <span class="st">&#39;active&#39;</span>,</span>
+<span id="cb19-7"><a href="#cb19-7" aria-hidden="true" tabindex="-1"></a>  <span class="at">numeric_covar =</span> <span class="cn">NULL</span>,</span>
+<span id="cb19-8"><a href="#cb19-8" aria-hidden="true" tabindex="-1"></a>  <span class="at">batch_vars =</span> <span class="cn">NULL</span>,</span>
+<span id="cb19-9"><a href="#cb19-9" aria-hidden="true" tabindex="-1"></a>  <span class="at">design_formula =</span> <span class="st">&quot;~ 0 + timepoint&quot;</span>,</span>
+<span id="cb19-10"><a href="#cb19-10" aria-hidden="true" tabindex="-1"></a>  <span class="at">coef =</span> <span class="st">&#39;last&#39;</span>,</span>
+<span id="cb19-11"><a href="#cb19-11" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Conversion from SingleCellExperiment to DGEList</span></span>
+<span id="cb19-12"><a href="#cb19-12" aria-hidden="true" tabindex="-1"></a>  <span class="at">spike_normalization =</span> <span class="cn">FALSE</span>,</span>
+<span id="cb19-13"><a href="#cb19-13" aria-hidden="true" tabindex="-1"></a>  <span class="at">assay_to_DGEList =</span> <span class="st">&#39;counts&#39;</span>,</span>
+<span id="cb19-14"><a href="#cb19-14" aria-hidden="true" tabindex="-1"></a>  <span class="at">assay_to_row_filter =</span> <span class="st">&quot;counts&quot;</span>,</span>
+<span id="cb19-15"><a href="#cb19-15" aria-hidden="true" tabindex="-1"></a>  <span class="at">use_colData =</span> <span class="cn">NULL</span>,</span>
+<span id="cb19-16"><a href="#cb19-16" aria-hidden="true" tabindex="-1"></a>  <span class="at">use_rowData =</span> <span class="cn">NULL</span>,</span>
+<span id="cb19-17"><a href="#cb19-17" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Feature filtering parameters</span></span>
+<span id="cb19-18"><a href="#cb19-18" aria-hidden="true" tabindex="-1"></a>  <span class="at">use_filterByExpr =</span> <span class="cn">TRUE</span>,</span>
+<span id="cb19-19"><a href="#cb19-19" aria-hidden="true" tabindex="-1"></a>  <span class="at">min_counts =</span> params<span class="sc">$</span>min_counts,</span>
+<span id="cb19-20"><a href="#cb19-20" aria-hidden="true" tabindex="-1"></a>  <span class="at">min_present_prop =</span> params<span class="sc">$</span>min_present_prop,</span>
+<span id="cb19-21"><a href="#cb19-21" aria-hidden="true" tabindex="-1"></a>  <span class="co"># EdgeR workflow configuration</span></span>
+<span id="cb19-22"><a href="#cb19-22" aria-hidden="true" tabindex="-1"></a>  <span class="at">run_calcNormFactors =</span> <span class="st">&#39;TMM&#39;</span>,</span>
+<span id="cb19-23"><a href="#cb19-23" aria-hidden="true" tabindex="-1"></a>  <span class="at">estimateDisp_robust =</span> <span class="cn">FALSE</span>,</span>
+<span id="cb19-24"><a href="#cb19-24" aria-hidden="true" tabindex="-1"></a>  <span class="at">estimateDisp_trend.method =</span> <span class="st">&quot;locfit&quot;</span>,</span>
+<span id="cb19-25"><a href="#cb19-25" aria-hidden="true" tabindex="-1"></a>  <span class="at">glmQLFit_robust =</span> <span class="cn">TRUE</span>,</span>
+<span id="cb19-26"><a href="#cb19-26" aria-hidden="true" tabindex="-1"></a>  <span class="at">glm_approach =</span> <span class="st">&quot;QLF&quot;</span>,</span>
+<span id="cb19-27"><a href="#cb19-27" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Output configuration</span></span>
+<span id="cb19-28"><a href="#cb19-28" aria-hidden="true" tabindex="-1"></a>  <span class="at">adjust_method =</span> <span class="st">&#39;BH&#39;</span>,</span>
+<span id="cb19-29"><a href="#cb19-29" aria-hidden="true" tabindex="-1"></a>  <span class="at">assays_from_SingleCellExperiment =</span> <span class="cn">NULL</span></span>
+<span id="cb19-30"><a href="#cb19-30" aria-hidden="true" tabindex="-1"></a>  )</span>
+<span id="cb19-31"><a href="#cb19-31" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb19-32"><a href="#cb19-32" aria-hidden="true" tabindex="-1"></a><span class="co"># Add gene description</span></span>
+<span id="cb19-33"><a href="#cb19-33" aria-hidden="true" tabindex="-1"></a>httr<span class="sc">::</span><span class="fu">set_config</span>(httr<span class="sc">::</span><span class="fu">config</span>(<span class="at">ssl_verifypeer =</span> <span class="cn">FALSE</span>))</span>
+<span id="cb19-34"><a href="#cb19-34" aria-hidden="true" tabindex="-1"></a>ensembl <span class="ot">&lt;-</span>  biomaRt<span class="sc">::</span><span class="fu">useEnsembl</span>(<span class="at">biomart=</span><span class="st">&quot;ensembl&quot;</span>, <span class="at">dataset=</span><span class="st">&quot;hsapiens_gene_ensembl&quot;</span>)</span>
+<span id="cb19-35"><a href="#cb19-35" aria-hidden="true" tabindex="-1"></a>gene_desc <span class="ot">&lt;-</span> biomaRt<span class="sc">::</span><span class="fu">getBM</span>(<span class="at">attributes=</span><span class="fu">c</span>(<span class="st">&#39;external_gene_name&#39;</span>,<span class="st">&#39;description&#39;</span>), <span class="at">filters =</span> <span class="st">&#39;external_gene_name&#39;</span>, <span class="at">values =</span> dge<span class="sc">$</span>results<span class="sc">$</span>gene_name, <span class="at">mart =</span>ensembl) <span class="sc">%&gt;%</span> </span>
+<span id="cb19-36"><a href="#cb19-36" aria-hidden="true" tabindex="-1"></a>  dplyr<span class="sc">::</span><span class="fu">rename</span>(<span class="st">&#39;gene_name&#39;</span> <span class="ot">=</span> <span class="st">&#39;external_gene_name&#39;</span>)</span>
+<span id="cb19-37"><a href="#cb19-37" aria-hidden="true" tabindex="-1"></a>use_res <span class="ot">&lt;-</span> dge<span class="sc">$</span>results <span class="sc">%&gt;%</span>  <span class="fu">left_join</span>(., gene_desc)</span>
+<span id="cb19-38"><a href="#cb19-38" aria-hidden="true" tabindex="-1"></a>dge<span class="sc">$</span>results <span class="ot">&lt;-</span> use_res <span class="sc">%&gt;%</span> </span>
+<span id="cb19-39"><a href="#cb19-39" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(<span class="sc">!</span><span class="fu">duplicated</span>(feature)) <span class="sc">%&gt;%</span> </span>
+<span id="cb19-40"><a href="#cb19-40" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">rownames =</span> feature) <span class="sc">%&gt;%</span> </span>
+<span id="cb19-41"><a href="#cb19-41" aria-hidden="true" tabindex="-1"></a>  <span class="fu">column_to_rownames</span>(<span class="st">&#39;rownames&#39;</span>)</span>
+<span id="cb19-42"><a href="#cb19-42" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb19-43"><a href="#cb19-43" aria-hidden="true" tabindex="-1"></a><span class="fu">detach</span>(<span class="st">&quot;package:biomaRt&quot;</span>, <span class="at">unload=</span><span class="cn">TRUE</span>)</span>
+<span id="cb19-44"><a href="#cb19-44" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb19-45"><a href="#cb19-45" aria-hidden="true" tabindex="-1"></a><span class="fu">saveRDS</span>(dge, <span class="at">file =</span> <span class="fu">file.path</span>(output_dir, <span class="st">&#39;dge_edgeR_QLF_robust.rds&#39;</span>))</span></code></pre></div>
+<p>Clean data</p>
+<div class="sourceCode" id="cb20"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a><span class="fu">rm</span>(use_sce)</span>
+<span id="cb20-2"><a href="#cb20-2" aria-hidden="true" tabindex="-1"></a><span class="fu">rm</span>(dge)</span></code></pre></div>
+</div>
+<div id="patient" class="section level2">
+<h2>Patient</h2>
+<p>Configuration</p>
+<div class="sourceCode" id="cb21"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a>use_sce <span class="ot">&lt;-</span> <span class="fu">readRDS</span>(<span class="at">file =</span> <span class="fu">file.path</span>(params<span class="sc">$</span>sce_dir, <span class="st">&#39;sce_patient.rds&#39;</span>))</span>
+<span id="cb21-2"><a href="#cb21-2" aria-hidden="true" tabindex="-1"></a>output_dir <span class="ot">&lt;-</span> <span class="st">&#39;./data/differential_expression/patient&#39;</span></span>
+<span id="cb21-3"><a href="#cb21-3" aria-hidden="true" tabindex="-1"></a><span class="cf">if</span>(<span class="sc">!</span><span class="fu">file.exists</span>(output_dir))</span>
+<span id="cb21-4"><a href="#cb21-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">dir.create</span>(output_dir, <span class="at">recursive =</span> <span class="cn">TRUE</span>)</span></code></pre></div>
+<p>Run DGE analysis</p>
+<div class="sourceCode" id="cb22"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a>dge <span class="ot">&lt;-</span> <span class="fu">edgeR_dge</span>(</span>
+<span id="cb22-2"><a href="#cb22-2" aria-hidden="true" tabindex="-1"></a>  use_sce,</span>
+<span id="cb22-3"><a href="#cb22-3" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Desing configuration for differential expression</span></span>
+<span id="cb22-4"><a href="#cb22-4" aria-hidden="true" tabindex="-1"></a>  <span class="at">group_var =</span>  <span class="st">&#39;timepoint&#39;</span>,</span>
+<span id="cb22-5"><a href="#cb22-5" aria-hidden="true" tabindex="-1"></a>  <span class="at">group_sample =</span> <span class="st">&#39;resting&#39;</span>,</span>
+<span id="cb22-6"><a href="#cb22-6" aria-hidden="true" tabindex="-1"></a>  <span class="at">group_ref =</span> <span class="st">&#39;active&#39;</span>,</span>
+<span id="cb22-7"><a href="#cb22-7" aria-hidden="true" tabindex="-1"></a>  <span class="at">numeric_covar =</span> <span class="cn">NULL</span>,</span>
+<span id="cb22-8"><a href="#cb22-8" aria-hidden="true" tabindex="-1"></a>  <span class="at">batch_vars =</span> <span class="cn">NULL</span>,</span>
+<span id="cb22-9"><a href="#cb22-9" aria-hidden="true" tabindex="-1"></a>  <span class="at">design_formula =</span> <span class="st">&quot;~ 0 + timepoint&quot;</span>,</span>
+<span id="cb22-10"><a href="#cb22-10" aria-hidden="true" tabindex="-1"></a>  <span class="at">coef =</span> <span class="st">&#39;last&#39;</span>,</span>
+<span id="cb22-11"><a href="#cb22-11" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Conversion from SingleCellExperiment to DGEList</span></span>
+<span id="cb22-12"><a href="#cb22-12" aria-hidden="true" tabindex="-1"></a>  <span class="at">spike_normalization =</span> <span class="cn">FALSE</span>,</span>
+<span id="cb22-13"><a href="#cb22-13" aria-hidden="true" tabindex="-1"></a>  <span class="at">assay_to_DGEList =</span> <span class="st">&#39;counts&#39;</span>,</span>
+<span id="cb22-14"><a href="#cb22-14" aria-hidden="true" tabindex="-1"></a>  <span class="at">assay_to_row_filter =</span> <span class="st">&quot;counts&quot;</span>,</span>
+<span id="cb22-15"><a href="#cb22-15" aria-hidden="true" tabindex="-1"></a>  <span class="at">use_colData =</span> <span class="cn">NULL</span>,</span>
+<span id="cb22-16"><a href="#cb22-16" aria-hidden="true" tabindex="-1"></a>  <span class="at">use_rowData =</span> <span class="cn">NULL</span>,</span>
+<span id="cb22-17"><a href="#cb22-17" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Feature filtering parameters</span></span>
+<span id="cb22-18"><a href="#cb22-18" aria-hidden="true" tabindex="-1"></a>  <span class="at">use_filterByExpr =</span> <span class="cn">TRUE</span>,</span>
+<span id="cb22-19"><a href="#cb22-19" aria-hidden="true" tabindex="-1"></a>  <span class="at">min_counts =</span> params<span class="sc">$</span>min_counts,</span>
+<span id="cb22-20"><a href="#cb22-20" aria-hidden="true" tabindex="-1"></a>  <span class="at">min_present_prop =</span> params<span class="sc">$</span>min_present_prop,</span>
+<span id="cb22-21"><a href="#cb22-21" aria-hidden="true" tabindex="-1"></a>  <span class="co"># EdgeR workflow configuration</span></span>
+<span id="cb22-22"><a href="#cb22-22" aria-hidden="true" tabindex="-1"></a>  <span class="at">run_calcNormFactors =</span> <span class="st">&#39;TMM&#39;</span>,</span>
+<span id="cb22-23"><a href="#cb22-23" aria-hidden="true" tabindex="-1"></a>  <span class="at">estimateDisp_robust =</span> <span class="cn">FALSE</span>,</span>
+<span id="cb22-24"><a href="#cb22-24" aria-hidden="true" tabindex="-1"></a>  <span class="at">estimateDisp_trend.method =</span> <span class="st">&quot;locfit&quot;</span>,</span>
+<span id="cb22-25"><a href="#cb22-25" aria-hidden="true" tabindex="-1"></a>  <span class="at">glmQLFit_robust =</span> <span class="cn">TRUE</span>,</span>
+<span id="cb22-26"><a href="#cb22-26" aria-hidden="true" tabindex="-1"></a>  <span class="at">glm_approach =</span> <span class="st">&quot;QLF&quot;</span>,</span>
+<span id="cb22-27"><a href="#cb22-27" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Output configuration</span></span>
+<span id="cb22-28"><a href="#cb22-28" aria-hidden="true" tabindex="-1"></a>  <span class="at">adjust_method =</span> <span class="st">&#39;BH&#39;</span>,</span>
+<span id="cb22-29"><a href="#cb22-29" aria-hidden="true" tabindex="-1"></a>  <span class="at">assays_from_SingleCellExperiment =</span> <span class="cn">NULL</span></span>
+<span id="cb22-30"><a href="#cb22-30" aria-hidden="true" tabindex="-1"></a>  )</span>
+<span id="cb22-31"><a href="#cb22-31" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb22-32"><a href="#cb22-32" aria-hidden="true" tabindex="-1"></a><span class="co"># Add gene description</span></span>
+<span id="cb22-33"><a href="#cb22-33" aria-hidden="true" tabindex="-1"></a>httr<span class="sc">::</span><span class="fu">set_config</span>(httr<span class="sc">::</span><span class="fu">config</span>(<span class="at">ssl_verifypeer =</span> <span class="cn">FALSE</span>))</span>
+<span id="cb22-34"><a href="#cb22-34" aria-hidden="true" tabindex="-1"></a>ensembl <span class="ot">&lt;-</span>  biomaRt<span class="sc">::</span><span class="fu">useEnsembl</span>(<span class="at">biomart=</span><span class="st">&quot;ensembl&quot;</span>, <span class="at">dataset=</span><span class="st">&quot;hsapiens_gene_ensembl&quot;</span>)</span>
+<span id="cb22-35"><a href="#cb22-35" aria-hidden="true" tabindex="-1"></a>gene_desc <span class="ot">&lt;-</span> biomaRt<span class="sc">::</span><span class="fu">getBM</span>(<span class="at">attributes=</span><span class="fu">c</span>(<span class="st">&#39;external_gene_name&#39;</span>,<span class="st">&#39;description&#39;</span>), <span class="at">filters =</span> <span class="st">&#39;external_gene_name&#39;</span>, <span class="at">values =</span> dge<span class="sc">$</span>results<span class="sc">$</span>gene_name, <span class="at">mart =</span>ensembl) <span class="sc">%&gt;%</span> </span>
+<span id="cb22-36"><a href="#cb22-36" aria-hidden="true" tabindex="-1"></a>  dplyr<span class="sc">::</span><span class="fu">rename</span>(<span class="st">&#39;gene_name&#39;</span> <span class="ot">=</span> <span class="st">&#39;external_gene_name&#39;</span>)</span>
+<span id="cb22-37"><a href="#cb22-37" aria-hidden="true" tabindex="-1"></a>use_res <span class="ot">&lt;-</span> dge<span class="sc">$</span>results <span class="sc">%&gt;%</span>  <span class="fu">left_join</span>(., gene_desc)</span>
+<span id="cb22-38"><a href="#cb22-38" aria-hidden="true" tabindex="-1"></a>dge<span class="sc">$</span>results <span class="ot">&lt;-</span> use_res <span class="sc">%&gt;%</span> </span>
+<span id="cb22-39"><a href="#cb22-39" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(<span class="sc">!</span><span class="fu">duplicated</span>(feature)) <span class="sc">%&gt;%</span> </span>
+<span id="cb22-40"><a href="#cb22-40" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">rownames =</span> feature) <span class="sc">%&gt;%</span> </span>
+<span id="cb22-41"><a href="#cb22-41" aria-hidden="true" tabindex="-1"></a>  <span class="fu">column_to_rownames</span>(<span class="st">&#39;rownames&#39;</span>)</span>
+<span id="cb22-42"><a href="#cb22-42" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb22-43"><a href="#cb22-43" aria-hidden="true" tabindex="-1"></a><span class="fu">detach</span>(<span class="st">&quot;package:biomaRt&quot;</span>, <span class="at">unload=</span><span class="cn">TRUE</span>)</span>
+<span id="cb22-44"><a href="#cb22-44" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb22-45"><a href="#cb22-45" aria-hidden="true" tabindex="-1"></a><span class="fu">saveRDS</span>(dge, <span class="at">file =</span> <span class="fu">file.path</span>(output_dir, <span class="st">&#39;dge_edgeR_QLF_robust.rds&#39;</span>))</span></code></pre></div>
+<p>Clean data</p>
+<div class="sourceCode" id="cb23"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb23-1"><a href="#cb23-1" aria-hidden="true" tabindex="-1"></a><span class="fu">rm</span>(use_sce)</span>
+<span id="cb23-2"><a href="#cb23-2" aria-hidden="true" tabindex="-1"></a><span class="fu">rm</span>(dge)</span></code></pre></div>
+</div>
+<div id="lm2-time-kinetics" class="section level2">
+<h2>LM2 time kinetics</h2>
+<p>Configuration</p>
+<div class="sourceCode" id="cb24"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb24-1"><a href="#cb24-1" aria-hidden="true" tabindex="-1"></a>use_sce <span class="ot">&lt;-</span> <span class="fu">readRDS</span>(<span class="at">file =</span> <span class="fu">file.path</span>(params<span class="sc">$</span>sce_dir, <span class="st">&#39;sce_lm2_tk.rds&#39;</span>))</span>
+<span id="cb24-2"><a href="#cb24-2" aria-hidden="true" tabindex="-1"></a>output_dir <span class="ot">&lt;-</span> <span class="st">&#39;./data/differential_expression/lm2_tk&#39;</span></span>
+<span id="cb24-3"><a href="#cb24-3" aria-hidden="true" tabindex="-1"></a><span class="cf">if</span>(<span class="sc">!</span><span class="fu">file.exists</span>(output_dir))</span>
+<span id="cb24-4"><a href="#cb24-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">dir.create</span>(output_dir, <span class="at">recursive =</span> <span class="cn">TRUE</span>)</span></code></pre></div>
+<p>Run <a
+href="https://www.bioconductor.org/packages/release/bioc/vignettes/GSVA/inst/doc/GSVA.html">GSVA</a>
+run with gene-set size between 5 and 700. Original GSEA analysis was
+performed with 10-500, but with this new treshold we make sure that all
+the gene sets from BR16 results are included in the analysis, as the
+effective gene set (expressed genes) might be different in GSVA
+analysis.</p>
+<p>For this analysis we remove samples from timepoint ZT0 (06:00). It
+only contains one replicate and can bias results. The timepoint will be
+added for visualization.</p>
+<div class="sourceCode" id="cb25"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb25-1"><a href="#cb25-1" aria-hidden="true" tabindex="-1"></a>use_sce <span class="ot">&lt;-</span> use_sce[,<span class="sc">!</span>use_sce<span class="sc">$</span>timepoint <span class="sc">%in%</span> <span class="fu">c</span>(<span class="st">&#39;0600&#39;</span>)]</span>
+<span id="cb25-2"><a href="#cb25-2" aria-hidden="true" tabindex="-1"></a><span class="fu">rownames</span>(use_sce) <span class="ot">&lt;-</span> <span class="fu">rowData</span>(use_sce)<span class="sc">$</span>gene_name</span>
+<span id="cb25-3"><a href="#cb25-3" aria-hidden="true" tabindex="-1"></a>use_gmt_file <span class="ot">&lt;-</span> <span class="st">&quot;./data/resources/MSigDB/v7.4/c2.cp.c5.bp.v7.4.symbols.gmt&quot;</span></span>
+<span id="cb25-4"><a href="#cb25-4" aria-hidden="true" tabindex="-1"></a>gset <span class="ot">&lt;-</span> GSEABase<span class="sc">::</span><span class="fu">getGmt</span>(use_gmt_file)</span>
+<span id="cb25-5"><a href="#cb25-5" aria-hidden="true" tabindex="-1"></a>gset_db <span class="ot">&lt;-</span> <span class="fu">foreach</span>(<span class="at">x =</span> gset, <span class="at">.combine =</span> rbind) <span class="sc">%do%</span> {<span class="fu">c</span>(<span class="at">term_size =</span> <span class="fu">length</span>(x<span class="sc">@</span>geneIds))} <span class="sc">%&gt;%</span> <span class="fu">data.frame</span>()</span>
+<span id="cb25-6"><a href="#cb25-6" aria-hidden="true" tabindex="-1"></a>gset_db<span class="sc">$</span>term_name <span class="ot">&lt;-</span> <span class="fu">names</span>(gset)</span>
+<span id="cb25-7"><a href="#cb25-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb25-8"><a href="#cb25-8" aria-hidden="true" tabindex="-1"></a>gsva_res <span class="ot">&lt;-</span> <span class="fu">gsva</span>(<span class="fu">assay</span>(use_sce, <span class="st">&#39;logcpm&#39;</span>), </span>
+<span id="cb25-9"><a href="#cb25-9" aria-hidden="true" tabindex="-1"></a>                   <span class="at">method =</span> <span class="st">&#39;gsva&#39;</span>,</span>
+<span id="cb25-10"><a href="#cb25-10" aria-hidden="true" tabindex="-1"></a>                   <span class="at">gset.idx.list =</span> gset, </span>
+<span id="cb25-11"><a href="#cb25-11" aria-hidden="true" tabindex="-1"></a>                   <span class="at">min.sz =</span> <span class="dv">5</span>, </span>
+<span id="cb25-12"><a href="#cb25-12" aria-hidden="true" tabindex="-1"></a>                   <span class="at">max.sz =</span> <span class="dv">700</span>, </span>
+<span id="cb25-13"><a href="#cb25-13" aria-hidden="true" tabindex="-1"></a>                   <span class="at">kcdf =</span> <span class="st">&quot;Gaussian&quot;</span>,</span>
+<span id="cb25-14"><a href="#cb25-14" aria-hidden="true" tabindex="-1"></a>                   <span class="at">mx.diff =</span> <span class="cn">TRUE</span>, </span>
+<span id="cb25-15"><a href="#cb25-15" aria-hidden="true" tabindex="-1"></a>                   <span class="at">verbose =</span> <span class="cn">FALSE</span>)</span>
+<span id="cb25-16"><a href="#cb25-16" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb25-17"><a href="#cb25-17" aria-hidden="true" tabindex="-1"></a><span class="fu">saveRDS</span>(gsva_res, <span class="at">file =</span> <span class="fu">file.path</span>(output_dir, <span class="st">&#39;gsva_c2.cp.c5.bp.rds&#39;</span>))</span></code></pre></div>
+<br>
+<p>
+<button type="button" class="btn btn-default btn-workflowr btn-workflowr-sessioninfo" data-toggle="collapse" data-target="#workflowr-sessioninfo" style="display: block;">
+<span class="glyphicon glyphicon-wrench" aria-hidden="true"></span>
+Session information
+</button>
+</p>
+<div id="workflowr-sessioninfo" class="collapse">
+<div class="sourceCode" id="cb26"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb26-1"><a href="#cb26-1" aria-hidden="true" tabindex="-1"></a><span class="fu">sessionInfo</span>()</span></code></pre></div>
+<p>R version 4.1.0 (2021-05-18) Platform: x86_64-apple-darwin17.0
+(64-bit) Running under: macOS Big Sur 10.16</p>
+<p>Matrix products: default BLAS:
+/Library/Frameworks/R.framework/Versions/4.1/Resources/lib/libRblas.dylib
+LAPACK:
+/Library/Frameworks/R.framework/Versions/4.1/Resources/lib/libRlapack.dylib</p>
+<p>locale: [1]
+en_US.UTF-8/en_US.UTF-8/en_US.UTF-8/C/en_US.UTF-8/en_US.UTF-8</p>
+<p>attached base packages: [1] parallel stats4 stats graphics grDevices
+utils datasets [8] methods base</p>
+<p>other attached packages: [1] foreach_1.5.1 GSVA_1.40.1<br />
+[3] clusterProfiler_4.0.5 edgeR_3.34.1<br />
+[5] limma_3.48.3 scran_1.20.1<br />
+[7] scater_1.20.1 scuttle_1.2.1<br />
+[9] SingleCellExperiment_1.14.1 SummarizedExperiment_1.22.0 [11]
+Biobase_2.52.0 GenomicRanges_1.44.0<br />
+[13] GenomeInfoDb_1.28.4 IRanges_2.26.0<br />
+[15] S4Vectors_0.30.2 BiocGenerics_0.38.0<br />
+[17] MatrixGenerics_1.4.3 matrixStats_0.61.0<br />
+[19] forcats_0.5.1 stringr_1.4.0<br />
+[21] dplyr_1.0.7 purrr_0.3.4<br />
+[23] readr_2.0.2 tidyr_1.1.4<br />
+[25] tibble_3.1.5 ggplot2_3.3.5<br />
+[27] tidyverse_1.3.1 workflowr_1.6.2</p>
+<p>loaded via a namespace (and not attached): [1] utf8_1.2.2
+tidyselect_1.1.1<br />
+[3] RSQLite_2.2.8 AnnotationDbi_1.54.1<br />
+[5] grid_4.1.0 BiocParallel_1.26.2<br />
+[7] scatterpie_0.1.7 munsell_0.5.0<br />
+[9] ScaledMatrix_1.0.0 codetools_0.2-18<br />
+[11] statmod_1.4.36 withr_2.4.2<br />
+[13] colorspace_2.0-2 GOSemSim_2.18.1<br />
+[15] knitr_1.36 rstudioapi_0.13<br />
+[17] DOSE_3.18.3 git2r_0.28.0<br />
+[19] GenomeInfoDbData_1.2.6 polyclip_1.10-0<br />
+[21] bit64_4.0.5 farver_2.1.0<br />
+[23] rhdf5_2.36.0 rprojroot_2.0.2<br />
+[25] downloader_0.4 treeio_1.16.2<br />
+[27] vctrs_0.3.8 generics_0.1.1<br />
+[29] xfun_0.27 R6_2.5.1<br />
+[31] ggbeeswarm_0.6.0 graphlayouts_0.7.1<br />
+[33] rsvd_1.0.5 locfit_1.5-9.4<br />
+[35] rhdf5filters_1.4.0 bitops_1.0-7<br />
+[37] cachem_1.0.6 fgsea_1.18.0<br />
+[39] gridGraphics_0.5-1 DelayedArray_0.18.0<br />
+[41] assertthat_0.2.1 showtext_0.9-4<br />
+[43] promises_1.2.0.1 scales_1.1.1<br />
+[45] ggraph_2.0.5 enrichplot_1.12.3<br />
+[47] beeswarm_0.4.0 gtable_0.3.0<br />
+[49] beachmat_2.8.1 tidygraph_1.2.0<br />
+[51] rlang_0.4.12 splines_4.1.0<br />
+[53] lazyeval_0.2.2 broom_0.7.10<br />
+[55] yaml_2.2.1 reshape2_1.4.4<br />
+[57] modelr_0.1.8 backports_1.3.0<br />
+[59] httpuv_1.6.3 qvalue_2.24.0<br />
+[61] tools_4.1.0 ggplotify_0.1.0<br />
+[63] ellipsis_0.3.2 jquerylib_0.1.4<br />
+[65] RColorBrewer_1.1-2 Rcpp_1.0.7<br />
+[67] plyr_1.8.6 sparseMatrixStats_1.4.2<br />
+[69] zlibbioc_1.38.0 RCurl_1.98-1.5<br />
+[71] viridis_0.6.2 cowplot_1.1.1<br />
+[73] haven_2.4.3 ggrepel_0.9.1<br />
+[75] cluster_2.1.2 fs_1.5.0<br />
+[77] magrittr_2.0.1 data.table_1.14.2<br />
+[79] DO.db_2.9 reprex_2.0.1<br />
+[81] whisker_0.4 xtable_1.8-4<br />
+[83] hms_1.1.1 patchwork_1.1.1<br />
+[85] evaluate_0.14 XML_3.99-0.8<br />
+[87] readxl_1.3.1 gridExtra_2.3<br />
+[89] compiler_4.1.0 shadowtext_0.0.9<br />
+[91] crayon_1.4.2 htmltools_0.5.2<br />
+[93] ggfun_0.0.4 later_1.3.0<br />
+[95] tzdb_0.2.0 aplot_0.1.1<br />
+[97] lubridate_1.8.0 DBI_1.1.1<br />
+[99] tweenr_1.0.2 dbplyr_2.1.1<br />
+[101] MASS_7.3-54 Matrix_1.3-4<br />
+[103] cli_3.1.0 metapod_1.0.0<br />
+[105] igraph_1.2.7 pkgconfig_2.0.3<br />
+[107] xml2_1.3.2 annotate_1.70.0<br />
+[109] ggtree_3.0.4 vipor_0.4.5<br />
+[111] bslib_0.3.1 dqrng_0.3.0<br />
+[113] XVector_0.32.0 rvest_1.0.2<br />
+[115] yulab.utils_0.0.4 digest_0.6.28<br />
+[117] graph_1.70.0 showtextdb_3.0<br />
+[119] Biostrings_2.60.2 rmarkdown_2.11<br />
+[121] cellranger_1.1.0 fastmatch_1.1-3<br />
+[123] tidytree_0.3.5 GSEABase_1.54.0<br />
+[125] DelayedMatrixStats_1.14.3 lifecycle_1.0.1<br />
+[127] nlme_3.1-153 jsonlite_1.7.2<br />
+[129] Rhdf5lib_1.14.2 BiocNeighbors_1.10.0<br />
+[131] viridisLite_0.4.0 fansi_0.5.0<br />
+[133] pillar_1.6.4 lattice_0.20-45<br />
+[135] KEGGREST_1.32.0 fastmap_1.1.0<br />
+[137] httr_1.4.2 GO.db_3.13.0<br />
+[139] glue_1.4.2 iterators_1.0.13<br />
+[141] png_0.1-7 bluster_1.2.1<br />
+[143] bit_4.0.4 HDF5Array_1.20.0<br />
+[145] ggforce_0.3.3 stringi_1.7.5<br />
+[147] sass_0.4.0 blob_1.2.2<br />
+[149] BiocSingular_1.8.1 memoise_2.0.0<br />
+[151] irlba_2.3.3 ape_5.5<br />
+[153] sysfonts_0.8.5</p>
+</div>
+</div>
+
+
+<!-- Adjust MathJax settings so that all math formulae are shown using
+TeX fonts only; see
+http://docs.mathjax.org/en/latest/configuration.html.  This will make
+the presentation more consistent at the cost of the webpage sometimes
+taking slightly longer to load. Note that this only works because the
+footer is added to webpages before the MathJax javascript. -->
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({
+    "HTML-CSS": { availableFonts: ["TeX"] }
+  });
+</script>
+
+
+
+
+</div>
+</div>
+
+</div>
+
+<script>
+
+// add bootstrap table styles to pandoc tables
+function bootstrapStylePandocTables() {
+  $('tr.odd').parent('tbody').parent('table').addClass('table table-condensed');
+}
+$(document).ready(function () {
+  bootstrapStylePandocTables();
+});
+
+
+</script>
+
+<!-- tabsets -->
+
+<script>
+$(document).ready(function () {
+  window.buildTabsets("TOC");
+});
+
+$(document).ready(function () {
+  $('.tabset-dropdown > .nav-tabs > li').click(function () {
+    $(this).parent().toggleClass('nav-tabs-open');
+  });
+});
+</script>
+
+<!-- code folding -->
+<script>
+$(document).ready(function () {
+  window.initializeCodeFolding("hide" === "show");
+});
+</script>
+
+<script>
+$(document).ready(function ()  {
+
+    // temporarily add toc-ignore selector to headers for the consistency with Pandoc
+    $('.unlisted.unnumbered').addClass('toc-ignore')
+
+    // move toc-ignore selectors from section div to header
+    $('div.section.toc-ignore')
+        .removeClass('toc-ignore')
+        .children('h1,h2,h3,h4,h5').addClass('toc-ignore');
+
+    // establish options
+    var options = {
+      selectors: "h1,h2,h3,h4",
+      theme: "bootstrap3",
+      context: '.toc-content',
+      hashGenerator: function (text) {
+        return text.replace(/[.\\/?&!#<>]/g, '').replace(/\s/g, '_');
+      },
+      ignoreSelector: ".toc-ignore",
+      scrollTo: 0
+    };
+    options.showAndHide = true;
+    options.smoothScroll = true;
+
+    // tocify
+    var toc = $("#TOC").tocify(options).data("toc-tocify");
+});
+</script>
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    script.src  = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+
+</body>
+</html>

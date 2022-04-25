@@ -1,0 +1,1064 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+
+<meta charset="utf-8" />
+<meta name="generator" content="pandoc" />
+<meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
+
+
+<meta name="author" content="Francesc Castro-Giner" />
+
+<meta name="date" content="2022-02-23" />
+
+<title>Distribution of CTC counts isolated in breast cancer patients</title>
+
+<script src="site_libs/header-attrs-2.11/header-attrs.js"></script>
+<script src="site_libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<link href="site_libs/bootstrap-3.3.5/css/journal.min.css" rel="stylesheet" />
+<script src="site_libs/bootstrap-3.3.5/js/bootstrap.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/html5shiv.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/respond.min.js"></script>
+<style>h1 {font-size: 34px;}
+       h1.title {font-size: 38px;}
+       h2 {font-size: 30px;}
+       h3 {font-size: 24px;}
+       h4 {font-size: 18px;}
+       h5 {font-size: 16px;}
+       h6 {font-size: 12px;}
+       code {color: inherit; background-color: rgba(0, 0, 0, 0.04);}
+       pre:not([class]) { background-color: white }</style>
+<script src="site_libs/jqueryui-1.11.4/jquery-ui.min.js"></script>
+<link href="site_libs/tocify-1.9.1/jquery.tocify.css" rel="stylesheet" />
+<script src="site_libs/tocify-1.9.1/jquery.tocify.js"></script>
+<script src="site_libs/navigation-1.1/tabsets.js"></script>
+<script src="site_libs/navigation-1.1/codefolding.js"></script>
+<link href="site_libs/font-awesome-5.1.0/css/all.css" rel="stylesheet" />
+<link href="site_libs/font-awesome-5.1.0/css/v4-shims.css" rel="stylesheet" />
+
+<link rel="icon" href="https://github.com/workflowr/workflowr-assets/raw/master/img/reproducible.png">
+<!-- Add a small amount of space between sections. -->
+<style type="text/css">
+div.section {
+  padding-top: 12px;
+}
+</style>
+
+
+
+<style type="text/css">
+  code{white-space: pre-wrap;}
+  span.smallcaps{font-variant: small-caps;}
+  span.underline{text-decoration: underline;}
+  div.column{display: inline-block; vertical-align: top; width: 50%;}
+  div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+  ul.task-list{list-style: none;}
+    </style>
+
+
+<style type="text/css">
+  code {
+    white-space: pre;
+  }
+  .sourceCode {
+    overflow: visible;
+  }
+</style>
+<style type="text/css" data-origin="pandoc">
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+    color: #aaaaaa;
+  }
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code span.at { color: #7d9029; } /* Attribute */
+code span.bn { color: #40a070; } /* BaseN */
+code span.bu { } /* BuiltIn */
+code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code span.ch { color: #4070a0; } /* Char */
+code span.cn { color: #880000; } /* Constant */
+code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code span.dt { color: #902000; } /* DataType */
+code span.dv { color: #40a070; } /* DecVal */
+code span.er { color: #ff0000; font-weight: bold; } /* Error */
+code span.ex { } /* Extension */
+code span.fl { color: #40a070; } /* Float */
+code span.fu { color: #06287e; } /* Function */
+code span.im { } /* Import */
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code span.op { color: #666666; } /* Operator */
+code span.ot { color: #007020; } /* Other */
+code span.pp { color: #bc7a00; } /* Preprocessor */
+code span.sc { color: #4070a0; } /* SpecialChar */
+code span.ss { color: #bb6688; } /* SpecialString */
+code span.st { color: #4070a0; } /* String */
+code span.va { color: #19177c; } /* Variable */
+code span.vs { color: #4070a0; } /* VerbatimString */
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+
+.sourceCode .row {
+  width: 100%;
+}
+.sourceCode {
+  overflow-x: auto;
+}
+.code-folding-btn {
+  margin-right: -30px;
+}
+</style>
+<script>
+// apply pandoc div.sourceCode style to pre.sourceCode instead
+(function() {
+  var sheets = document.styleSheets;
+  for (var i = 0; i < sheets.length; i++) {
+    if (sheets[i].ownerNode.dataset["origin"] !== "pandoc") continue;
+    try { var rules = sheets[i].cssRules; } catch (e) { continue; }
+    for (var j = 0; j < rules.length; j++) {
+      var rule = rules[j];
+      // check if there is a div.sourceCode rule
+      if (rule.type !== rule.STYLE_RULE || rule.selectorText !== "div.sourceCode") continue;
+      var style = rule.style.cssText;
+      // check if color or background-color is set
+      if (rule.style.color === '' && rule.style.backgroundColor === '') continue;
+      // replace div.sourceCode by a pre.sourceCode rule
+      sheets[i].deleteRule(j);
+      sheets[i].insertRule('pre.sourceCode{' + style + '}', j);
+    }
+  }
+})();
+</script>
+
+
+
+
+<link rel="stylesheet" href="style.css" type="text/css" />
+
+
+
+<style type = "text/css">
+.main-container {
+  max-width: 940px;
+  margin-left: auto;
+  margin-right: auto;
+}
+img {
+  max-width:100%;
+}
+.tabbed-pane {
+  padding-top: 12px;
+}
+.html-widget {
+  margin-bottom: 20px;
+}
+button.code-folding-btn:focus {
+  outline: none;
+}
+summary {
+  display: list-item;
+}
+pre code {
+  padding: 0;
+}
+</style>
+
+
+<style type="text/css">
+.dropdown-submenu {
+  position: relative;
+}
+.dropdown-submenu>.dropdown-menu {
+  top: 0;
+  left: 100%;
+  margin-top: -6px;
+  margin-left: -1px;
+  border-radius: 0 6px 6px 6px;
+}
+.dropdown-submenu:hover>.dropdown-menu {
+  display: block;
+}
+.dropdown-submenu>a:after {
+  display: block;
+  content: " ";
+  float: right;
+  width: 0;
+  height: 0;
+  border-color: transparent;
+  border-style: solid;
+  border-width: 5px 0 5px 5px;
+  border-left-color: #cccccc;
+  margin-top: 5px;
+  margin-right: -10px;
+}
+.dropdown-submenu:hover>a:after {
+  border-left-color: #adb5bd;
+}
+.dropdown-submenu.pull-left {
+  float: none;
+}
+.dropdown-submenu.pull-left>.dropdown-menu {
+  left: -100%;
+  margin-left: 10px;
+  border-radius: 6px 0 6px 6px;
+}
+</style>
+
+<script type="text/javascript">
+// manage active state of menu based on current page
+$(document).ready(function () {
+  // active menu anchor
+  href = window.location.pathname
+  href = href.substr(href.lastIndexOf('/') + 1)
+  if (href === "")
+    href = "index.html";
+  var menuAnchor = $('a[href="' + href + '"]');
+
+  // mark it active
+  menuAnchor.tab('show');
+
+  // if it's got a parent navbar menu mark it active as well
+  menuAnchor.closest('li.dropdown').addClass('active');
+
+  // Navbar adjustments
+  var navHeight = $(".navbar").first().height() + 15;
+  var style = document.createElement('style');
+  var pt = "padding-top: " + navHeight + "px; ";
+  var mt = "margin-top: -" + navHeight + "px; ";
+  var css = "";
+  // offset scroll position for anchor links (for fixed navbar)
+  for (var i = 1; i <= 6; i++) {
+    css += ".section h" + i + "{ " + pt + mt + "}\n";
+  }
+  style.innerHTML = "body {" + pt + "padding-bottom: 40px; }\n" + css;
+  document.head.appendChild(style);
+});
+</script>
+
+<!-- tabsets -->
+
+<style type="text/css">
+.tabset-dropdown > .nav-tabs {
+  display: inline-table;
+  max-height: 500px;
+  min-height: 44px;
+  overflow-y: auto;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+}
+
+.tabset-dropdown > .nav-tabs > li.active:before {
+  content: "";
+  font-family: 'Glyphicons Halflings';
+  display: inline-block;
+  padding: 10px;
+  border-right: 1px solid #ddd;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li.active:before {
+  content: "&#xe258;";
+  border: none;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open:before {
+  content: "";
+  font-family: 'Glyphicons Halflings';
+  display: inline-block;
+  padding: 10px;
+  border-right: 1px solid #ddd;
+}
+
+.tabset-dropdown > .nav-tabs > li.active {
+  display: block;
+}
+
+.tabset-dropdown > .nav-tabs > li > a,
+.tabset-dropdown > .nav-tabs > li > a:focus,
+.tabset-dropdown > .nav-tabs > li > a:hover {
+  border: none;
+  display: inline-block;
+  border-radius: 4px;
+  background-color: transparent;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li {
+  display: block;
+  float: none;
+}
+
+.tabset-dropdown > .nav-tabs > li {
+  display: none;
+}
+</style>
+
+<!-- code folding -->
+<style type="text/css">
+.code-folding-btn { margin-bottom: 4px; }
+</style>
+
+
+
+<style type="text/css">
+
+#TOC {
+  margin: 25px 0px 20px 0px;
+}
+@media (max-width: 768px) {
+#TOC {
+  position: relative;
+  width: 100%;
+}
+}
+
+@media print {
+.toc-content {
+  /* see https://github.com/w3c/csswg-drafts/issues/4434 */
+  float: right;
+}
+}
+
+.toc-content {
+  padding-left: 30px;
+  padding-right: 40px;
+}
+
+div.main-container {
+  max-width: 1200px;
+}
+
+div.tocify {
+  width: 20%;
+  max-width: 260px;
+  max-height: 85%;
+}
+
+@media (min-width: 768px) and (max-width: 991px) {
+  div.tocify {
+    width: 25%;
+  }
+}
+
+@media (max-width: 767px) {
+  div.tocify {
+    width: 100%;
+    max-width: none;
+  }
+}
+
+.tocify ul, .tocify li {
+  line-height: 20px;
+}
+
+.tocify-subheader .tocify-item {
+  font-size: 0.90em;
+}
+
+.tocify .list-group-item {
+  border-radius: 0px;
+}
+
+
+</style>
+
+
+
+</head>
+
+<body>
+
+
+<div class="container-fluid main-container">
+
+
+<!-- setup 3col/9col grid for toc_float and main content  -->
+<div class="row">
+<div class="col-xs-12 col-sm-4 col-md-3">
+<div id="TOC" class="tocify">
+</div>
+</div>
+
+<div class="toc-content col-xs-12 col-sm-8 col-md-9">
+
+
+
+
+<div class="navbar navbar-default  navbar-fixed-top" role="navigation">
+  <div class="container">
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar">
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      <a class="navbar-brand" href="index.html">CIRCADIAN-CTCs</a>
+    </div>
+    <div id="navbar" class="navbar-collapse collapse">
+      <ul class="nav navbar-nav">
+        
+      </ul>
+      <ul class="nav navbar-nav navbar-right">
+        <li>
+  <a href="https://github.com/TheAcetoLab/diamantopoulou-ctc-dynamics">
+    <span class="fa fa-github"></span>
+     
+    Source code
+  </a>
+</li>
+      </ul>
+    </div><!--/.nav-collapse -->
+  </div><!--/.container -->
+</div><!--/.navbar -->
+
+<div id="header">
+
+<div class="btn-group pull-right float-right">
+<button type="button" class="btn btn-default btn-xs btn-secondary btn-sm dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><span>Code</span> <span class="caret"></span></button>
+<ul class="dropdown-menu dropdown-menu-right" style="min-width: 50px;">
+<li><a id="rmd-show-all-code" href="#">Show All Code</a></li>
+<li><a id="rmd-hide-all-code" href="#">Hide All Code</a></li>
+</ul>
+</div>
+
+
+
+<h1 class="title toc-ignore">Distribution of CTC counts isolated in
+breast cancer patients</h1>
+<h4 class="author">Francesc Castro-Giner</h4>
+<h4 class="date">2022-02-23</h4>
+
+</div>
+
+
+<p>
+<button type="button" class="btn btn-default btn-workflowr btn-workflowr-report" data-toggle="collapse" data-target="#workflowr-report">
+<span class="glyphicon glyphicon-list" aria-hidden="true"></span>
+workflowr <span class="glyphicon glyphicon-ok text-success"
+aria-hidden="true"></span>
+</button>
+</p>
+<div id="workflowr-report" class="collapse">
+<ul class="nav nav-tabs">
+<li class="active">
+<a data-toggle="tab" href="#summary">Summary</a>
+</li>
+<li>
+<a data-toggle="tab" href="#checks"> Checks <span
+class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span>
+</a>
+</li>
+<li>
+<a data-toggle="tab" href="#versions">Past versions</a>
+</li>
+</ul>
+<div class="tab-content">
+<div id="summary" class="tab-pane fade in active">
+<p>
+<strong>Last updated:</strong> 2022-04-26
+</p>
+<p>
+<strong>Checks:</strong> <span
+class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> 7
+<span class="glyphicon glyphicon-exclamation-sign text-danger"
+aria-hidden="true"></span> 0
+</p>
+<p>
+<strong>Knit directory:</strong>
+<code>diamantopoulou-ctc-dynamics/</code> <span
+class="glyphicon glyphicon-question-sign" aria-hidden="true"
+title="This is the local directory in which the code in this file was executed.">
+</span>
+</p>
+<p>
+This reproducible <a href="http://rmarkdown.rstudio.com">R Markdown</a>
+analysis was created with <a
+  href="https://github.com/jdblischak/workflowr">workflowr</a> (version
+1.6.2). The <em>Checks</em> tab describes the reproducibility checks
+that were applied when the results were created. The <em>Past
+versions</em> tab lists the development history.
+</p>
+<hr>
+</div>
+<div id="checks" class="tab-pane fade">
+<div id="workflowr-checks" class="panel-group">
+<div class="panel panel-default">
+<div class="panel-heading">
+<p class="panel-title">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRMarkdownfilestronguptodate">
+<span class="glyphicon glyphicon-ok text-success"
+aria-hidden="true"></span> <strong>R Markdown file:</strong> up-to-date
+</a>
+</p>
+</div>
+<div id="strongRMarkdownfilestronguptodate"
+class="panel-collapse collapse">
+<div class="panel-body">
+<p>Great! Since the R Markdown file has been committed to the Git
+repository, you know the exact version of the code that produced these
+results.</p>
+</div>
+</div>
+</div>
+<div class="panel panel-default">
+<div class="panel-heading">
+<p class="panel-title">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongEnvironmentstrongempty">
+<span class="glyphicon glyphicon-ok text-success"
+aria-hidden="true"></span> <strong>Environment:</strong> empty </a>
+</p>
+</div>
+<div id="strongEnvironmentstrongempty" class="panel-collapse collapse">
+<div class="panel-body">
+<p>Great job! The global environment was empty. Objects defined in the
+global environment can affect the analysis in your R Markdown file in
+unknown ways. For reproduciblity it’s best to always run the code in an
+empty environment.</p>
+</div>
+</div>
+</div>
+<div class="panel panel-default">
+<div class="panel-heading">
+<p class="panel-title">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongSeedstrongcodesetseed20220425code">
+<span class="glyphicon glyphicon-ok text-success"
+aria-hidden="true"></span> <strong>Seed:</strong>
+<code>set.seed(20220425)</code> </a>
+</p>
+</div>
+<div id="strongSeedstrongcodesetseed20220425code"
+class="panel-collapse collapse">
+<div class="panel-body">
+<p>The command <code>set.seed(20220425)</code> was run prior to running
+the code in the R Markdown file. Setting a seed ensures that any results
+that rely on randomness, e.g. subsampling or permutations, are
+reproducible.</p>
+</div>
+</div>
+</div>
+<div class="panel panel-default">
+<div class="panel-heading">
+<p class="panel-title">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongSessioninformationstrongrecorded">
+<span class="glyphicon glyphicon-ok text-success"
+aria-hidden="true"></span> <strong>Session information:</strong>
+recorded </a>
+</p>
+</div>
+<div id="strongSessioninformationstrongrecorded"
+class="panel-collapse collapse">
+<div class="panel-body">
+<p>Great job! Recording the operating system, R version, and package
+versions is critical for reproducibility.</p>
+</div>
+</div>
+</div>
+<div class="panel panel-default">
+<div class="panel-heading">
+<p class="panel-title">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongCachestrongnone">
+<span class="glyphicon glyphicon-ok text-success"
+aria-hidden="true"></span> <strong>Cache:</strong> none </a>
+</p>
+</div>
+<div id="strongCachestrongnone" class="panel-collapse collapse">
+<div class="panel-body">
+<p>Nice! There were no cached chunks for this analysis, so you can be
+confident that you successfully produced the results during this
+run.</p>
+</div>
+</div>
+</div>
+<div class="panel panel-default">
+<div class="panel-heading">
+<p class="panel-title">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongFilepathsstrongrelative">
+<span class="glyphicon glyphicon-ok text-success"
+aria-hidden="true"></span> <strong>File paths:</strong> relative </a>
+</p>
+</div>
+<div id="strongFilepathsstrongrelative" class="panel-collapse collapse">
+<div class="panel-body">
+<p>Great job! Using relative paths to the files within your workflowr
+project makes it easier to run your code on other machines.</p>
+</div>
+</div>
+</div>
+<div class="panel panel-default">
+<div class="panel-heading">
+<p class="panel-title">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRepositoryversionstrongahrefhttpsgithubcomTheAcetoLabdiamantopoulouctcdynamicstree0ded9f5eb929c7853186f31da3ed481e57e151e9targetblank0ded9f5a">
+<span class="glyphicon glyphicon-ok text-success"
+aria-hidden="true"></span> <strong>Repository version:</strong>
+<a href="https://github.com/TheAcetoLab/diamantopoulou-ctc-dynamics/tree/0ded9f5eb929c7853186f31da3ed481e57e151e9" target="_blank">0ded9f5</a>
+</a>
+</p>
+</div>
+<div
+id="strongRepositoryversionstrongahrefhttpsgithubcomTheAcetoLabdiamantopoulouctcdynamicstree0ded9f5eb929c7853186f31da3ed481e57e151e9targetblank0ded9f5a"
+class="panel-collapse collapse">
+<div class="panel-body">
+<p>
+Great! You are using Git for version control. Tracking code development
+and connecting the code version to the results is critical for
+reproducibility.
+</p>
+<p>
+The results in this page were generated with repository version
+<a href="https://github.com/TheAcetoLab/diamantopoulou-ctc-dynamics/tree/0ded9f5eb929c7853186f31da3ed481e57e151e9" target="_blank">0ded9f5</a>.
+See the <em>Past versions</em> tab to see a history of the changes made
+to the R Markdown and HTML files.
+</p>
+<p>
+Note that you need to be careful to ensure that all relevant files for
+the analysis have been committed to Git prior to generating the results
+(you can use <code>wflow_publish</code> or
+<code>wflow_git_commit</code>). workflowr only checks the R Markdown
+file, but you know if there are other scripts or data files that it
+depends on. Below is the status of the Git repository when the results
+were generated:
+</p>
+<pre><code>
+Ignored files:
+    Ignored:    .Rhistory
+    Ignored:    .Rproj.user/
+
+Untracked files:
+    Untracked:  analysis/0_differential_expression_gsea_gsva.md
+    Untracked:  analysis/about.md
+    Untracked:  analysis/br16_dge.md
+    Untracked:  analysis/br16_pca.md
+    Untracked:  analysis/core_gene_sets.md
+    Untracked:  analysis/gsea_across_models.md
+    Untracked:  analysis/index.md
+    Untracked:  analysis/license.md
+    Untracked:  analysis/patients_ctc_counts_distribution.md
+    Untracked:  data/differential_expression/
+    Untracked:  data/patients/
+    Untracked:  data/resources/
+    Untracked:  data/sce/
+
+</code></pre>
+<p>
+Note that any generated files, e.g. HTML, png, CSS, etc., are not
+included in this status report because it is ok for generated content to
+have uncommitted changes.
+</p>
+</div>
+</div>
+</div>
+</div>
+<hr>
+</div>
+<div id="versions" class="tab-pane fade">
+
+<p>
+These are the previous versions of the repository in which changes were
+made to the R Markdown
+(<code>analysis/patients_ctc_counts_distribution.Rmd</code>) and HTML
+(<code>docs/patients_ctc_counts_distribution.html</code>) files. If
+you’ve configured a remote Git repository (see
+<code>?wflow_git_remote</code>), click on the hyperlinks in the table
+below to view the files as they were in that past version.
+</p>
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+File
+</th>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+<th>
+Message
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+Rmd
+</td>
+<td>
+<a href="https://github.com/TheAcetoLab/diamantopoulou-ctc-dynamics/blob/0ded9f5eb929c7853186f31da3ed481e57e151e9/analysis/patients_ctc_counts_distribution.Rmd" target="_blank">0ded9f5</a>
+</td>
+<td>
+fcg-bio
+</td>
+<td>
+2022-04-26
+</td>
+<td>
+added final code
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+<hr>
+</div>
+</div>
+</div>
+<div id="load-libraries-additional-functions-and-variables"
+class="section level2">
+<h2>Load libraries, additional functions and variables</h2>
+<p>Setup environment</p>
+<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a>knitr<span class="sc">::</span>opts_chunk<span class="sc">$</span><span class="fu">set</span>(<span class="at">results=</span><span class="st">&#39;asis&#39;</span>, <span class="at">echo=</span><span class="cn">TRUE</span>, <span class="at">message=</span><span class="cn">FALSE</span>, <span class="at">warning=</span><span class="cn">FALSE</span>, <span class="at">error=</span><span class="cn">FALSE</span>, <span class="at">fig.align =</span> <span class="st">&#39;center&#39;</span>, <span class="at">fig.width =</span> <span class="fl">3.5</span>, <span class="at">fig.asp =</span> <span class="fl">0.618</span>, <span class="at">dpi =</span> <span class="dv">600</span>, <span class="at">dev =</span> <span class="fu">c</span>(<span class="st">&quot;png&quot;</span>, <span class="st">&quot;pdf&quot;</span>), <span class="at">fig.showtext =</span> <span class="cn">TRUE</span>)</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="fu">options</span>(<span class="at">stringsAsFactors =</span> <span class="cn">FALSE</span>)</span></code></pre></div>
+<p>Load packages</p>
+<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tidyverse)</span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(showtext)</span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(grid)</span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(gridExtra)</span></code></pre></div>
+<p>Set font family for figures</p>
+<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="fu">font_add</span>(<span class="st">&quot;Helvetica&quot;</span>, <span class="st">&quot;./configuration/fonts/Helvetica.ttc&quot;</span>)</span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a><span class="fu">showtext_auto</span>()</span></code></pre></div>
+<p>Load ggplot theme</p>
+<div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="fu">source</span>(<span class="st">&quot;./configuration/rmarkdown/ggplot_theme.R&quot;</span>)</span></code></pre></div>
+<p>Load color palettes</p>
+<div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="fu">source</span>(<span class="st">&quot;./configuration/rmarkdown/color_palettes.R&quot;</span>)</span></code></pre></div>
+</div>
+<div id="data-wrangling" class="section level2">
+<h2>Data wrangling</h2>
+<div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a>use_data_raw <span class="ot">&lt;-</span> <span class="fu">read_tsv</span>(<span class="at">file =</span> <span class="st">&#39;data/patients/ctc_frequency_patients.tsv.txt&#39;</span>) <span class="sc">%&gt;%</span> </span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(</span>
+<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a>   <span class="at">n_active =</span> <span class="st">`</span><span class="at">Single CTCs active phase</span><span class="st">`</span> <span class="sc">+</span> <span class="st">`</span><span class="at">CTC Clusters active phase</span><span class="st">`</span> <span class="sc">+</span><span class="st">`</span><span class="at">CTC-WBC clusters active phase</span><span class="st">`</span>,</span>
+<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a>   <span class="at">n_rest =</span> <span class="st">`</span><span class="at">Single CTCs rest phase</span><span class="st">`</span> <span class="sc">+</span> <span class="st">`</span><span class="at">CTC Clusters rest phase</span><span class="st">`</span> <span class="sc">+</span> <span class="st">`</span><span class="at">CTC-WBC clusters rest phase</span><span class="st">`</span>,</span>
+<span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a>   <span class="at">p_active =</span> n_active <span class="sc">/</span> (n_active <span class="sc">+</span> n_rest)</span>
+<span id="cb6-6"><a href="#cb6-6" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">%&gt;%</span> </span>
+<span id="cb6-7"><a href="#cb6-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">pivot_longer</span>(<span class="at">cols =</span> <span class="fu">contains</span>(<span class="st">&quot;CTC&quot;</span>), <span class="at">names_to =</span> <span class="st">&#39;timepoint_sample_type_legend&#39;</span>, <span class="at">values_to =</span> <span class="st">&#39;n&#39;</span>) <span class="sc">%&gt;%</span> </span>
+<span id="cb6-8"><a href="#cb6-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(</span>
+<span id="cb6-9"><a href="#cb6-9" aria-hidden="true" tabindex="-1"></a>    <span class="at">donor =</span> <span class="fu">paste</span>(<span class="st">&#39;Patient&#39;</span>, Patient),</span>
+<span id="cb6-10"><a href="#cb6-10" aria-hidden="true" tabindex="-1"></a>    <span class="at">Status =</span> <span class="fu">ifelse</span>(<span class="st">`</span><span class="at">AJCC Stage 8th Edition</span><span class="st">`</span> <span class="sc">==</span> <span class="st">&#39;IV&#39;</span>, <span class="st">&#39;Late&#39;</span>, <span class="st">&#39;Early&#39;</span>),</span>
+<span id="cb6-11"><a href="#cb6-11" aria-hidden="true" tabindex="-1"></a>    <span class="at">timepoint_sample_type_legend =</span> <span class="fu">recode</span>(</span>
+<span id="cb6-12"><a href="#cb6-12" aria-hidden="true" tabindex="-1"></a>      timepoint_sample_type_legend,</span>
+<span id="cb6-13"><a href="#cb6-13" aria-hidden="true" tabindex="-1"></a>      <span class="st">`</span><span class="at">CTC Clusters active phase</span><span class="st">`</span> <span class="ot">=</span> <span class="st">&#39;Active phase CTC Clusters&#39;</span>,</span>
+<span id="cb6-14"><a href="#cb6-14" aria-hidden="true" tabindex="-1"></a>      <span class="st">`</span><span class="at">CTC Clusters rest phase</span><span class="st">`</span> <span class="ot">=</span> <span class="st">&#39;Rest phase CTC Clusters&#39;</span>,</span>
+<span id="cb6-15"><a href="#cb6-15" aria-hidden="true" tabindex="-1"></a>      <span class="st">`</span><span class="at">CTC-WBC clusters active phase</span><span class="st">`</span> <span class="ot">=</span> <span class="st">&#39;Active phase CTC-WBC Clusters&#39;</span>,</span>
+<span id="cb6-16"><a href="#cb6-16" aria-hidden="true" tabindex="-1"></a>      <span class="st">`</span><span class="at">CTC-WBC clusters rest phase</span><span class="st">`</span> <span class="ot">=</span> <span class="st">&#39;Rest phase CTC-WBC Clusters&#39;</span>,</span>
+<span id="cb6-17"><a href="#cb6-17" aria-hidden="true" tabindex="-1"></a>      <span class="st">`</span><span class="at">Single CTCs active phase</span><span class="st">`</span> <span class="ot">=</span> <span class="st">&#39;Active phase Single CTCs&#39;</span>,</span>
+<span id="cb6-18"><a href="#cb6-18" aria-hidden="true" tabindex="-1"></a>      <span class="st">`</span><span class="at">Single CTCs rest phase</span><span class="st">`</span> <span class="ot">=</span> <span class="st">&#39;Rest phase Single CTCs&#39;</span>,</span>
+<span id="cb6-19"><a href="#cb6-19" aria-hidden="true" tabindex="-1"></a>    ),</span>
+<span id="cb6-20"><a href="#cb6-20" aria-hidden="true" tabindex="-1"></a>    <span class="at">timepoint_sample_type_legend =</span> <span class="fu">factor</span>(</span>
+<span id="cb6-21"><a href="#cb6-21" aria-hidden="true" tabindex="-1"></a>      timepoint_sample_type_legend,</span>
+<span id="cb6-22"><a href="#cb6-22" aria-hidden="true" tabindex="-1"></a>      <span class="at">levels =</span> <span class="fu">c</span>(<span class="st">&#39;Active phase Single CTCs&#39;</span>, <span class="st">&#39;Active phase CTC Clusters&#39;</span>, <span class="st">&#39;Active phase CTC-WBC Clusters&#39;</span>,</span>
+<span id="cb6-23"><a href="#cb6-23" aria-hidden="true" tabindex="-1"></a>                    <span class="st">&#39;Rest phase Single CTCs&#39;</span>, <span class="st">&#39;Rest phase CTC Clusters&#39;</span>, <span class="st">&#39;Rest phase CTC-WBC Clusters&#39;</span>)</span>
+<span id="cb6-24"><a href="#cb6-24" aria-hidden="true" tabindex="-1"></a>    )</span>
+<span id="cb6-25"><a href="#cb6-25" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">%&gt;%</span> </span>
+<span id="cb6-26"><a href="#cb6-26" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(n <span class="sc">&gt;</span> <span class="dv">0</span>) <span class="sc">%&gt;%</span> </span>
+<span id="cb6-27"><a href="#cb6-27" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(Status, donor, timepoint_sample_type_legend, n, p_active) <span class="sc">%&gt;%</span> </span>
+<span id="cb6-28"><a href="#cb6-28" aria-hidden="true" tabindex="-1"></a>  unique</span>
+<span id="cb6-29"><a href="#cb6-29" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-30"><a href="#cb6-30" aria-hidden="true" tabindex="-1"></a>use_data_all <span class="ot">&lt;-</span> use_data_raw <span class="sc">%&gt;%</span> </span>
+<span id="cb6-31"><a href="#cb6-31" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(donor) <span class="sc">%&gt;%</span> </span>
+<span id="cb6-32"><a href="#cb6-32" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarise</span>(<span class="at">t =</span> <span class="fu">sum</span>(n)) <span class="sc">%&gt;%</span> </span>
+<span id="cb6-33"><a href="#cb6-33" aria-hidden="true" tabindex="-1"></a>  <span class="fu">right_join</span>(use_data_raw) <span class="sc">%&gt;%</span> </span>
+<span id="cb6-34"><a href="#cb6-34" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">p =</span> n<span class="sc">/</span>t) <span class="sc">%&gt;%</span> </span>
+<span id="cb6-35"><a href="#cb6-35" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(</span>
+<span id="cb6-36"><a href="#cb6-36" aria-hidden="true" tabindex="-1"></a>    <span class="at">donor =</span> <span class="fu">fct_reorder</span>(donor, t),</span>
+<span id="cb6-37"><a href="#cb6-37" aria-hidden="true" tabindex="-1"></a>    <span class="at">id =</span> <span class="fu">gsub</span>(<span class="st">&quot;.* &quot;</span>, <span class="st">&quot;&quot;</span>, donor) <span class="sc">%&gt;%</span> as.numeric)</span></code></pre></div>
+</div>
+<div id="setup-polar-plot-early-status" class="section level2">
+<h2>Setup polar plot early status</h2>
+<div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a>use_data <span class="ot">&lt;-</span> use_data_all <span class="sc">%&gt;%</span> <span class="fu">filter</span>(Status <span class="sc">==</span> <span class="st">&#39;Early&#39;</span>)</span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a><span class="co"># Get the name and the y position of each label</span></span>
+<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a>label_data <span class="ot">&lt;-</span> use_data <span class="sc">%&gt;%</span> dplyr<span class="sc">::</span><span class="fu">select</span>(donor, id, t) <span class="sc">%&gt;%</span> unique</span>
+<span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a>number_of_bar <span class="ot">&lt;-</span> <span class="fu">nrow</span>(label_data)</span>
+<span id="cb7-5"><a href="#cb7-5" aria-hidden="true" tabindex="-1"></a>angle <span class="ot">&lt;-</span> <span class="dv">90</span> <span class="sc">-</span> <span class="dv">360</span> <span class="sc">*</span> (label_data<span class="sc">$</span>id<span class="fl">-0.5</span>) <span class="sc">/</span> (number_of_bar <span class="sc">+</span><span class="fl">0.5</span>)   <span class="co"># I substract 0.5 because the letter must have the angle of the center of the bars. Not extreme right(1) or extreme left (0)</span></span>
+<span id="cb7-6"><a href="#cb7-6" aria-hidden="true" tabindex="-1"></a>label_data<span class="sc">$</span>hjust <span class="ot">&lt;-</span> <span class="fu">ifelse</span>( angle <span class="sc">&lt;</span> <span class="sc">-</span><span class="dv">90</span>, <span class="dv">1</span>, <span class="dv">0</span>)</span>
+<span id="cb7-7"><a href="#cb7-7" aria-hidden="true" tabindex="-1"></a>label_data<span class="sc">$</span>angle <span class="ot">&lt;-</span> <span class="fu">ifelse</span>(angle <span class="sc">&lt;</span> <span class="sc">-</span><span class="dv">90</span>, angle<span class="sc">+</span><span class="dv">180</span>, angle)</span>
+<span id="cb7-8"><a href="#cb7-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-9"><a href="#cb7-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-10"><a href="#cb7-10" aria-hidden="true" tabindex="-1"></a><span class="co"># prepare a data frame for grid (scales)</span></span>
+<span id="cb7-11"><a href="#cb7-11" aria-hidden="true" tabindex="-1"></a>grid_data <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(<span class="at">start =</span> <span class="dv">1</span>, <span class="at">end =</span> (use_data<span class="sc">$</span>donor <span class="sc">%&gt;%</span> unique <span class="sc">%&gt;%</span> length))</span>
+<span id="cb7-12"><a href="#cb7-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-13"><a href="#cb7-13" aria-hidden="true" tabindex="-1"></a><span class="co"># Add two additional donor levels to have additional space for grid labels</span></span>
+<span id="cb7-14"><a href="#cb7-14" aria-hidden="true" tabindex="-1"></a>use_data_to_plot <span class="ot">&lt;-</span> <span class="fu">rbind</span>(</span>
+<span id="cb7-15"><a href="#cb7-15" aria-hidden="true" tabindex="-1"></a>    <span class="fu">c</span>(<span class="st">&#39;empty1&#39;</span>, <span class="fu">rep</span>(<span class="cn">NA</span>, <span class="fu">ncol</span>(use_data)<span class="sc">-</span><span class="dv">1</span>)), </span>
+<span id="cb7-16"><a href="#cb7-16" aria-hidden="true" tabindex="-1"></a>    <span class="fu">c</span>(<span class="st">&#39;empty2&#39;</span>,<span class="fu">rep</span>(<span class="cn">NA</span>, <span class="fu">ncol</span>(use_data)<span class="sc">-</span><span class="dv">1</span>)), </span>
+<span id="cb7-17"><a href="#cb7-17" aria-hidden="true" tabindex="-1"></a>    use_data</span>
+<span id="cb7-18"><a href="#cb7-18" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">%&gt;%</span> </span>
+<span id="cb7-19"><a href="#cb7-19" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">p =</span> <span class="fu">as.numeric</span>(p))</span>
+<span id="cb7-20"><a href="#cb7-20" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-21"><a href="#cb7-21" aria-hidden="true" tabindex="-1"></a><span class="co"># Generate plot</span></span>
+<span id="cb7-22"><a href="#cb7-22" aria-hidden="true" tabindex="-1"></a>ctc_dist_plot_early <span class="ot">&lt;-</span> use_data_to_plot <span class="sc">%&gt;%</span> </span>
+<span id="cb7-23"><a href="#cb7-23" aria-hidden="true" tabindex="-1"></a>  <span class="co"># mutate(donor = fct_reorder(donor, t)) %&gt;% </span></span>
+<span id="cb7-24"><a href="#cb7-24" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(<span class="at">x =</span> donor, <span class="at">y =</span> p, <span class="at">fill =</span> timepoint_sample_type_legend, <span class="at">label =</span> donor)) <span class="sc">+</span></span>
+<span id="cb7-25"><a href="#cb7-25" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_bar</span>(<span class="at">stat=</span><span class="st">&quot;identity&quot;</span>, <span class="at">position =</span> <span class="st">&quot;fill&quot;</span>, <span class="at">width=</span><span class="fl">0.8</span>, <span class="at">size =</span> <span class="fl">0.2</span>) <span class="sc">+</span></span>
+<span id="cb7-26"><a href="#cb7-26" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Add a val=100/75/50/25 lines. I do it at the beginning to make sur barplots are OVER it.</span></span>
+<span id="cb7-27"><a href="#cb7-27" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_segment</span>(<span class="at">data=</span>grid_data, <span class="fu">aes</span>(<span class="at">x =</span> end, <span class="at">y =</span> <span class="dv">0</span>, <span class="at">xend =</span> start<span class="fl">-0.5</span>, <span class="at">yend =</span> <span class="dv">0</span>), <span class="at">colour =</span> <span class="st">&quot;grey50&quot;</span>, <span class="at">alpha=</span><span class="dv">1</span>, <span class="at">size=</span><span class="fl">0.2</span>, <span class="at">inherit.aes =</span> <span class="cn">FALSE</span> ) <span class="sc">+</span></span>
+<span id="cb7-28"><a href="#cb7-28" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_segment</span>(<span class="at">data=</span>grid_data, <span class="fu">aes</span>(<span class="at">x =</span> end, <span class="at">y =</span> <span class="fl">0.25</span>, <span class="at">xend =</span> start<span class="fl">-0.5</span>, <span class="at">yend =</span> <span class="fl">0.25</span>), <span class="at">colour =</span> <span class="st">&quot;grey50&quot;</span>, <span class="at">alpha=</span><span class="dv">1</span>, <span class="at">size=</span><span class="fl">0.2</span> , <span class="at">inherit.aes =</span> <span class="cn">FALSE</span> ) <span class="sc">+</span></span>
+<span id="cb7-29"><a href="#cb7-29" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_segment</span>(<span class="at">data=</span>grid_data, <span class="fu">aes</span>(<span class="at">x =</span> end, <span class="at">y =</span> <span class="fl">0.50</span>, <span class="at">xend =</span> start<span class="fl">-0.5</span>, <span class="at">yend =</span> <span class="fl">0.50</span>), <span class="at">colour =</span> <span class="st">&quot;grey50&quot;</span>, <span class="at">alpha=</span><span class="dv">1</span>, <span class="at">size=</span><span class="fl">0.2</span> , <span class="at">inherit.aes =</span> <span class="cn">FALSE</span> ) <span class="sc">+</span></span>
+<span id="cb7-30"><a href="#cb7-30" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_segment</span>(<span class="at">data=</span>grid_data, <span class="fu">aes</span>(<span class="at">x =</span> end, <span class="at">y =</span> <span class="fl">0.75</span>, <span class="at">xend =</span> start<span class="fl">-0.5</span>, <span class="at">yend =</span> <span class="fl">0.75</span>), <span class="at">colour =</span> <span class="st">&quot;grey50&quot;</span>, <span class="at">alpha=</span><span class="dv">1</span>, <span class="at">size=</span><span class="fl">0.2</span> , <span class="at">inherit.aes =</span> <span class="cn">FALSE</span> ) <span class="sc">+</span></span>
+<span id="cb7-31"><a href="#cb7-31" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_segment</span>(<span class="at">data=</span>grid_data, <span class="fu">aes</span>(<span class="at">x =</span> end, <span class="at">y =</span> <span class="dv">1</span>, <span class="at">xend =</span> start<span class="fl">-0.5</span>, <span class="at">yend =</span> <span class="dv">1</span>), <span class="at">colour =</span> <span class="st">&quot;grey50&quot;</span>, <span class="at">alpha=</span><span class="dv">1</span>, <span class="at">size=</span><span class="fl">0.2</span> , <span class="at">inherit.aes =</span> <span class="cn">FALSE</span> ) <span class="sc">+</span></span>
+<span id="cb7-32"><a href="#cb7-32" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Add text showing the value of each 100/75/50/25 lines</span></span>
+<span id="cb7-33"><a href="#cb7-33" aria-hidden="true" tabindex="-1"></a>  <span class="fu">annotate</span>(<span class="st">&quot;text&quot;</span>, <span class="at">x =</span> <span class="fu">rep</span>(grid_data<span class="sc">$</span>end <span class="sc">+</span> <span class="dv">3</span> ,<span class="dv">5</span>), <span class="at">y =</span> <span class="fu">c</span>(<span class="dv">0</span>, <span class="fl">0.25</span>, <span class="fl">0.50</span>, <span class="fl">0.75</span>, <span class="dv">1</span>), <span class="at">label =</span> <span class="fu">c</span>(<span class="st">&#39;0%&#39;</span>, <span class="st">&#39;25%&#39;</span>, <span class="st">&#39;50%&#39;</span>, <span class="st">&#39;75%&#39;</span>, <span class="st">&#39;100%&#39;</span>) , <span class="at">color=</span><span class="st">&quot;black&quot;</span>, <span class="at">size=</span>geom_text_size , <span class="at">angle=</span><span class="dv">0</span>, <span class="at">fontface=</span><span class="st">&quot;plain&quot;</span>, <span class="at">hjust=</span><span class="dv">1</span>) <span class="sc">+</span></span>
+<span id="cb7-34"><a href="#cb7-34" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_bar</span>(<span class="at">stat=</span><span class="st">&quot;identity&quot;</span>, <span class="at">position =</span> <span class="st">&quot;fill&quot;</span>, <span class="at">width=</span><span class="fl">0.8</span>, <span class="at">color =</span> <span class="st">&#39;white&#39;</span>, <span class="at">size =</span> <span class="fl">0.2</span>) <span class="sc">+</span></span>
+<span id="cb7-35"><a href="#cb7-35" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_fill_manual</span>(<span class="at">values =</span> timepoint_sample_type_legend_palette_2) <span class="sc">+</span></span>
+<span id="cb7-36"><a href="#cb7-36" aria-hidden="true" tabindex="-1"></a>  <span class="co"># scale_y_continuous(breaks = seq(0 , 1, 0.1), minor_breaks = seq(0 , 1, 0.1)) +</span></span>
+<span id="cb7-37"><a href="#cb7-37" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ylim</span>(<span class="sc">-</span><span class="fl">0.5</span>, <span class="fl">1.5</span>) <span class="sc">+</span></span>
+<span id="cb7-38"><a href="#cb7-38" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span> (<span class="at">fill =</span> <span class="st">&#39;&#39;</span>) <span class="sc">+</span></span>
+<span id="cb7-39"><a href="#cb7-39" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme</span>(</span>
+<span id="cb7-40"><a href="#cb7-40" aria-hidden="true" tabindex="-1"></a>    <span class="at">axis.text =</span> <span class="fu">element_blank</span>(),</span>
+<span id="cb7-41"><a href="#cb7-41" aria-hidden="true" tabindex="-1"></a>    <span class="at">axis.title =</span> <span class="fu">element_blank</span>(),</span>
+<span id="cb7-42"><a href="#cb7-42" aria-hidden="true" tabindex="-1"></a>    <span class="at">axis.ticks =</span> <span class="fu">element_blank</span>(),</span>
+<span id="cb7-43"><a href="#cb7-43" aria-hidden="true" tabindex="-1"></a>    <span class="at">axis.line =</span> <span class="fu">element_blank</span>(),</span>
+<span id="cb7-44"><a href="#cb7-44" aria-hidden="true" tabindex="-1"></a>    <span class="at">panel.grid =</span> <span class="fu">element_blank</span>(),</span>
+<span id="cb7-45"><a href="#cb7-45" aria-hidden="true" tabindex="-1"></a>    <span class="at">plot.margin =</span> <span class="fu">unit</span>(<span class="fu">rep</span>(<span class="sc">-</span><span class="dv">1</span>,<span class="dv">4</span>), <span class="st">&quot;cm&quot;</span>)</span>
+<span id="cb7-46"><a href="#cb7-46" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">+</span></span>
+<span id="cb7-47"><a href="#cb7-47" aria-hidden="true" tabindex="-1"></a>  <span class="fu">coord_polar</span>(<span class="at">start =</span> <span class="dv">0</span>) <span class="co">#+</span></span>
+<span id="cb7-48"><a href="#cb7-48" aria-hidden="true" tabindex="-1"></a>  <span class="co"># geom_text(data=label_data, aes(x=id, y=1+0.1, label=donor, hjust=hjust), color=&quot;black&quot;, fontface=&quot;plain&quot;,alpha=0.6, size=geom_text_size, angle= label_data$angle, inherit.aes = FALSE )</span></span></code></pre></div>
+</div>
+<div id="setup-polar-plot-early-status-1" class="section level2">
+<h2>Setup polar plot early status</h2>
+<div class="sourceCode" id="cb8"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a>use_data <span class="ot">&lt;-</span> use_data_all <span class="sc">%&gt;%</span> <span class="fu">filter</span>(Status <span class="sc">==</span> <span class="st">&#39;Late&#39;</span>)</span>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a><span class="co"># Get the name and the y position of each label</span></span>
+<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a>label_data <span class="ot">&lt;-</span> use_data <span class="sc">%&gt;%</span> dplyr<span class="sc">::</span><span class="fu">select</span>(donor, id, t) <span class="sc">%&gt;%</span> unique</span>
+<span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a>number_of_bar <span class="ot">&lt;-</span> <span class="fu">nrow</span>(label_data)</span>
+<span id="cb8-5"><a href="#cb8-5" aria-hidden="true" tabindex="-1"></a>angle <span class="ot">&lt;-</span> <span class="dv">90</span> <span class="sc">-</span> <span class="dv">360</span> <span class="sc">*</span> (label_data<span class="sc">$</span>id<span class="dv">-5</span><span class="fl">-0.5</span>) <span class="sc">/</span> (number_of_bar <span class="sc">+</span><span class="fl">0.5</span>)   <span class="co"># I substract 0.5 because the letter must have the angle of the center of the bars. Not extreme right(1) or extreme left (0)</span></span>
+<span id="cb8-6"><a href="#cb8-6" aria-hidden="true" tabindex="-1"></a>label_data<span class="sc">$</span>hjust <span class="ot">&lt;-</span> <span class="fu">ifelse</span>( angle <span class="sc">&lt;</span> <span class="sc">-</span><span class="dv">90</span>, <span class="dv">1</span>, <span class="dv">0</span>)</span>
+<span id="cb8-7"><a href="#cb8-7" aria-hidden="true" tabindex="-1"></a>label_data<span class="sc">$</span>angle <span class="ot">&lt;-</span> <span class="fu">ifelse</span>(angle <span class="sc">&lt;</span> <span class="sc">-</span><span class="dv">90</span>, angle<span class="sc">+</span><span class="dv">180</span>, angle)</span>
+<span id="cb8-8"><a href="#cb8-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-9"><a href="#cb8-9" aria-hidden="true" tabindex="-1"></a><span class="co"># prepare a data frame for grid (scales)</span></span>
+<span id="cb8-10"><a href="#cb8-10" aria-hidden="true" tabindex="-1"></a>grid_data <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(<span class="at">start =</span> <span class="dv">1</span>, <span class="at">end =</span> (use_data<span class="sc">$</span>donor <span class="sc">%&gt;%</span> unique <span class="sc">%&gt;%</span> length))</span>
+<span id="cb8-11"><a href="#cb8-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-12"><a href="#cb8-12" aria-hidden="true" tabindex="-1"></a><span class="co"># Add two additional donor levels to have additional space for grid labels</span></span>
+<span id="cb8-13"><a href="#cb8-13" aria-hidden="true" tabindex="-1"></a>use_data_to_plot <span class="ot">&lt;-</span> <span class="fu">rbind</span>(</span>
+<span id="cb8-14"><a href="#cb8-14" aria-hidden="true" tabindex="-1"></a>  <span class="fu">c</span>(<span class="st">&#39;empty1&#39;</span>, <span class="fu">rep</span>(<span class="cn">NA</span>, <span class="fu">ncol</span>(use_data)<span class="sc">-</span><span class="dv">1</span>)), </span>
+<span id="cb8-15"><a href="#cb8-15" aria-hidden="true" tabindex="-1"></a>  use_data) <span class="sc">%&gt;%</span> </span>
+<span id="cb8-16"><a href="#cb8-16" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">p =</span> <span class="fu">as.numeric</span>(p))</span>
+<span id="cb8-17"><a href="#cb8-17" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-18"><a href="#cb8-18" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-19"><a href="#cb8-19" aria-hidden="true" tabindex="-1"></a>ctc_dist_plot_late <span class="ot">&lt;-</span> use_data_to_plot <span class="sc">%&gt;%</span> </span>
+<span id="cb8-20"><a href="#cb8-20" aria-hidden="true" tabindex="-1"></a>  <span class="co"># mutate(donor = fct_reorder(donor, t)) %&gt;% </span></span>
+<span id="cb8-21"><a href="#cb8-21" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(<span class="at">x =</span> donor, <span class="at">y =</span> p, <span class="at">fill =</span> timepoint_sample_type_legend, <span class="at">label =</span> donor)) <span class="sc">+</span></span>
+<span id="cb8-22"><a href="#cb8-22" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_bar</span>(<span class="at">stat=</span><span class="st">&quot;identity&quot;</span>, <span class="at">position =</span> <span class="st">&quot;fill&quot;</span>, <span class="at">width=</span><span class="fl">0.8</span>, <span class="at">size =</span> <span class="fl">0.2</span>) <span class="sc">+</span></span>
+<span id="cb8-23"><a href="#cb8-23" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Add a val=100/75/50/25 lines. I do it at the beginning to make sur barplots are OVER it.</span></span>
+<span id="cb8-24"><a href="#cb8-24" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_segment</span>(<span class="at">data=</span>grid_data, <span class="fu">aes</span>(<span class="at">x =</span> end, <span class="at">y =</span> <span class="dv">0</span>, <span class="at">xend =</span> start<span class="fl">-0.5</span>, <span class="at">yend =</span> <span class="dv">0</span>), <span class="at">colour =</span> <span class="st">&quot;grey50&quot;</span>, <span class="at">alpha=</span><span class="dv">1</span>, <span class="at">size=</span><span class="fl">0.2</span>, <span class="at">inherit.aes =</span> <span class="cn">FALSE</span> ) <span class="sc">+</span></span>
+<span id="cb8-25"><a href="#cb8-25" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_segment</span>(<span class="at">data=</span>grid_data, <span class="fu">aes</span>(<span class="at">x =</span> end, <span class="at">y =</span> <span class="fl">0.25</span>, <span class="at">xend =</span> start<span class="fl">-0.5</span>, <span class="at">yend =</span> <span class="fl">0.25</span>), <span class="at">colour =</span> <span class="st">&quot;grey50&quot;</span>, <span class="at">alpha=</span><span class="dv">1</span>, <span class="at">size=</span><span class="fl">0.2</span> , <span class="at">inherit.aes =</span> <span class="cn">FALSE</span> ) <span class="sc">+</span></span>
+<span id="cb8-26"><a href="#cb8-26" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_segment</span>(<span class="at">data=</span>grid_data, <span class="fu">aes</span>(<span class="at">x =</span> end, <span class="at">y =</span> <span class="fl">0.50</span>, <span class="at">xend =</span> start<span class="fl">-0.5</span>, <span class="at">yend =</span> <span class="fl">0.50</span>), <span class="at">colour =</span> <span class="st">&quot;grey50&quot;</span>, <span class="at">alpha=</span><span class="dv">1</span>, <span class="at">size=</span><span class="fl">0.2</span> , <span class="at">inherit.aes =</span> <span class="cn">FALSE</span> ) <span class="sc">+</span></span>
+<span id="cb8-27"><a href="#cb8-27" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_segment</span>(<span class="at">data=</span>grid_data, <span class="fu">aes</span>(<span class="at">x =</span> end, <span class="at">y =</span> <span class="fl">0.75</span>, <span class="at">xend =</span> start<span class="fl">-0.5</span>, <span class="at">yend =</span> <span class="fl">0.75</span>), <span class="at">colour =</span> <span class="st">&quot;grey50&quot;</span>, <span class="at">alpha=</span><span class="dv">1</span>, <span class="at">size=</span><span class="fl">0.2</span> , <span class="at">inherit.aes =</span> <span class="cn">FALSE</span> ) <span class="sc">+</span></span>
+<span id="cb8-28"><a href="#cb8-28" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_segment</span>(<span class="at">data=</span>grid_data, <span class="fu">aes</span>(<span class="at">x =</span> end, <span class="at">y =</span> <span class="dv">1</span>, <span class="at">xend =</span> start<span class="fl">-0.5</span>, <span class="at">yend =</span> <span class="dv">1</span>), <span class="at">colour =</span> <span class="st">&quot;grey50&quot;</span>, <span class="at">alpha=</span><span class="dv">1</span>, <span class="at">size=</span><span class="fl">0.2</span> , <span class="at">inherit.aes =</span> <span class="cn">FALSE</span> ) <span class="sc">+</span></span>
+<span id="cb8-29"><a href="#cb8-29" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Add text showing the value of each 100/75/50/25 lines</span></span>
+<span id="cb8-30"><a href="#cb8-30" aria-hidden="true" tabindex="-1"></a>  <span class="fu">annotate</span>(<span class="st">&quot;text&quot;</span>, <span class="at">x =</span> <span class="fu">rep</span>(grid_data<span class="sc">$</span>end <span class="sc">+</span> <span class="dv">2</span> ,<span class="dv">5</span>), <span class="at">y =</span> <span class="fu">c</span>(<span class="dv">0</span>, <span class="fl">0.25</span>, <span class="fl">0.50</span>, <span class="fl">0.75</span>, <span class="dv">1</span>), <span class="at">label =</span> <span class="fu">c</span>(<span class="st">&#39;0%&#39;</span>, <span class="st">&#39;25%&#39;</span>, <span class="st">&#39;50%&#39;</span>, <span class="st">&#39;75%&#39;</span>, <span class="st">&#39;100%&#39;</span>) , <span class="at">color=</span><span class="st">&quot;black&quot;</span>, <span class="at">size=</span>geom_text_size , <span class="at">angle=</span><span class="dv">0</span>, <span class="at">fontface=</span><span class="st">&quot;plain&quot;</span>, <span class="at">hjust=</span><span class="dv">1</span>) <span class="sc">+</span></span>
+<span id="cb8-31"><a href="#cb8-31" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_bar</span>(<span class="at">stat=</span><span class="st">&quot;identity&quot;</span>, <span class="at">position =</span> <span class="st">&quot;fill&quot;</span>, <span class="at">width=</span><span class="fl">0.8</span>, <span class="at">color =</span> <span class="st">&#39;white&#39;</span>, <span class="at">size =</span> <span class="fl">0.2</span>) <span class="sc">+</span></span>
+<span id="cb8-32"><a href="#cb8-32" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_fill_manual</span>(<span class="at">values =</span> timepoint_sample_type_legend_palette_2) <span class="sc">+</span></span>
+<span id="cb8-33"><a href="#cb8-33" aria-hidden="true" tabindex="-1"></a>  <span class="co"># scale_y_continuous(breaks = seq(0 , 1, 0.1), minor_breaks = seq(0 , 1, 0.1)) +</span></span>
+<span id="cb8-34"><a href="#cb8-34" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ylim</span>(<span class="sc">-</span><span class="fl">0.5</span>, <span class="fl">1.5</span>) <span class="sc">+</span></span>
+<span id="cb8-35"><a href="#cb8-35" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span> (<span class="at">fill =</span> <span class="st">&#39;&#39;</span>) <span class="sc">+</span></span>
+<span id="cb8-36"><a href="#cb8-36" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme</span>(</span>
+<span id="cb8-37"><a href="#cb8-37" aria-hidden="true" tabindex="-1"></a>    <span class="at">axis.text =</span> <span class="fu">element_blank</span>(),</span>
+<span id="cb8-38"><a href="#cb8-38" aria-hidden="true" tabindex="-1"></a>    <span class="at">axis.title =</span> <span class="fu">element_blank</span>(),</span>
+<span id="cb8-39"><a href="#cb8-39" aria-hidden="true" tabindex="-1"></a>    <span class="at">axis.ticks =</span> <span class="fu">element_blank</span>(),</span>
+<span id="cb8-40"><a href="#cb8-40" aria-hidden="true" tabindex="-1"></a>    <span class="at">axis.line =</span> <span class="fu">element_blank</span>(),</span>
+<span id="cb8-41"><a href="#cb8-41" aria-hidden="true" tabindex="-1"></a>    <span class="at">panel.grid =</span> <span class="fu">element_blank</span>(),</span>
+<span id="cb8-42"><a href="#cb8-42" aria-hidden="true" tabindex="-1"></a>    <span class="at">plot.margin =</span> <span class="fu">unit</span>(<span class="fu">rep</span>(<span class="sc">-</span><span class="dv">1</span>,<span class="dv">4</span>), <span class="st">&quot;cm&quot;</span>)</span>
+<span id="cb8-43"><a href="#cb8-43" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">+</span></span>
+<span id="cb8-44"><a href="#cb8-44" aria-hidden="true" tabindex="-1"></a>  <span class="fu">coord_polar</span>(<span class="at">start =</span> <span class="dv">0</span>) <span class="co">#+</span></span>
+<span id="cb8-45"><a href="#cb8-45" aria-hidden="true" tabindex="-1"></a>  <span class="co"># geom_text(data=label_data, aes(x=id-5, y=1+0.1, label=donor, hjust=hjust), color=&quot;black&quot;, fontface=&quot;plain&quot;,alpha=0.6, size=geom_text_size, angle= label_data$angle, inherit.aes = FALSE )</span></span></code></pre></div>
+</div>
+<div id="plot-polar-distribution" class="section level2">
+<h2>Plot polar distribution</h2>
+<p>The radial histograms show the percent of single CTCs, CTC clusters
+and CTC-WBC clusters isolated during the rest or active phase in early-
+or late-stage breast cancer patients. n=21 early-stage and n=9
+late-stage patients.</p>
+<div class="sourceCode" id="cb9"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="fu">plot_grid</span>(</span>
+<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a>  ctc_dist_plot_early <span class="sc">+</span> <span class="fu">theme</span>( <span class="at">legend.position =</span> <span class="st">&quot;none&quot;</span>),</span>
+<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a>  ctc_dist_plot_late <span class="sc">+</span> <span class="fu">theme</span>( <span class="at">legend.position =</span> <span class="st">&quot;none&quot;</span>),</span>
+<span id="cb9-4"><a href="#cb9-4" aria-hidden="true" tabindex="-1"></a>  <span class="at">labels =</span> <span class="fu">c</span>(<span class="st">&quot;Early&quot;</span>, <span class="st">&quot;Late&quot;</span>),</span>
+<span id="cb9-5"><a href="#cb9-5" aria-hidden="true" tabindex="-1"></a>  <span class="at">label_size =</span> <span class="dv">8</span>,</span>
+<span id="cb9-6"><a href="#cb9-6" aria-hidden="true" tabindex="-1"></a>  <span class="at">label_x =</span> <span class="fl">0.35</span></span>
+<span id="cb9-7"><a href="#cb9-7" aria-hidden="true" tabindex="-1"></a>)</span></code></pre></div>
+<p><img src="figure/patients_ctc_counts_distribution.Rmd/ctc_patients_dist_polar-1.png" style="display: block; margin: auto;" /></p>
+</div>
+<div id="plot-legend" class="section level2">
+<h2>Plot legend</h2>
+<div class="sourceCode" id="cb10"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a>legend <span class="ot">&lt;-</span> cowplot<span class="sc">::</span><span class="fu">get_legend</span>(ctc_dist_plot_late)</span>
+<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a><span class="fu">grid.newpage</span>()</span>
+<span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a><span class="fu">grid.draw</span>(legend)</span></code></pre></div>
+<p><img src="figure/patients_ctc_counts_distribution.Rmd/ctc_patients_dist_polar_legend-1.png" style="display: block; margin: auto;" /></p>
+<br>
+<p>
+<button type="button" class="btn btn-default btn-workflowr btn-workflowr-sessioninfo" data-toggle="collapse" data-target="#workflowr-sessioninfo" style="display: block;">
+<span class="glyphicon glyphicon-wrench" aria-hidden="true"></span>
+Session information
+</button>
+</p>
+<div id="workflowr-sessioninfo" class="collapse">
+<div class="sourceCode" id="cb11"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="fu">sessionInfo</span>()</span></code></pre></div>
+<p>R version 4.1.0 (2021-05-18) Platform: x86_64-apple-darwin17.0
+(64-bit) Running under: macOS Big Sur 10.16</p>
+<p>Matrix products: default BLAS:
+/Library/Frameworks/R.framework/Versions/4.1/Resources/lib/libRblas.dylib
+LAPACK:
+/Library/Frameworks/R.framework/Versions/4.1/Resources/lib/libRlapack.dylib</p>
+<p>locale: [1]
+en_US.UTF-8/en_US.UTF-8/en_US.UTF-8/C/en_US.UTF-8/en_US.UTF-8</p>
+<p>attached base packages: [1] grid stats graphics grDevices utils
+datasets methods<br />
+[8] base</p>
+<p>other attached packages: [1] cowplot_1.1.1 gridExtra_2.3
+showtext_0.9-4 showtextdb_3.0 [5] sysfonts_0.8.5 forcats_0.5.1
+stringr_1.4.0 dplyr_1.0.7<br />
+[9] purrr_0.3.4 readr_2.0.2 tidyr_1.1.4 tibble_3.1.5<br />
+[13] ggplot2_3.3.5 tidyverse_1.3.1 workflowr_1.6.2</p>
+<p>loaded via a namespace (and not attached): [1] httr_1.4.2 sass_0.4.0
+bit64_4.0.5 vroom_1.5.5<br />
+[5] jsonlite_1.7.2 modelr_0.1.8 bslib_0.3.1 assertthat_0.2.1 [9]
+highr_0.9 cellranger_1.1.0 yaml_2.2.1 pillar_1.6.4<br />
+[13] backports_1.3.0 glue_1.4.2 digest_0.6.28 promises_1.2.0.1 [17]
+rvest_1.0.2 colorspace_2.0-2 htmltools_0.5.2 httpuv_1.6.3<br />
+[21] pkgconfig_2.0.3 broom_0.7.10 haven_2.4.3 scales_1.1.1<br />
+[25] whisker_0.4 later_1.3.0 tzdb_0.2.0 git2r_0.28.0<br />
+[29] generics_0.1.1 farver_2.1.0 ellipsis_0.3.2 withr_2.4.2<br />
+[33] cli_3.1.0 magrittr_2.0.1 crayon_1.4.2 readxl_1.3.1<br />
+[37] evaluate_0.14 fs_1.5.0 fansi_0.5.0 xml2_1.3.2<br />
+[41] tools_4.1.0 hms_1.1.1 lifecycle_1.0.1 munsell_0.5.0<br />
+[45] reprex_2.0.1 compiler_4.1.0 jquerylib_0.1.4 rlang_0.4.12<br />
+[49] rstudioapi_0.13 labeling_0.4.2 rmarkdown_2.11 gtable_0.3.0<br />
+[53] DBI_1.1.1 R6_2.5.1 lubridate_1.8.0 knitr_1.36<br />
+[57] fastmap_1.1.0 bit_4.0.4 utf8_1.2.2 rprojroot_2.0.2 [61]
+stringi_1.7.5 parallel_4.1.0 Rcpp_1.0.7 vctrs_0.3.8<br />
+[65] dbplyr_2.1.1 tidyselect_1.1.1 xfun_0.27</p>
+</div>
+</div>
+
+
+<!-- Adjust MathJax settings so that all math formulae are shown using
+TeX fonts only; see
+http://docs.mathjax.org/en/latest/configuration.html.  This will make
+the presentation more consistent at the cost of the webpage sometimes
+taking slightly longer to load. Note that this only works because the
+footer is added to webpages before the MathJax javascript. -->
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({
+    "HTML-CSS": { availableFonts: ["TeX"] }
+  });
+</script>
+
+
+
+
+</div>
+</div>
+
+</div>
+
+<script>
+
+// add bootstrap table styles to pandoc tables
+function bootstrapStylePandocTables() {
+  $('tr.odd').parent('tbody').parent('table').addClass('table table-condensed');
+}
+$(document).ready(function () {
+  bootstrapStylePandocTables();
+});
+
+
+</script>
+
+<!-- tabsets -->
+
+<script>
+$(document).ready(function () {
+  window.buildTabsets("TOC");
+});
+
+$(document).ready(function () {
+  $('.tabset-dropdown > .nav-tabs > li').click(function () {
+    $(this).parent().toggleClass('nav-tabs-open');
+  });
+});
+</script>
+
+<!-- code folding -->
+<script>
+$(document).ready(function () {
+  window.initializeCodeFolding("hide" === "show");
+});
+</script>
+
+<script>
+$(document).ready(function ()  {
+
+    // temporarily add toc-ignore selector to headers for the consistency with Pandoc
+    $('.unlisted.unnumbered').addClass('toc-ignore')
+
+    // move toc-ignore selectors from section div to header
+    $('div.section.toc-ignore')
+        .removeClass('toc-ignore')
+        .children('h1,h2,h3,h4,h5').addClass('toc-ignore');
+
+    // establish options
+    var options = {
+      selectors: "h1,h2,h3,h4",
+      theme: "bootstrap3",
+      context: '.toc-content',
+      hashGenerator: function (text) {
+        return text.replace(/[.\\/?&!#<>]/g, '').replace(/\s/g, '_');
+      },
+      ignoreSelector: ".toc-ignore",
+      scrollTo: 0
+    };
+    options.showAndHide = true;
+    options.smoothScroll = true;
+
+    // tocify
+    var toc = $("#TOC").tocify(options).data("toc-tocify");
+});
+</script>
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    script.src  = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+
+</body>
+</html>

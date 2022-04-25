@@ -1,0 +1,1191 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+
+<meta charset="utf-8" />
+<meta name="generator" content="pandoc" />
+<meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
+
+
+<meta name="author" content="Francesc Castro-Giner" />
+
+<meta name="date" content="2022-02-23" />
+
+<title>Analysis of genes from candidate gene sets</title>
+
+<script src="site_libs/header-attrs-2.11/header-attrs.js"></script>
+<script src="site_libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<link href="site_libs/bootstrap-3.3.5/css/journal.min.css" rel="stylesheet" />
+<script src="site_libs/bootstrap-3.3.5/js/bootstrap.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/html5shiv.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/respond.min.js"></script>
+<style>h1 {font-size: 34px;}
+       h1.title {font-size: 38px;}
+       h2 {font-size: 30px;}
+       h3 {font-size: 24px;}
+       h4 {font-size: 18px;}
+       h5 {font-size: 16px;}
+       h6 {font-size: 12px;}
+       code {color: inherit; background-color: rgba(0, 0, 0, 0.04);}
+       pre:not([class]) { background-color: white }</style>
+<script src="site_libs/jqueryui-1.11.4/jquery-ui.min.js"></script>
+<link href="site_libs/tocify-1.9.1/jquery.tocify.css" rel="stylesheet" />
+<script src="site_libs/tocify-1.9.1/jquery.tocify.js"></script>
+<script src="site_libs/navigation-1.1/tabsets.js"></script>
+<script src="site_libs/navigation-1.1/codefolding.js"></script>
+<link href="site_libs/font-awesome-5.1.0/css/all.css" rel="stylesheet" />
+<link href="site_libs/font-awesome-5.1.0/css/v4-shims.css" rel="stylesheet" />
+
+<link rel="icon" href="https://github.com/workflowr/workflowr-assets/raw/master/img/reproducible.png">
+<!-- Add a small amount of space between sections. -->
+<style type="text/css">
+div.section {
+  padding-top: 12px;
+}
+</style>
+
+
+
+<style type="text/css">
+  code{white-space: pre-wrap;}
+  span.smallcaps{font-variant: small-caps;}
+  span.underline{text-decoration: underline;}
+  div.column{display: inline-block; vertical-align: top; width: 50%;}
+  div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+  ul.task-list{list-style: none;}
+    </style>
+
+
+<style type="text/css">
+  code {
+    white-space: pre;
+  }
+  .sourceCode {
+    overflow: visible;
+  }
+</style>
+<style type="text/css" data-origin="pandoc">
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+    color: #aaaaaa;
+  }
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code span.at { color: #7d9029; } /* Attribute */
+code span.bn { color: #40a070; } /* BaseN */
+code span.bu { } /* BuiltIn */
+code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code span.ch { color: #4070a0; } /* Char */
+code span.cn { color: #880000; } /* Constant */
+code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code span.dt { color: #902000; } /* DataType */
+code span.dv { color: #40a070; } /* DecVal */
+code span.er { color: #ff0000; font-weight: bold; } /* Error */
+code span.ex { } /* Extension */
+code span.fl { color: #40a070; } /* Float */
+code span.fu { color: #06287e; } /* Function */
+code span.im { } /* Import */
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code span.op { color: #666666; } /* Operator */
+code span.ot { color: #007020; } /* Other */
+code span.pp { color: #bc7a00; } /* Preprocessor */
+code span.sc { color: #4070a0; } /* SpecialChar */
+code span.ss { color: #bb6688; } /* SpecialString */
+code span.st { color: #4070a0; } /* String */
+code span.va { color: #19177c; } /* Variable */
+code span.vs { color: #4070a0; } /* VerbatimString */
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+
+.sourceCode .row {
+  width: 100%;
+}
+.sourceCode {
+  overflow-x: auto;
+}
+.code-folding-btn {
+  margin-right: -30px;
+}
+</style>
+<script>
+// apply pandoc div.sourceCode style to pre.sourceCode instead
+(function() {
+  var sheets = document.styleSheets;
+  for (var i = 0; i < sheets.length; i++) {
+    if (sheets[i].ownerNode.dataset["origin"] !== "pandoc") continue;
+    try { var rules = sheets[i].cssRules; } catch (e) { continue; }
+    for (var j = 0; j < rules.length; j++) {
+      var rule = rules[j];
+      // check if there is a div.sourceCode rule
+      if (rule.type !== rule.STYLE_RULE || rule.selectorText !== "div.sourceCode") continue;
+      var style = rule.style.cssText;
+      // check if color or background-color is set
+      if (rule.style.color === '' && rule.style.backgroundColor === '') continue;
+      // replace div.sourceCode by a pre.sourceCode rule
+      sheets[i].deleteRule(j);
+      sheets[i].insertRule('pre.sourceCode{' + style + '}', j);
+    }
+  }
+})();
+</script>
+
+
+
+
+<link rel="stylesheet" href="style.css" type="text/css" />
+
+
+
+<style type = "text/css">
+.main-container {
+  max-width: 940px;
+  margin-left: auto;
+  margin-right: auto;
+}
+img {
+  max-width:100%;
+}
+.tabbed-pane {
+  padding-top: 12px;
+}
+.html-widget {
+  margin-bottom: 20px;
+}
+button.code-folding-btn:focus {
+  outline: none;
+}
+summary {
+  display: list-item;
+}
+pre code {
+  padding: 0;
+}
+</style>
+
+
+<style type="text/css">
+.dropdown-submenu {
+  position: relative;
+}
+.dropdown-submenu>.dropdown-menu {
+  top: 0;
+  left: 100%;
+  margin-top: -6px;
+  margin-left: -1px;
+  border-radius: 0 6px 6px 6px;
+}
+.dropdown-submenu:hover>.dropdown-menu {
+  display: block;
+}
+.dropdown-submenu>a:after {
+  display: block;
+  content: " ";
+  float: right;
+  width: 0;
+  height: 0;
+  border-color: transparent;
+  border-style: solid;
+  border-width: 5px 0 5px 5px;
+  border-left-color: #cccccc;
+  margin-top: 5px;
+  margin-right: -10px;
+}
+.dropdown-submenu:hover>a:after {
+  border-left-color: #adb5bd;
+}
+.dropdown-submenu.pull-left {
+  float: none;
+}
+.dropdown-submenu.pull-left>.dropdown-menu {
+  left: -100%;
+  margin-left: 10px;
+  border-radius: 6px 0 6px 6px;
+}
+</style>
+
+<script type="text/javascript">
+// manage active state of menu based on current page
+$(document).ready(function () {
+  // active menu anchor
+  href = window.location.pathname
+  href = href.substr(href.lastIndexOf('/') + 1)
+  if (href === "")
+    href = "index.html";
+  var menuAnchor = $('a[href="' + href + '"]');
+
+  // mark it active
+  menuAnchor.tab('show');
+
+  // if it's got a parent navbar menu mark it active as well
+  menuAnchor.closest('li.dropdown').addClass('active');
+
+  // Navbar adjustments
+  var navHeight = $(".navbar").first().height() + 15;
+  var style = document.createElement('style');
+  var pt = "padding-top: " + navHeight + "px; ";
+  var mt = "margin-top: -" + navHeight + "px; ";
+  var css = "";
+  // offset scroll position for anchor links (for fixed navbar)
+  for (var i = 1; i <= 6; i++) {
+    css += ".section h" + i + "{ " + pt + mt + "}\n";
+  }
+  style.innerHTML = "body {" + pt + "padding-bottom: 40px; }\n" + css;
+  document.head.appendChild(style);
+});
+</script>
+
+<!-- tabsets -->
+
+<style type="text/css">
+.tabset-dropdown > .nav-tabs {
+  display: inline-table;
+  max-height: 500px;
+  min-height: 44px;
+  overflow-y: auto;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+}
+
+.tabset-dropdown > .nav-tabs > li.active:before {
+  content: "";
+  font-family: 'Glyphicons Halflings';
+  display: inline-block;
+  padding: 10px;
+  border-right: 1px solid #ddd;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li.active:before {
+  content: "&#xe258;";
+  border: none;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open:before {
+  content: "";
+  font-family: 'Glyphicons Halflings';
+  display: inline-block;
+  padding: 10px;
+  border-right: 1px solid #ddd;
+}
+
+.tabset-dropdown > .nav-tabs > li.active {
+  display: block;
+}
+
+.tabset-dropdown > .nav-tabs > li > a,
+.tabset-dropdown > .nav-tabs > li > a:focus,
+.tabset-dropdown > .nav-tabs > li > a:hover {
+  border: none;
+  display: inline-block;
+  border-radius: 4px;
+  background-color: transparent;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li {
+  display: block;
+  float: none;
+}
+
+.tabset-dropdown > .nav-tabs > li {
+  display: none;
+}
+</style>
+
+<!-- code folding -->
+<style type="text/css">
+.code-folding-btn { margin-bottom: 4px; }
+</style>
+
+
+
+<style type="text/css">
+
+#TOC {
+  margin: 25px 0px 20px 0px;
+}
+@media (max-width: 768px) {
+#TOC {
+  position: relative;
+  width: 100%;
+}
+}
+
+@media print {
+.toc-content {
+  /* see https://github.com/w3c/csswg-drafts/issues/4434 */
+  float: right;
+}
+}
+
+.toc-content {
+  padding-left: 30px;
+  padding-right: 40px;
+}
+
+div.main-container {
+  max-width: 1200px;
+}
+
+div.tocify {
+  width: 20%;
+  max-width: 260px;
+  max-height: 85%;
+}
+
+@media (min-width: 768px) and (max-width: 991px) {
+  div.tocify {
+    width: 25%;
+  }
+}
+
+@media (max-width: 767px) {
+  div.tocify {
+    width: 100%;
+    max-width: none;
+  }
+}
+
+.tocify ul, .tocify li {
+  line-height: 20px;
+}
+
+.tocify-subheader .tocify-item {
+  font-size: 0.90em;
+}
+
+.tocify .list-group-item {
+  border-radius: 0px;
+}
+
+
+</style>
+
+
+
+</head>
+
+<body>
+
+
+<div class="container-fluid main-container">
+
+
+<!-- setup 3col/9col grid for toc_float and main content  -->
+<div class="row">
+<div class="col-xs-12 col-sm-4 col-md-3">
+<div id="TOC" class="tocify">
+</div>
+</div>
+
+<div class="toc-content col-xs-12 col-sm-8 col-md-9">
+
+
+
+
+<div class="navbar navbar-default  navbar-fixed-top" role="navigation">
+  <div class="container">
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar">
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      <a class="navbar-brand" href="index.html">CIRCADIAN-CTCs</a>
+    </div>
+    <div id="navbar" class="navbar-collapse collapse">
+      <ul class="nav navbar-nav">
+        
+      </ul>
+      <ul class="nav navbar-nav navbar-right">
+        <li>
+  <a href="https://github.com/TheAcetoLab/diamantopoulou-ctc-dynamics">
+    <span class="fa fa-github"></span>
+     
+    Source code
+  </a>
+</li>
+      </ul>
+    </div><!--/.nav-collapse -->
+  </div><!--/.container -->
+</div><!--/.navbar -->
+
+<div id="header">
+
+<div class="btn-group pull-right float-right">
+<button type="button" class="btn btn-default btn-xs btn-secondary btn-sm dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><span>Code</span> <span class="caret"></span></button>
+<ul class="dropdown-menu dropdown-menu-right" style="min-width: 50px;">
+<li><a id="rmd-show-all-code" href="#">Show All Code</a></li>
+<li><a id="rmd-hide-all-code" href="#">Hide All Code</a></li>
+</ul>
+</div>
+
+
+
+<h1 class="title toc-ignore">Analysis of genes from candidate gene
+sets</h1>
+<h4 class="author">Francesc Castro-Giner</h4>
+<h4 class="date">2022-02-23</h4>
+
+</div>
+
+
+<p>
+<button type="button" class="btn btn-default btn-workflowr btn-workflowr-report" data-toggle="collapse" data-target="#workflowr-report">
+<span class="glyphicon glyphicon-list" aria-hidden="true"></span>
+workflowr <span class="glyphicon glyphicon-ok text-success"
+aria-hidden="true"></span>
+</button>
+</p>
+<div id="workflowr-report" class="collapse">
+<ul class="nav nav-tabs">
+<li class="active">
+<a data-toggle="tab" href="#summary">Summary</a>
+</li>
+<li>
+<a data-toggle="tab" href="#checks"> Checks <span
+class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span>
+</a>
+</li>
+<li>
+<a data-toggle="tab" href="#versions">Past versions</a>
+</li>
+</ul>
+<div class="tab-content">
+<div id="summary" class="tab-pane fade in active">
+<p>
+<strong>Last updated:</strong> 2022-04-26
+</p>
+<p>
+<strong>Checks:</strong> <span
+class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> 7
+<span class="glyphicon glyphicon-exclamation-sign text-danger"
+aria-hidden="true"></span> 0
+</p>
+<p>
+<strong>Knit directory:</strong>
+<code>diamantopoulou-ctc-dynamics/</code> <span
+class="glyphicon glyphicon-question-sign" aria-hidden="true"
+title="This is the local directory in which the code in this file was executed.">
+</span>
+</p>
+<p>
+This reproducible <a href="http://rmarkdown.rstudio.com">R Markdown</a>
+analysis was created with <a
+  href="https://github.com/jdblischak/workflowr">workflowr</a> (version
+1.6.2). The <em>Checks</em> tab describes the reproducibility checks
+that were applied when the results were created. The <em>Past
+versions</em> tab lists the development history.
+</p>
+<hr>
+</div>
+<div id="checks" class="tab-pane fade">
+<div id="workflowr-checks" class="panel-group">
+<div class="panel panel-default">
+<div class="panel-heading">
+<p class="panel-title">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRMarkdownfilestronguptodate">
+<span class="glyphicon glyphicon-ok text-success"
+aria-hidden="true"></span> <strong>R Markdown file:</strong> up-to-date
+</a>
+</p>
+</div>
+<div id="strongRMarkdownfilestronguptodate"
+class="panel-collapse collapse">
+<div class="panel-body">
+<p>Great! Since the R Markdown file has been committed to the Git
+repository, you know the exact version of the code that produced these
+results.</p>
+</div>
+</div>
+</div>
+<div class="panel panel-default">
+<div class="panel-heading">
+<p class="panel-title">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongEnvironmentstrongempty">
+<span class="glyphicon glyphicon-ok text-success"
+aria-hidden="true"></span> <strong>Environment:</strong> empty </a>
+</p>
+</div>
+<div id="strongEnvironmentstrongempty" class="panel-collapse collapse">
+<div class="panel-body">
+<p>Great job! The global environment was empty. Objects defined in the
+global environment can affect the analysis in your R Markdown file in
+unknown ways. For reproduciblity it’s best to always run the code in an
+empty environment.</p>
+</div>
+</div>
+</div>
+<div class="panel panel-default">
+<div class="panel-heading">
+<p class="panel-title">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongSeedstrongcodesetseed20220425code">
+<span class="glyphicon glyphicon-ok text-success"
+aria-hidden="true"></span> <strong>Seed:</strong>
+<code>set.seed(20220425)</code> </a>
+</p>
+</div>
+<div id="strongSeedstrongcodesetseed20220425code"
+class="panel-collapse collapse">
+<div class="panel-body">
+<p>The command <code>set.seed(20220425)</code> was run prior to running
+the code in the R Markdown file. Setting a seed ensures that any results
+that rely on randomness, e.g. subsampling or permutations, are
+reproducible.</p>
+</div>
+</div>
+</div>
+<div class="panel panel-default">
+<div class="panel-heading">
+<p class="panel-title">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongSessioninformationstrongrecorded">
+<span class="glyphicon glyphicon-ok text-success"
+aria-hidden="true"></span> <strong>Session information:</strong>
+recorded </a>
+</p>
+</div>
+<div id="strongSessioninformationstrongrecorded"
+class="panel-collapse collapse">
+<div class="panel-body">
+<p>Great job! Recording the operating system, R version, and package
+versions is critical for reproducibility.</p>
+</div>
+</div>
+</div>
+<div class="panel panel-default">
+<div class="panel-heading">
+<p class="panel-title">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongCachestrongnone">
+<span class="glyphicon glyphicon-ok text-success"
+aria-hidden="true"></span> <strong>Cache:</strong> none </a>
+</p>
+</div>
+<div id="strongCachestrongnone" class="panel-collapse collapse">
+<div class="panel-body">
+<p>Nice! There were no cached chunks for this analysis, so you can be
+confident that you successfully produced the results during this
+run.</p>
+</div>
+</div>
+</div>
+<div class="panel panel-default">
+<div class="panel-heading">
+<p class="panel-title">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongFilepathsstrongrelative">
+<span class="glyphicon glyphicon-ok text-success"
+aria-hidden="true"></span> <strong>File paths:</strong> relative </a>
+</p>
+</div>
+<div id="strongFilepathsstrongrelative" class="panel-collapse collapse">
+<div class="panel-body">
+<p>Great job! Using relative paths to the files within your workflowr
+project makes it easier to run your code on other machines.</p>
+</div>
+</div>
+</div>
+<div class="panel panel-default">
+<div class="panel-heading">
+<p class="panel-title">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRepositoryversionstrongahrefhttpsgithubcomTheAcetoLabdiamantopoulouctcdynamicstree0ded9f5eb929c7853186f31da3ed481e57e151e9targetblank0ded9f5a">
+<span class="glyphicon glyphicon-ok text-success"
+aria-hidden="true"></span> <strong>Repository version:</strong>
+<a href="https://github.com/TheAcetoLab/diamantopoulou-ctc-dynamics/tree/0ded9f5eb929c7853186f31da3ed481e57e151e9" target="_blank">0ded9f5</a>
+</a>
+</p>
+</div>
+<div
+id="strongRepositoryversionstrongahrefhttpsgithubcomTheAcetoLabdiamantopoulouctcdynamicstree0ded9f5eb929c7853186f31da3ed481e57e151e9targetblank0ded9f5a"
+class="panel-collapse collapse">
+<div class="panel-body">
+<p>
+Great! You are using Git for version control. Tracking code development
+and connecting the code version to the results is critical for
+reproducibility.
+</p>
+<p>
+The results in this page were generated with repository version
+<a href="https://github.com/TheAcetoLab/diamantopoulou-ctc-dynamics/tree/0ded9f5eb929c7853186f31da3ed481e57e151e9" target="_blank">0ded9f5</a>.
+See the <em>Past versions</em> tab to see a history of the changes made
+to the R Markdown and HTML files.
+</p>
+<p>
+Note that you need to be careful to ensure that all relevant files for
+the analysis have been committed to Git prior to generating the results
+(you can use <code>wflow_publish</code> or
+<code>wflow_git_commit</code>). workflowr only checks the R Markdown
+file, but you know if there are other scripts or data files that it
+depends on. Below is the status of the Git repository when the results
+were generated:
+</p>
+<pre><code>
+Ignored files:
+    Ignored:    .Rhistory
+    Ignored:    .Rproj.user/
+
+Untracked files:
+    Untracked:  analysis/0_differential_expression_gsea_gsva.md
+    Untracked:  analysis/about.md
+    Untracked:  analysis/br16_dge.md
+    Untracked:  analysis/br16_pca.md
+    Untracked:  analysis/core_gene_sets.md
+    Untracked:  analysis/gsea_across_models.md
+    Untracked:  analysis/index.md
+    Untracked:  analysis/license.md
+    Untracked:  analysis/patients_ctc_counts_distribution.md
+    Untracked:  data/differential_expression/
+    Untracked:  data/patients/
+    Untracked:  data/resources/
+    Untracked:  data/sce/
+
+</code></pre>
+<p>
+Note that any generated files, e.g. HTML, png, CSS, etc., are not
+included in this status report because it is ok for generated content to
+have uncommitted changes.
+</p>
+</div>
+</div>
+</div>
+</div>
+<hr>
+</div>
+<div id="versions" class="tab-pane fade">
+
+<p>
+These are the previous versions of the repository in which changes were
+made to the R Markdown (<code>analysis/core_gene_sets.Rmd</code>) and
+HTML (<code>docs/core_gene_sets.html</code>) files. If you’ve configured
+a remote Git repository (see <code>?wflow_git_remote</code>), click on
+the hyperlinks in the table below to view the files as they were in that
+past version.
+</p>
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+File
+</th>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+<th>
+Message
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+Rmd
+</td>
+<td>
+<a href="https://github.com/TheAcetoLab/diamantopoulou-ctc-dynamics/blob/0ded9f5eb929c7853186f31da3ed481e57e151e9/analysis/core_gene_sets.Rmd" target="_blank">0ded9f5</a>
+</td>
+<td>
+fcg-bio
+</td>
+<td>
+2022-04-26
+</td>
+<td>
+added final code
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+<hr>
+</div>
+</div>
+</div>
+<div id="load-libraries-additional-functions-and-data"
+class="section level2">
+<h2>Load libraries, additional functions and data</h2>
+<p>Setup environment</p>
+<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a>knitr<span class="sc">::</span>opts_chunk<span class="sc">$</span><span class="fu">set</span>(<span class="at">results=</span><span class="st">&#39;asis&#39;</span>, <span class="at">echo=</span><span class="cn">TRUE</span>, <span class="at">message=</span><span class="cn">FALSE</span>, <span class="at">warning=</span><span class="cn">FALSE</span>, <span class="at">error=</span><span class="cn">FALSE</span>, <span class="at">fig.align =</span> <span class="st">&#39;center&#39;</span>, <span class="at">fig.width =</span> <span class="fl">3.5</span>, <span class="at">fig.asp =</span> <span class="fl">0.618</span>, <span class="at">dpi =</span> <span class="dv">600</span>, <span class="at">dev =</span> <span class="fu">c</span>(<span class="st">&quot;png&quot;</span>, <span class="st">&quot;pdf&quot;</span>), <span class="at">fig.showtext =</span> <span class="cn">TRUE</span>)</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="fu">options</span>(<span class="at">stringsAsFactors =</span> <span class="cn">FALSE</span>)</span></code></pre></div>
+<p>Load packages</p>
+<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tidyverse)</span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(showtext)</span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(cowplot)</span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(scater)</span>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(ggbeeswarm)</span>
+<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(ggpubr)</span>
+<span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(ggrepel)</span></code></pre></div>
+<p>Set font family for figures</p>
+<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="fu">font_add</span>(<span class="st">&quot;Helvetica&quot;</span>, <span class="st">&quot;./configuration/fonts/Helvetica.ttc&quot;</span>)</span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a><span class="fu">showtext_auto</span>()</span></code></pre></div>
+<p>Load ggplot theme</p>
+<div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="fu">source</span>(<span class="st">&quot;./configuration/rmarkdown/ggplot_theme.R&quot;</span>)</span></code></pre></div>
+<p>Load color palettes</p>
+<div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="fu">source</span>(<span class="st">&quot;./configuration/rmarkdown/color_palettes.R&quot;</span>)</span></code></pre></div>
+<p>Load shared variables</p>
+<div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="fu">source</span>(<span class="st">&quot;./configuration/rmarkdown/shared_variables.R&quot;</span>)</span></code></pre></div>
+<p>Load functions</p>
+<div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="fu">source</span>(<span class="st">&#39;./code/R-functions/gse_report.r&#39;</span>)</span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a>clean_msigdb_names <span class="ot">&lt;-</span> <span class="cf">function</span>(x) x <span class="sc">%&gt;%</span> <span class="fu">gsub</span>(<span class="st">&#39;REACTOME_&#39;</span>, <span class="st">&#39;&#39;</span>, .) <span class="sc">%&gt;%</span> <span class="fu">gsub</span>(<span class="st">&#39;WP_&#39;</span>, <span class="st">&#39;&#39;</span>, .) <span class="sc">%&gt;%</span> <span class="fu">gsub</span>(<span class="st">&#39;BIOCARTA_&#39;</span>, <span class="st">&#39;&#39;</span>, .) <span class="sc">%&gt;%</span> <span class="fu">gsub</span>(<span class="st">&#39;KEGG_&#39;</span>, <span class="st">&#39;&#39;</span>, .) <span class="sc">%&gt;%</span> <span class="fu">gsub</span>(<span class="st">&#39;PID_&#39;</span>, <span class="st">&#39;&#39;</span>, .) <span class="sc">%&gt;%</span> <span class="fu">gsub</span>(<span class="st">&#39;GOBP_&#39;</span>, <span class="st">&#39;&#39;</span>, .) <span class="sc">%&gt;%</span> <span class="fu">gsub</span>(<span class="st">&#39;_&#39;</span>, <span class="st">&#39; &#39;</span>, .)</span></code></pre></div>
+<p>Load NSG-BR16 data</p>
+<div class="sourceCode" id="cb8"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a>sce_br16 <span class="ot">&lt;-</span> <span class="fu">readRDS</span>(<span class="fu">file.path</span>(params<span class="sc">$</span>sce_dir, <span class="st">&#39;sce_br16.rds&#39;</span>))</span>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a>sce_br16<span class="sc">$</span>sample_type <span class="ot">&lt;-</span> <span class="fu">recode</span>(sce_br16<span class="sc">$</span>sample_type, <span class="at">ctc_single =</span> <span class="st">&#39;Single CTCs&#39;</span>, <span class="at">ctc_cluster =</span> <span class="st">&#39;CTC-clusters&#39;</span>, <span class="at">ctc_cluster_wbc =</span> <span class="st">&#39;CTC-WBC Clusters&#39;</span>)</span>
+<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a>dge_br16 <span class="ot">&lt;-</span> <span class="fu">readRDS</span>(<span class="fu">file.path</span>(<span class="st">&#39;./data/differential_expression/br16&#39;</span>, <span class="st">&#39;dge_edgeR_QLF_robust.rds&#39;</span>))</span>
+<span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a>dge_br16 <span class="ot">&lt;-</span> dge_br16<span class="sc">$</span>results</span></code></pre></div>
+<p>Load SingleCellExpression raw data</p>
+<div class="sourceCode" id="cb9"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a>sce_raw <span class="ot">&lt;-</span> <span class="fu">readRDS</span>(<span class="fu">file.path</span>(params<span class="sc">$</span>sce_dir, <span class="st">&#39;sce_raw.rds&#39;</span>))</span></code></pre></div>
+</div>
+<div id="core-circadian-genes-in-nsg-cdx-br16" class="section level2">
+<h2>Core circadian genes in NSG-CDX-BR16</h2>
+<p>Initial configuration</p>
+<div class="sourceCode" id="cb10"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a>use_sce <span class="ot">&lt;-</span> sce_br16</span>
+<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a>use_dge <span class="ot">&lt;-</span> dge_br16</span></code></pre></div>
+<p>Read core circadian genes list</p>
+<div class="sourceCode" id="cb11"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a>key_circadian_genes_sel <span class="ot">&lt;-</span> key_circadian_genes[key_circadian_genes <span class="sc">%in%</span> <span class="fu">rowData</span>(use_sce)<span class="sc">$</span>gene_name]</span>
+<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a>key_circadian_genes_ens <span class="ot">&lt;-</span> <span class="fu">rowData</span>(use_sce)[<span class="fu">match</span>(key_circadian_genes_sel, <span class="fu">rowData</span>(use_sce)<span class="sc">$</span>gene_name), <span class="st">&#39;gene_id&#39;</span>] <span class="sc">%&gt;%</span> <span class="fu">set_names</span>(<span class="fu">names</span>(key_circadian_genes_sel)) <span class="sc">%&gt;%</span> <span class="fu">gsub</span>(<span class="st">&quot;</span><span class="sc">\\</span><span class="st">.[0-9]+&quot;</span>, <span class="st">&quot;&quot;</span>, .)</span></code></pre></div>
+<p>Subset of SCE and DGE objects</p>
+<div class="sourceCode" id="cb12"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a>use_sce <span class="ot">&lt;-</span> use_sce[key_circadian_genes_ens,]</span>
+<span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a><span class="fu">rownames</span>(use_sce) <span class="ot">&lt;-</span> <span class="fu">names</span>(key_circadian_genes_sel)</span>
+<span id="cb12-3"><a href="#cb12-3" aria-hidden="true" tabindex="-1"></a>use_dge <span class="ot">&lt;-</span> use_dge[key_circadian_genes_ens,]</span>
+<span id="cb12-4"><a href="#cb12-4" aria-hidden="true" tabindex="-1"></a><span class="fu">rownames</span>(use_dge) <span class="ot">&lt;-</span> <span class="fu">names</span>(key_circadian_genes_sel)</span>
+<span id="cb12-5"><a href="#cb12-5" aria-hidden="true" tabindex="-1"></a>use_dge<span class="sc">$</span>gene <span class="ot">&lt;-</span> <span class="fu">names</span>(key_circadian_genes_sel)</span>
+<span id="cb12-6"><a href="#cb12-6" aria-hidden="true" tabindex="-1"></a>use_dge <span class="ot">&lt;-</span> use_dge <span class="sc">%&gt;%</span></span>
+<span id="cb12-7"><a href="#cb12-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">group1 =</span> <span class="st">&#39;active&#39;</span>, <span class="at">group2 =</span> <span class="st">&#39;resting&#39;</span>) <span class="sc">%&gt;%</span> <span class="co"># for stat_pvalue_manual</span></span>
+<span id="cb12-8"><a href="#cb12-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">arrange</span>(PValue) <span class="sc">%&gt;%</span> </span>
+<span id="cb12-9"><a href="#cb12-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(</span>
+<span id="cb12-10"><a href="#cb12-10" aria-hidden="true" tabindex="-1"></a>    <span class="at">gene =</span> <span class="fu">factor</span>(gene, <span class="at">levels =</span> gene)</span>
+<span id="cb12-11"><a href="#cb12-11" aria-hidden="true" tabindex="-1"></a>  )</span></code></pre></div>
+<div
+id="expression-distribution-of-core-circadian-genes-in-nsg-cdx-br16"
+class="section level3">
+<h3>Expression distribution of core circadian genes in NSG-CDX-BR16</h3>
+<p>Plot showing the expression distribution of core circadian genes in
+CTCs from NSG-CDX-BR16 mice. The fold change (FC, in log2 scale) and P
+value from the differential expression analysis are shown for each
+gene.</p>
+<div class="sourceCode" id="cb13"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a>expr_long <span class="ot">&lt;-</span> <span class="fu">logcounts</span>(use_sce) <span class="sc">%&gt;%</span> data.frame <span class="sc">%&gt;%</span> <span class="fu">rownames_to_column</span>(<span class="st">&#39;gene&#39;</span>) <span class="sc">%&gt;%</span> <span class="fu">pivot_longer</span>(<span class="sc">-</span>gene, <span class="at">names_to =</span> <span class="st">&#39;sample_alias&#39;</span>, <span class="at">values_to =</span> <span class="st">&#39;exprs&#39;</span>)</span>
+<span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a>use_data <span class="ot">&lt;-</span> <span class="fu">colData</span>(use_sce) <span class="sc">%&gt;%</span> </span>
+<span id="cb13-3"><a href="#cb13-3" aria-hidden="true" tabindex="-1"></a>  data.frame <span class="sc">%&gt;%</span> </span>
+<span id="cb13-4"><a href="#cb13-4" aria-hidden="true" tabindex="-1"></a>  dplyr<span class="sc">::</span><span class="fu">select</span>(sample_alias, timepoint, sample_type) <span class="sc">%&gt;%</span> </span>
+<span id="cb13-5"><a href="#cb13-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">left_join</span>(expr_long) <span class="sc">%&gt;%</span> </span>
+<span id="cb13-6"><a href="#cb13-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(</span>
+<span id="cb13-7"><a href="#cb13-7" aria-hidden="true" tabindex="-1"></a>    <span class="at">gene =</span> <span class="fu">factor</span>(gene, <span class="at">levels =</span> use_dge<span class="sc">$</span>gene),</span>
+<span id="cb13-8"><a href="#cb13-8" aria-hidden="true" tabindex="-1"></a>    <span class="at">timepoint =</span> <span class="fu">recode</span>(timepoint, <span class="at">resting =</span> <span class="st">&#39;Rest phase&#39;</span>, <span class="at">active =</span> <span class="st">&#39;Active phase&#39;</span>)</span>
+<span id="cb13-9"><a href="#cb13-9" aria-hidden="true" tabindex="-1"></a>    )</span>
+<span id="cb13-10"><a href="#cb13-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb13-11"><a href="#cb13-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb13-12"><a href="#cb13-12" aria-hidden="true" tabindex="-1"></a>use_ylim <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="dv">0</span>, <span class="dv">2</span> <span class="sc">+</span> <span class="fu">max</span>(use_data<span class="sc">$</span>exprs))</span>
+<span id="cb13-13"><a href="#cb13-13" aria-hidden="true" tabindex="-1"></a>use_breaks <span class="ot">&lt;-</span> <span class="fu">seq</span>(use_ylim[<span class="dv">1</span>],  <span class="fu">max</span>(use_data<span class="sc">$</span>exprs), <span class="at">by =</span> <span class="dv">2</span>)</span>
+<span id="cb13-14"><a href="#cb13-14" aria-hidden="true" tabindex="-1"></a>use_dge <span class="ot">&lt;-</span> use_dge <span class="sc">%&gt;%</span></span>
+<span id="cb13-15"><a href="#cb13-15" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(</span>
+<span id="cb13-16"><a href="#cb13-16" aria-hidden="true" tabindex="-1"></a>    <span class="at">group1 =</span> <span class="st">&#39;Rest phase&#39;</span>, <span class="at">group2 =</span> <span class="st">&#39;Active phase&#39;</span>,</span>
+<span id="cb13-17"><a href="#cb13-17" aria-hidden="true" tabindex="-1"></a>    <span class="at">label =</span> <span class="fu">paste0</span>(<span class="st">&#39;FC=&#39;</span>, <span class="fu">round</span>(logFC,<span class="dv">2</span>),<span class="st">&quot;, P= &quot;</span>, <span class="fu">format.pval</span>(PValue, <span class="dv">1</span>))</span>
+<span id="cb13-18"><a href="#cb13-18" aria-hidden="true" tabindex="-1"></a>  )</span>
+<span id="cb13-19"><a href="#cb13-19" aria-hidden="true" tabindex="-1"></a>timepoint_palette[<span class="st">&#39;Rest phase&#39;</span>] <span class="ot">&lt;-</span> timepoint_palette[<span class="st">&#39;resting&#39;</span>]</span>
+<span id="cb13-20"><a href="#cb13-20" aria-hidden="true" tabindex="-1"></a>timepoint_palette[<span class="st">&#39;Active phase&#39;</span>] <span class="ot">&lt;-</span> timepoint_palette[<span class="st">&#39;active&#39;</span>]</span>
+<span id="cb13-21"><a href="#cb13-21" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb13-22"><a href="#cb13-22" aria-hidden="true" tabindex="-1"></a>use_data <span class="sc">%&gt;%</span> </span>
+<span id="cb13-23"><a href="#cb13-23" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(timepoint, exprs, <span class="at">color =</span> timepoint)) <span class="sc">+</span></span>
+<span id="cb13-24"><a href="#cb13-24" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_quasirandom</span>(<span class="at">alpha =</span> <span class="fl">0.6</span>, <span class="at">wdth =</span> <span class="fl">0.4</span>, <span class="at">groupOnX=</span><span class="cn">TRUE</span>, <span class="at">bandwidth=</span><span class="dv">1</span>) <span class="sc">+</span></span>
+<span id="cb13-25"><a href="#cb13-25" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_violin</span>(<span class="at">color =</span> <span class="st">&#39;black&#39;</span>, <span class="at">alpha =</span> <span class="dv">0</span>, <span class="at">scale =</span> <span class="st">&quot;width&quot;</span>, <span class="at">width =</span> <span class="fl">0.8</span>, <span class="at">draw_quantiles =</span> <span class="fl">0.5</span>) <span class="sc">+</span></span>
+<span id="cb13-26"><a href="#cb13-26" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_color_manual</span>(<span class="at">values =</span>timepoint_palette) <span class="sc">+</span></span>
+<span id="cb13-27"><a href="#cb13-27" aria-hidden="true" tabindex="-1"></a>  <span class="fu">facet_wrap</span>(<span class="sc">~</span>gene, <span class="at">ncol =</span> <span class="dv">3</span>) <span class="sc">+</span></span>
+<span id="cb13-28"><a href="#cb13-28" aria-hidden="true" tabindex="-1"></a>  <span class="fu">stat_pvalue_manual</span>(use_dge, <span class="at">label =</span> <span class="st">&quot;label&quot;</span>, <span class="at">y.position =</span> <span class="dv">9</span>, <span class="at">size =</span> geom_text_size) <span class="sc">+</span></span>
+<span id="cb13-29"><a href="#cb13-29" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_y_continuous</span>(<span class="at">limits =</span> use_ylim, <span class="at">breaks =</span> use_breaks) <span class="sc">+</span></span>
+<span id="cb13-30"><a href="#cb13-30" aria-hidden="true" tabindex="-1"></a>  <span class="fu">guides</span>(<span class="at">color =</span> <span class="cn">FALSE</span>) <span class="sc">+</span></span>
+<span id="cb13-31"><a href="#cb13-31" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(</span>
+<span id="cb13-32"><a href="#cb13-32" aria-hidden="true" tabindex="-1"></a>    <span class="at">x =</span> <span class="st">&#39;&#39;</span>,</span>
+<span id="cb13-33"><a href="#cb13-33" aria-hidden="true" tabindex="-1"></a>    <span class="at">y =</span> <span class="fu">expression</span>(<span class="fu">paste</span>(<span class="st">&quot;lo&quot;</span>, g[<span class="dv">2</span>],<span class="st">&quot;(Normalized counts)&quot;</span>))</span>
+<span id="cb13-34"><a href="#cb13-34" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">+</span></span>
+<span id="cb13-35"><a href="#cb13-35" aria-hidden="true" tabindex="-1"></a>  <span class="fu">background_grid</span>(<span class="at">minor =</span> <span class="st">&#39;none&#39;</span>, <span class="at">major =</span> <span class="st">&#39;y&#39;</span>, <span class="at">size.major =</span> <span class="fl">0.2</span>)</span></code></pre></div>
+<p><img src="figure/core_gene_sets.Rmd/circadian_expression_levels_by_timepoint-1.png" style="display: block; margin: auto;" /></p>
+</div>
+<div id="density-plot-of-core-circadian-genes-in-nsg-cdx-br16"
+class="section level3">
+<h3>Density plot of core circadian genes in NSG-CDX-BR16</h3>
+<p>Density plot showing the distribution of the average expression (log2
+counts per million) of genes in CTCs from NSG-CDX-BR16 mice. Core
+circadian genes are labeled in the X-axis.</p>
+<div class="sourceCode" id="cb14"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a>avg_counts <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(</span>
+<span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a>  <span class="at">median_expr =</span> <span class="fu">logcounts</span>(sce_br16) <span class="sc">%&gt;%</span> rowMedians,</span>
+<span id="cb14-3"><a href="#cb14-3" aria-hidden="true" tabindex="-1"></a>  <span class="at">mean_expr =</span> <span class="fu">logcounts</span>(sce_br16) <span class="sc">%&gt;%</span> rowMeans,</span>
+<span id="cb14-4"><a href="#cb14-4" aria-hidden="true" tabindex="-1"></a>  <span class="at">gene_name =</span> <span class="fu">rowData</span>(sce_br16)<span class="sc">$</span>gene_name</span>
+<span id="cb14-5"><a href="#cb14-5" aria-hidden="true" tabindex="-1"></a>  )</span>
+<span id="cb14-6"><a href="#cb14-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-7"><a href="#cb14-7" aria-hidden="true" tabindex="-1"></a>avg_counts_circadian <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(</span>
+<span id="cb14-8"><a href="#cb14-8" aria-hidden="true" tabindex="-1"></a>  <span class="at">median_expr =</span> <span class="fu">logcounts</span>(use_sce) <span class="sc">%&gt;%</span> rowMedians,</span>
+<span id="cb14-9"><a href="#cb14-9" aria-hidden="true" tabindex="-1"></a>  <span class="at">mean_expr =</span> <span class="fu">logcounts</span>(use_sce) <span class="sc">%&gt;%</span> rowMeans</span>
+<span id="cb14-10"><a href="#cb14-10" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">%&gt;%</span> </span>
+<span id="cb14-11"><a href="#cb14-11" aria-hidden="true" tabindex="-1"></a>  <span class="fu">rownames_to_column</span>(<span class="st">&#39;gene_name&#39;</span>)</span>
+<span id="cb14-12"><a href="#cb14-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-13"><a href="#cb14-13" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(avg_counts, <span class="fu">aes</span>(<span class="at">x =</span> median_expr)) <span class="sc">+</span></span>
+<span id="cb14-14"><a href="#cb14-14" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_density</span>(<span class="at">fill=</span><span class="st">&quot;#dbd8be&quot;</span>) <span class="sc">+</span></span>
+<span id="cb14-15"><a href="#cb14-15" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_vline</span>(<span class="fu">aes</span>(<span class="at">xintercept=</span><span class="fu">median</span>(median_expr)), <span class="at">color=</span><span class="st">&quot;#043665&quot;</span>, <span class="at">linetype=</span><span class="st">&quot;dashed&quot;</span>, <span class="at">size=</span><span class="fl">0.5</span>)  <span class="sc">+</span></span>
+<span id="cb14-16"><a href="#cb14-16" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>(</span>
+<span id="cb14-17"><a href="#cb14-17" aria-hidden="true" tabindex="-1"></a>    <span class="at">data =</span> avg_counts_circadian, </span>
+<span id="cb14-18"><a href="#cb14-18" aria-hidden="true" tabindex="-1"></a>    <span class="at">mapping =</span> <span class="fu">aes</span>(<span class="at">y =</span> <span class="fl">0.01</span>, <span class="at">x =</span> median_expr, <span class="at">label =</span> gene_name, <span class="at">color =</span> keep), </span>
+<span id="cb14-19"><a href="#cb14-19" aria-hidden="true" tabindex="-1"></a>    <span class="at">alpha =</span> <span class="fl">0.8</span>, </span>
+<span id="cb14-20"><a href="#cb14-20" aria-hidden="true" tabindex="-1"></a>    <span class="at">color =</span> <span class="st">&#39;#d37d0a&#39;</span>) <span class="sc">+</span></span>
+<span id="cb14-21"><a href="#cb14-21" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_text_repel</span>(</span>
+<span id="cb14-22"><a href="#cb14-22" aria-hidden="true" tabindex="-1"></a>    <span class="at">data =</span> avg_counts_circadian, </span>
+<span id="cb14-23"><a href="#cb14-23" aria-hidden="true" tabindex="-1"></a>    <span class="at">mapping =</span> <span class="fu">aes</span>(<span class="at">y =</span> <span class="fl">0.01</span>, <span class="at">x =</span> median_expr, <span class="at">label =</span> gene_name),</span>
+<span id="cb14-24"><a href="#cb14-24" aria-hidden="true" tabindex="-1"></a>    <span class="at">force_pull   =</span> <span class="dv">0</span>, <span class="co"># do not pull toward data points</span></span>
+<span id="cb14-25"><a href="#cb14-25" aria-hidden="true" tabindex="-1"></a>    <span class="at">nudge_y      =</span> <span class="fl">0.02</span>,</span>
+<span id="cb14-26"><a href="#cb14-26" aria-hidden="true" tabindex="-1"></a>    <span class="at">direction    =</span> <span class="st">&quot;x&quot;</span>,</span>
+<span id="cb14-27"><a href="#cb14-27" aria-hidden="true" tabindex="-1"></a>    <span class="at">angle        =</span> <span class="dv">90</span>,</span>
+<span id="cb14-28"><a href="#cb14-28" aria-hidden="true" tabindex="-1"></a>    <span class="at">hjust        =</span> <span class="dv">0</span>,</span>
+<span id="cb14-29"><a href="#cb14-29" aria-hidden="true" tabindex="-1"></a>    <span class="at">segment.size =</span> <span class="fl">0.2</span>,</span>
+<span id="cb14-30"><a href="#cb14-30" aria-hidden="true" tabindex="-1"></a>    <span class="at">max.iter =</span> <span class="fl">1e4</span>, </span>
+<span id="cb14-31"><a href="#cb14-31" aria-hidden="true" tabindex="-1"></a>    <span class="at">max.time =</span> <span class="dv">1</span>,</span>
+<span id="cb14-32"><a href="#cb14-32" aria-hidden="true" tabindex="-1"></a>    <span class="at">size =</span> geom_text_size</span>
+<span id="cb14-33"><a href="#cb14-33" aria-hidden="true" tabindex="-1"></a>    ) <span class="sc">+</span></span>
+<span id="cb14-34"><a href="#cb14-34" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(</span>
+<span id="cb14-35"><a href="#cb14-35" aria-hidden="true" tabindex="-1"></a>    <span class="at">x =</span> <span class="st">&#39;Median expression (logcounts)&#39;</span>,</span>
+<span id="cb14-36"><a href="#cb14-36" aria-hidden="true" tabindex="-1"></a>    <span class="at">y =</span> <span class="st">&#39;Density&#39;</span>,</span>
+<span id="cb14-37"><a href="#cb14-37" aria-hidden="true" tabindex="-1"></a>    <span class="at">caption =</span> <span class="st">&#39;Blue dashed line represents the median across all genes&#39;</span></span>
+<span id="cb14-38"><a href="#cb14-38" aria-hidden="true" tabindex="-1"></a>  )</span></code></pre></div>
+<p><img src="figure/core_gene_sets.Rmd/circadian_expression_background_density-1.png" style="display: block; margin: auto;" /></p>
+</div>
+</div>
+<div id="expression-of-tead-genes-in-ctcs-from-nsg-cdx-br16"
+class="section level2">
+<h2>Expression of TEAD genes in CTCs from NSG-CDX-BR16</h2>
+<p>Plot showing the expression distribution of TEAD genes in CTCs from
+NSG-CDX-BR16 mice. The fold change (FC, in log2 scale) and P value from
+the differential expression analysis are shown for each gene.</p>
+<div class="sourceCode" id="cb15"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a>use_sce <span class="ot">&lt;-</span> sce_br16</span>
+<span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a>use_dge <span class="ot">&lt;-</span> dge_br16</span>
+<span id="cb15-3"><a href="#cb15-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb15-4"><a href="#cb15-4" aria-hidden="true" tabindex="-1"></a>use_genes_name <span class="ot">&lt;-</span> <span class="fu">grep</span>(<span class="st">&#39;TEAD[0-9]&#39;</span>, <span class="fu">rowData</span>(use_sce)<span class="sc">$</span>gene_name, <span class="at">value =</span> <span class="cn">TRUE</span>)</span>
+<span id="cb15-5"><a href="#cb15-5" aria-hidden="true" tabindex="-1"></a>use_rows <span class="ot">&lt;-</span> <span class="fu">grepl</span>(<span class="st">&#39;TEAD[0-9]&#39;</span>, <span class="fu">rowData</span>(use_sce)<span class="sc">$</span>gene_name)</span>
+<span id="cb15-6"><a href="#cb15-6" aria-hidden="true" tabindex="-1"></a>sel_sce <span class="ot">&lt;-</span> use_sce[use_rows,]</span>
+<span id="cb15-7"><a href="#cb15-7" aria-hidden="true" tabindex="-1"></a>use_features <span class="ot">&lt;-</span> <span class="fu">rownames</span>(sel_sce)</span>
+<span id="cb15-8"><a href="#cb15-8" aria-hidden="true" tabindex="-1"></a><span class="fu">rownames</span>(sel_sce) <span class="ot">&lt;-</span> use_genes_name</span>
+<span id="cb15-9"><a href="#cb15-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb15-10"><a href="#cb15-10" aria-hidden="true" tabindex="-1"></a>sel_dge <span class="ot">&lt;-</span> use_dge[use_features,]</span>
+<span id="cb15-11"><a href="#cb15-11" aria-hidden="true" tabindex="-1"></a><span class="fu">rownames</span>(sel_dge) <span class="ot">&lt;-</span> use_genes_name</span>
+<span id="cb15-12"><a href="#cb15-12" aria-hidden="true" tabindex="-1"></a>sel_dge<span class="sc">$</span>gene <span class="ot">&lt;-</span> <span class="fu">rownames</span>(sel_dge)</span>
+<span id="cb15-13"><a href="#cb15-13" aria-hidden="true" tabindex="-1"></a>sel_dge <span class="ot">&lt;-</span> sel_dge <span class="sc">%&gt;%</span></span>
+<span id="cb15-14"><a href="#cb15-14" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">group1 =</span> <span class="st">&#39;active&#39;</span>, <span class="at">group2 =</span> <span class="st">&#39;resting&#39;</span>) <span class="sc">%&gt;%</span> <span class="co"># for stat_pvalue_manual</span></span>
+<span id="cb15-15"><a href="#cb15-15" aria-hidden="true" tabindex="-1"></a>  <span class="fu">arrange</span>(PValue) <span class="sc">%&gt;%</span></span>
+<span id="cb15-16"><a href="#cb15-16" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(</span>
+<span id="cb15-17"><a href="#cb15-17" aria-hidden="true" tabindex="-1"></a>    <span class="at">gene =</span> <span class="fu">factor</span>(gene, <span class="at">levels =</span> gene)</span>
+<span id="cb15-18"><a href="#cb15-18" aria-hidden="true" tabindex="-1"></a>  )</span>
+<span id="cb15-19"><a href="#cb15-19" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb15-20"><a href="#cb15-20" aria-hidden="true" tabindex="-1"></a>expr_long <span class="ot">&lt;-</span> <span class="fu">logcounts</span>(sel_sce) <span class="sc">%&gt;%</span> data.frame <span class="sc">%&gt;%</span> <span class="fu">rownames_to_column</span>(<span class="st">&#39;gene&#39;</span>) <span class="sc">%&gt;%</span> <span class="fu">pivot_longer</span>(<span class="sc">-</span>gene, <span class="at">names_to =</span> <span class="st">&#39;sample_alias&#39;</span>, <span class="at">values_to =</span> <span class="st">&#39;exprs&#39;</span>)</span>
+<span id="cb15-21"><a href="#cb15-21" aria-hidden="true" tabindex="-1"></a>use_data <span class="ot">&lt;-</span> <span class="fu">colData</span>(sel_sce) <span class="sc">%&gt;%</span> </span>
+<span id="cb15-22"><a href="#cb15-22" aria-hidden="true" tabindex="-1"></a>  data.frame <span class="sc">%&gt;%</span> </span>
+<span id="cb15-23"><a href="#cb15-23" aria-hidden="true" tabindex="-1"></a>  dplyr<span class="sc">::</span><span class="fu">select</span>(sample_alias, timepoint, sample_type) <span class="sc">%&gt;%</span> </span>
+<span id="cb15-24"><a href="#cb15-24" aria-hidden="true" tabindex="-1"></a>  <span class="fu">left_join</span>(expr_long) <span class="sc">%&gt;%</span> </span>
+<span id="cb15-25"><a href="#cb15-25" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(</span>
+<span id="cb15-26"><a href="#cb15-26" aria-hidden="true" tabindex="-1"></a>    <span class="at">gene =</span> <span class="fu">factor</span>(gene, <span class="at">levels =</span> sel_dge<span class="sc">$</span>gene),</span>
+<span id="cb15-27"><a href="#cb15-27" aria-hidden="true" tabindex="-1"></a>    <span class="at">timepoint =</span> <span class="fu">recode</span>(timepoint, <span class="at">resting =</span> <span class="st">&#39;Rest phase&#39;</span>, <span class="at">active =</span> <span class="st">&#39;Active phase&#39;</span>)</span>
+<span id="cb15-28"><a href="#cb15-28" aria-hidden="true" tabindex="-1"></a>    )</span>
+<span id="cb15-29"><a href="#cb15-29" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb15-30"><a href="#cb15-30" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb15-31"><a href="#cb15-31" aria-hidden="true" tabindex="-1"></a>use_ylim <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="dv">0</span>, <span class="dv">1</span> <span class="sc">+</span> <span class="fu">max</span>(use_data<span class="sc">$</span>exprs))</span>
+<span id="cb15-32"><a href="#cb15-32" aria-hidden="true" tabindex="-1"></a>use_breaks <span class="ot">&lt;-</span> <span class="fu">seq</span>(use_ylim[<span class="dv">1</span>],  <span class="fu">max</span>(use_data<span class="sc">$</span>exprs), <span class="at">by =</span> <span class="dv">2</span>)</span>
+<span id="cb15-33"><a href="#cb15-33" aria-hidden="true" tabindex="-1"></a>sel_dge <span class="ot">&lt;-</span> sel_dge <span class="sc">%&gt;%</span></span>
+<span id="cb15-34"><a href="#cb15-34" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(</span>
+<span id="cb15-35"><a href="#cb15-35" aria-hidden="true" tabindex="-1"></a>    <span class="at">group1 =</span> <span class="st">&#39;Rest phase&#39;</span>, <span class="at">group2 =</span> <span class="st">&#39;Active phase&#39;</span>,</span>
+<span id="cb15-36"><a href="#cb15-36" aria-hidden="true" tabindex="-1"></a>    <span class="at">label =</span> <span class="fu">paste0</span>(<span class="st">&#39;FC=&#39;</span>, <span class="fu">round</span>(logFC,<span class="dv">2</span>),<span class="st">&quot;, P= &quot;</span>, <span class="fu">format.pval</span>(PValue, <span class="dv">1</span>))</span>
+<span id="cb15-37"><a href="#cb15-37" aria-hidden="true" tabindex="-1"></a>  )</span>
+<span id="cb15-38"><a href="#cb15-38" aria-hidden="true" tabindex="-1"></a>timepoint_palette[<span class="st">&#39;Rest phase&#39;</span>] <span class="ot">&lt;-</span> timepoint_palette[<span class="st">&#39;resting&#39;</span>]</span>
+<span id="cb15-39"><a href="#cb15-39" aria-hidden="true" tabindex="-1"></a>timepoint_palette[<span class="st">&#39;Active phase&#39;</span>] <span class="ot">&lt;-</span> timepoint_palette[<span class="st">&#39;active&#39;</span>]</span>
+<span id="cb15-40"><a href="#cb15-40" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb15-41"><a href="#cb15-41" aria-hidden="true" tabindex="-1"></a>use_data <span class="sc">%&gt;%</span> </span>
+<span id="cb15-42"><a href="#cb15-42" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(timepoint, exprs, <span class="at">color =</span> timepoint)) <span class="sc">+</span></span>
+<span id="cb15-43"><a href="#cb15-43" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_quasirandom</span>(<span class="at">alpha =</span> <span class="fl">0.6</span>, <span class="at">wdth =</span> <span class="fl">0.4</span>, <span class="at">groupOnX=</span><span class="cn">TRUE</span>, <span class="at">bandwidth=</span><span class="dv">1</span>) <span class="sc">+</span></span>
+<span id="cb15-44"><a href="#cb15-44" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_violin</span>(<span class="at">color =</span> <span class="st">&#39;black&#39;</span>, <span class="at">alpha =</span> <span class="dv">0</span>, <span class="at">scale =</span> <span class="st">&quot;width&quot;</span>, <span class="at">width =</span> <span class="fl">0.8</span>, <span class="at">draw_quantiles =</span> <span class="fl">0.5</span>) <span class="sc">+</span></span>
+<span id="cb15-45"><a href="#cb15-45" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_color_manual</span>(<span class="at">values =</span>timepoint_palette) <span class="sc">+</span></span>
+<span id="cb15-46"><a href="#cb15-46" aria-hidden="true" tabindex="-1"></a>  <span class="fu">facet_wrap</span>(<span class="sc">~</span>gene, <span class="at">ncol =</span> <span class="dv">3</span>) <span class="sc">+</span></span>
+<span id="cb15-47"><a href="#cb15-47" aria-hidden="true" tabindex="-1"></a>  <span class="fu">stat_pvalue_manual</span>(sel_dge, <span class="at">label =</span> <span class="st">&quot;label&quot;</span>, <span class="at">y.position =</span> <span class="fl">0.5</span><span class="sc">+</span><span class="fu">max</span>(use_data<span class="sc">$</span>exprs), <span class="at">size =</span> geom_text_size) <span class="sc">+</span></span>
+<span id="cb15-48"><a href="#cb15-48" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_y_continuous</span>(<span class="at">limits =</span> use_ylim, <span class="at">breaks =</span> use_breaks) <span class="sc">+</span></span>
+<span id="cb15-49"><a href="#cb15-49" aria-hidden="true" tabindex="-1"></a>  <span class="fu">guides</span>(<span class="at">color =</span> <span class="st">&#39;none&#39;</span>) <span class="sc">+</span></span>
+<span id="cb15-50"><a href="#cb15-50" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(</span>
+<span id="cb15-51"><a href="#cb15-51" aria-hidden="true" tabindex="-1"></a>    <span class="at">x =</span> <span class="st">&#39;&#39;</span>,</span>
+<span id="cb15-52"><a href="#cb15-52" aria-hidden="true" tabindex="-1"></a>    <span class="at">y =</span> <span class="fu">expression</span>(<span class="fu">paste</span>(<span class="st">&quot;lo&quot;</span>, g[<span class="dv">2</span>],<span class="st">&quot;(Normalized counts)&quot;</span>))</span>
+<span id="cb15-53"><a href="#cb15-53" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">+</span></span>
+<span id="cb15-54"><a href="#cb15-54" aria-hidden="true" tabindex="-1"></a>  <span class="fu">background_grid</span>(<span class="at">minor =</span> <span class="st">&#39;none&#39;</span>, <span class="at">major =</span> <span class="st">&#39;y&#39;</span>, <span class="at">size.major =</span> <span class="fl">0.2</span>)</span></code></pre></div>
+<p><img src="figure/core_gene_sets.Rmd/tead_expression_levels_by_timepoint-1.png" style="display: block; margin: auto;" /></p>
+</div>
+<div
+id="expression-of-receptors-activated-by-circadian-rhythm-regulated-ligands"
+class="section level2">
+<h2>Expression of receptors activated by circadian rhythm regulated
+ligands</h2>
+<p>Density plots showing the distribution of the average expression
+(log2 counts per million) of genes encoding for receptors of
+circadian-regulated hormones, growth factors or molecules in CTCs from
+NSG-CDX-BR16 mice, NSG-LM2 mice and patients with breast cancer. Genes
+for the glucocorticoid receptor, androgen receptor and insulin receptor
+are labeled in the X-axis.</p>
+<p>Load list of genes</p>
+<div class="sourceCode" id="cb16"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a>use_genes_1 <span class="ot">&lt;-</span> <span class="fu">read_csv</span>(<span class="at">file =</span>  <span class="st">&#39;./data/resources/HGNC/group-71-nuclear_hormone_receptors.csv&#39;</span>, <span class="at">skip =</span> <span class="dv">1</span>)<span class="sc">$</span><span class="st">`</span><span class="at">Approved symbol</span><span class="st">`</span></span>
+<span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a>use_genes_2 <span class="ot">&lt;-</span> <span class="fu">read_tsv</span>(<span class="at">file =</span>  <span class="st">&#39;./data/resources/user_input/circadian_regulated_hormones_and_gf.txt&#39;</span>, <span class="at">col_names =</span> <span class="st">&#39;genes&#39;</span>)<span class="sc">$</span>genes</span>
+<span id="cb16-3"><a href="#cb16-3" aria-hidden="true" tabindex="-1"></a>use_genes <span class="ot">&lt;-</span> <span class="fu">c</span>(use_genes_1, use_genes_2, <span class="fu">c</span>(<span class="st">&#39;INSR&#39;</span>, <span class="st">&#39;IGF1R&#39;</span>, <span class="st">&#39;IGF2R&#39;</span>, <span class="st">&#39;NR2C2&#39;</span>, <span class="st">&#39;AR&#39;</span>)) <span class="sc">%&gt;%</span> unique</span>
+<span id="cb16-4"><a href="#cb16-4" aria-hidden="true" tabindex="-1"></a>rm_genes <span class="ot">&lt;-</span> use_genes[<span class="sc">!</span>use_genes <span class="sc">%in%</span> <span class="fu">rowData</span>(sce_raw)<span class="sc">$</span>gene_name]</span></code></pre></div>
+<p>Plot expression distributions</p>
+<div class="sourceCode" id="cb17"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a>use_rows <span class="ot">&lt;-</span> <span class="fu">rowData</span>(sce_raw)<span class="sc">$</span>gene_name <span class="sc">%in%</span> use_genes</span>
+<span id="cb17-2"><a href="#cb17-2" aria-hidden="true" tabindex="-1"></a>use_sce <span class="ot">&lt;-</span> sce_raw[use_rows,]</span>
+<span id="cb17-3"><a href="#cb17-3" aria-hidden="true" tabindex="-1"></a><span class="fu">rownames</span>(use_sce) <span class="ot">&lt;-</span> <span class="fu">rowData</span>(use_sce)<span class="sc">$</span>gene_name</span>
+<span id="cb17-4"><a href="#cb17-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb17-5"><a href="#cb17-5" aria-hidden="true" tabindex="-1"></a>use_data <span class="ot">&lt;-</span> <span class="fu">assay</span>(use_sce, <span class="st">&#39;logcpm&#39;</span>) <span class="sc">%&gt;%</span> data.frame <span class="sc">%&gt;%</span> <span class="fu">rownames_to_column</span>(<span class="st">&#39;gene_name&#39;</span>) <span class="sc">%&gt;%</span> <span class="fu">pivot_longer</span>(<span class="at">cols =</span>  <span class="sc">-</span>gene_name, <span class="at">names_to =</span> <span class="st">&#39;sample_alias&#39;</span>, <span class="at">values_to =</span> <span class="st">&#39;exprs&#39;</span>) <span class="sc">%&gt;%</span> </span>
+<span id="cb17-6"><a href="#cb17-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">left_join</span>(<span class="fu">colData</span>(use_sce) <span class="sc">%&gt;%</span> data.frame) <span class="sc">%&gt;%</span> </span>
+<span id="cb17-7"><a href="#cb17-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(</span>
+<span id="cb17-8"><a href="#cb17-8" aria-hidden="true" tabindex="-1"></a>    <span class="at">genes_sel =</span> gene_name <span class="sc">%in%</span> <span class="fu">c</span>(<span class="st">&#39;INSR&#39;</span>, <span class="st">&#39;IGF1R&#39;</span>, <span class="st">&#39;IGF2R&#39;</span>, <span class="st">&#39;NR2C2&#39;</span>, <span class="st">&#39;AR&#39;</span>)</span>
+<span id="cb17-9"><a href="#cb17-9" aria-hidden="true" tabindex="-1"></a>    )</span>
+<span id="cb17-10"><a href="#cb17-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb17-11"><a href="#cb17-11" aria-hidden="true" tabindex="-1"></a>mean_data <span class="ot">&lt;-</span> use_data <span class="sc">%&gt;%</span> <span class="fu">group_by</span>(donor, gene_name) <span class="sc">%&gt;%</span> <span class="fu">summarise</span>(<span class="at">avrg_exprs =</span> <span class="fu">mean</span>(exprs)) </span>
+<span id="cb17-12"><a href="#cb17-12" aria-hidden="true" tabindex="-1"></a>mean_data_selected <span class="ot">&lt;-</span> mean_data <span class="sc">%&gt;%</span> <span class="fu">filter</span>(gene_name <span class="sc">%in%</span> <span class="fu">c</span>(<span class="st">&#39;INSR&#39;</span>, <span class="st">&#39;IGF1R&#39;</span>, <span class="st">&#39;IGF2R&#39;</span>, <span class="st">&#39;NR2C2&#39;</span>, <span class="st">&#39;AR&#39;</span>))</span>
+<span id="cb17-13"><a href="#cb17-13" aria-hidden="true" tabindex="-1"></a>mean_data <span class="sc">%&gt;%</span> </span>
+<span id="cb17-14"><a href="#cb17-14" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(avrg_exprs)) <span class="sc">+</span></span>
+<span id="cb17-15"><a href="#cb17-15" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_density</span>(<span class="at">fill=</span><span class="st">&quot;#dbd8be&quot;</span>) <span class="sc">+</span></span>
+<span id="cb17-16"><a href="#cb17-16" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_vline</span>(<span class="fu">aes</span>(<span class="at">xintercept=</span><span class="fu">mean</span>(avrg_exprs)), <span class="at">color=</span><span class="st">&quot;#043665&quot;</span>, <span class="at">linetype=</span><span class="st">&quot;dashed&quot;</span>, <span class="at">size=</span><span class="fl">0.5</span>)  <span class="sc">+</span></span>
+<span id="cb17-17"><a href="#cb17-17" aria-hidden="true" tabindex="-1"></a>  <span class="fu">facet_grid</span>(<span class="at">rows =</span> <span class="fu">vars</span>(donor), <span class="at">scales =</span> <span class="st">&#39;free&#39;</span>) <span class="sc">+</span></span>
+<span id="cb17-18"><a href="#cb17-18" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>(</span>
+<span id="cb17-19"><a href="#cb17-19" aria-hidden="true" tabindex="-1"></a>    <span class="at">data =</span> mean_data_selected, </span>
+<span id="cb17-20"><a href="#cb17-20" aria-hidden="true" tabindex="-1"></a>    <span class="at">mapping =</span> <span class="fu">aes</span>(<span class="at">y =</span> <span class="fl">0.01</span>, <span class="at">x =</span> avrg_exprs, <span class="at">label =</span> gene_name), </span>
+<span id="cb17-21"><a href="#cb17-21" aria-hidden="true" tabindex="-1"></a>    <span class="at">alpha =</span> <span class="fl">0.8</span>,</span>
+<span id="cb17-22"><a href="#cb17-22" aria-hidden="true" tabindex="-1"></a>    <span class="at">color =</span> <span class="st">&#39;#d37d0a&#39;</span>) <span class="sc">+</span></span>
+<span id="cb17-23"><a href="#cb17-23" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_text_repel</span>(</span>
+<span id="cb17-24"><a href="#cb17-24" aria-hidden="true" tabindex="-1"></a>    mean_data_selected, </span>
+<span id="cb17-25"><a href="#cb17-25" aria-hidden="true" tabindex="-1"></a>    <span class="at">mapping =</span> <span class="fu">aes</span>(<span class="at">y =</span> <span class="fl">0.01</span>, <span class="at">x =</span> avrg_exprs, <span class="at">label =</span> gene_name),</span>
+<span id="cb17-26"><a href="#cb17-26" aria-hidden="true" tabindex="-1"></a>    <span class="at">force_pull   =</span> <span class="dv">0</span>, <span class="co"># do not pull toward data points</span></span>
+<span id="cb17-27"><a href="#cb17-27" aria-hidden="true" tabindex="-1"></a>    <span class="at">nudge_y      =</span> <span class="fl">0.4</span>,</span>
+<span id="cb17-28"><a href="#cb17-28" aria-hidden="true" tabindex="-1"></a>    <span class="at">direction    =</span> <span class="st">&quot;x&quot;</span>,</span>
+<span id="cb17-29"><a href="#cb17-29" aria-hidden="true" tabindex="-1"></a>    <span class="at">angle        =</span> <span class="dv">90</span>,</span>
+<span id="cb17-30"><a href="#cb17-30" aria-hidden="true" tabindex="-1"></a>    <span class="at">hjust        =</span> <span class="dv">0</span>,</span>
+<span id="cb17-31"><a href="#cb17-31" aria-hidden="true" tabindex="-1"></a>    <span class="at">segment.size =</span> <span class="fl">0.2</span>,</span>
+<span id="cb17-32"><a href="#cb17-32" aria-hidden="true" tabindex="-1"></a>    <span class="at">max.iter =</span> <span class="fl">1e4</span>, </span>
+<span id="cb17-33"><a href="#cb17-33" aria-hidden="true" tabindex="-1"></a>    <span class="at">max.time =</span> <span class="dv">1</span>,</span>
+<span id="cb17-34"><a href="#cb17-34" aria-hidden="true" tabindex="-1"></a>    <span class="at">size =</span> geom_text_size) <span class="sc">+</span></span>
+<span id="cb17-35"><a href="#cb17-35" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(</span>
+<span id="cb17-36"><a href="#cb17-36" aria-hidden="true" tabindex="-1"></a>    <span class="at">x =</span> <span class="fu">expression</span>(<span class="fu">paste</span>(<span class="st">&quot;Average lo&quot;</span>, g[<span class="dv">2</span>],<span class="st">&quot;(counts per million reads)&quot;</span>)),</span>
+<span id="cb17-37"><a href="#cb17-37" aria-hidden="true" tabindex="-1"></a>    <span class="at">y =</span> <span class="st">&#39;Density&#39;</span>,</span>
+<span id="cb17-38"><a href="#cb17-38" aria-hidden="true" tabindex="-1"></a>    <span class="at">caption =</span> <span class="st">&#39;Blue dashed line represents the average across all genes&#39;</span></span>
+<span id="cb17-39"><a href="#cb17-39" aria-hidden="true" tabindex="-1"></a>  )</span></code></pre></div>
+<p><img src="figure/core_gene_sets.Rmd/receptores_expression_avrg_density_plot-1.png" style="display: block; margin: auto;" /></p>
+<br>
+<p>
+<button type="button" class="btn btn-default btn-workflowr btn-workflowr-sessioninfo" data-toggle="collapse" data-target="#workflowr-sessioninfo" style="display: block;">
+<span class="glyphicon glyphicon-wrench" aria-hidden="true"></span>
+Session information
+</button>
+</p>
+<div id="workflowr-sessioninfo" class="collapse">
+<div class="sourceCode" id="cb18"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a><span class="fu">sessionInfo</span>()</span></code></pre></div>
+<p>R version 4.1.0 (2021-05-18) Platform: x86_64-apple-darwin17.0
+(64-bit) Running under: macOS Big Sur 10.16</p>
+<p>Matrix products: default BLAS:
+/Library/Frameworks/R.framework/Versions/4.1/Resources/lib/libRblas.dylib
+LAPACK:
+/Library/Frameworks/R.framework/Versions/4.1/Resources/lib/libRlapack.dylib</p>
+<p>locale: [1]
+en_US.UTF-8/en_US.UTF-8/en_US.UTF-8/C/en_US.UTF-8/en_US.UTF-8</p>
+<p>attached base packages: [1] parallel stats4 stats graphics grDevices
+utils datasets [8] methods base</p>
+<p>other attached packages: [1] ggrepel_0.9.1 ggpubr_0.4.0<br />
+[3] ggbeeswarm_0.6.0 scater_1.20.1<br />
+[5] scuttle_1.2.1 SingleCellExperiment_1.14.1 [7]
+SummarizedExperiment_1.22.0 Biobase_2.52.0<br />
+[9] GenomicRanges_1.44.0 GenomeInfoDb_1.28.4<br />
+[11] IRanges_2.26.0 S4Vectors_0.30.2<br />
+[13] BiocGenerics_0.38.0 MatrixGenerics_1.4.3<br />
+[15] matrixStats_0.61.0 cowplot_1.1.1<br />
+[17] showtext_0.9-4 showtextdb_3.0<br />
+[19] sysfonts_0.8.5 forcats_0.5.1<br />
+[21] stringr_1.4.0 dplyr_1.0.7<br />
+[23] purrr_0.3.4 readr_2.0.2<br />
+[25] tidyr_1.1.4 tibble_3.1.5<br />
+[27] ggplot2_3.3.5 tidyverse_1.3.1<br />
+[29] workflowr_1.6.2</p>
+<p>loaded via a namespace (and not attached): [1] colorspace_2.0-2
+ggsignif_0.6.3<br />
+[3] rio_0.5.27 ellipsis_0.3.2<br />
+[5] rprojroot_2.0.2 XVector_0.32.0<br />
+[7] BiocNeighbors_1.10.0 fs_1.5.0<br />
+[9] rstudioapi_0.13 farver_2.1.0<br />
+[11] bit64_4.0.5 fansi_0.5.0<br />
+[13] lubridate_1.8.0 xml2_1.3.2<br />
+[15] sparseMatrixStats_1.4.2 knitr_1.36<br />
+[17] jsonlite_1.7.2 broom_0.7.10<br />
+[19] dbplyr_2.1.1 compiler_4.1.0<br />
+[21] httr_1.4.2 backports_1.3.0<br />
+[23] assertthat_0.2.1 Matrix_1.3-4<br />
+[25] fastmap_1.1.0 cli_3.1.0<br />
+[27] later_1.3.0 BiocSingular_1.8.1<br />
+[29] htmltools_0.5.2 tools_4.1.0<br />
+[31] rsvd_1.0.5 gtable_0.3.0<br />
+[33] glue_1.4.2 GenomeInfoDbData_1.2.6<br />
+[35] Rcpp_1.0.7 carData_3.0-4<br />
+[37] cellranger_1.1.0 jquerylib_0.1.4<br />
+[39] vctrs_0.3.8 DelayedMatrixStats_1.14.3 [41] xfun_0.27
+openxlsx_4.2.4<br />
+[43] beachmat_2.8.1 rvest_1.0.2<br />
+[45] lifecycle_1.0.1 irlba_2.3.3<br />
+[47] rstatix_0.7.0 zlibbioc_1.38.0<br />
+[49] scales_1.1.1 vroom_1.5.5<br />
+[51] hms_1.1.1 promises_1.2.0.1<br />
+[53] curl_4.3.2 yaml_2.2.1<br />
+[55] gridExtra_2.3 sass_0.4.0<br />
+[57] stringi_1.7.5 highr_0.9<br />
+[59] ScaledMatrix_1.0.0 zip_2.2.0<br />
+[61] BiocParallel_1.26.2 rlang_0.4.12<br />
+[63] pkgconfig_2.0.3 bitops_1.0-7<br />
+[65] evaluate_0.14 lattice_0.20-45<br />
+[67] labeling_0.4.2 bit_4.0.4<br />
+[69] tidyselect_1.1.1 magrittr_2.0.1<br />
+[71] R6_2.5.1 generics_0.1.1<br />
+[73] DelayedArray_0.18.0 DBI_1.1.1<br />
+[75] foreign_0.8-81 pillar_1.6.4<br />
+[77] haven_2.4.3 whisker_0.4<br />
+[79] withr_2.4.2 abind_1.4-5<br />
+[81] RCurl_1.98-1.5 car_3.0-11<br />
+[83] modelr_0.1.8 crayon_1.4.2<br />
+[85] utf8_1.2.2 tzdb_0.2.0<br />
+[87] rmarkdown_2.11 viridis_0.6.2<br />
+[89] grid_4.1.0 readxl_1.3.1<br />
+[91] data.table_1.14.2 git2r_0.28.0<br />
+[93] reprex_2.0.1 digest_0.6.28<br />
+[95] httpuv_1.6.3 munsell_0.5.0<br />
+[97] beeswarm_0.4.0 viridisLite_0.4.0<br />
+[99] vipor_0.4.5 bslib_0.3.1</p>
+</div>
+</div>
+
+
+<!-- Adjust MathJax settings so that all math formulae are shown using
+TeX fonts only; see
+http://docs.mathjax.org/en/latest/configuration.html.  This will make
+the presentation more consistent at the cost of the webpage sometimes
+taking slightly longer to load. Note that this only works because the
+footer is added to webpages before the MathJax javascript. -->
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({
+    "HTML-CSS": { availableFonts: ["TeX"] }
+  });
+</script>
+
+
+
+
+</div>
+</div>
+
+</div>
+
+<script>
+
+// add bootstrap table styles to pandoc tables
+function bootstrapStylePandocTables() {
+  $('tr.odd').parent('tbody').parent('table').addClass('table table-condensed');
+}
+$(document).ready(function () {
+  bootstrapStylePandocTables();
+});
+
+
+</script>
+
+<!-- tabsets -->
+
+<script>
+$(document).ready(function () {
+  window.buildTabsets("TOC");
+});
+
+$(document).ready(function () {
+  $('.tabset-dropdown > .nav-tabs > li').click(function () {
+    $(this).parent().toggleClass('nav-tabs-open');
+  });
+});
+</script>
+
+<!-- code folding -->
+<script>
+$(document).ready(function () {
+  window.initializeCodeFolding("hide" === "show");
+});
+</script>
+
+<script>
+$(document).ready(function ()  {
+
+    // temporarily add toc-ignore selector to headers for the consistency with Pandoc
+    $('.unlisted.unnumbered').addClass('toc-ignore')
+
+    // move toc-ignore selectors from section div to header
+    $('div.section.toc-ignore')
+        .removeClass('toc-ignore')
+        .children('h1,h2,h3,h4,h5').addClass('toc-ignore');
+
+    // establish options
+    var options = {
+      selectors: "h1,h2,h3,h4",
+      theme: "bootstrap3",
+      context: '.toc-content',
+      hashGenerator: function (text) {
+        return text.replace(/[.\\/?&!#<>]/g, '').replace(/\s/g, '_');
+      },
+      ignoreSelector: ".toc-ignore",
+      scrollTo: 0
+    };
+    options.showAndHide = true;
+    options.smoothScroll = true;
+
+    // tocify
+    var toc = $("#TOC").tocify(options).data("toc-tocify");
+});
+</script>
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    script.src  = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+
+</body>
+</html>
