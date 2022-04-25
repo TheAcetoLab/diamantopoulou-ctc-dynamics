@@ -1,0 +1,204 @@
+---
+title: "Distribution of CTC counts isolated in breast cancer patients"
+author: "Francesc Castro-Giner"
+date: "2022-02-23"
+output: workflowr::wflow_html
+editor_options:
+  chunk_output_type: console
+---
+
+
+## Load libraries, additional functions and variables
+
+Setup environment
+```{r setup, include=TRUE, warning=FALSE, message=FALSE}
+knitr::opts_chunk$set(results='asis', echo=TRUE, message=FALSE, warning=FALSE, error=FALSE, fig.align = 'center', fig.width = 3.5, fig.asp = 0.618, dpi = 600, dev = c("png", "pdf"), fig.showtext = TRUE)
+
+options(stringsAsFactors = FALSE)
+```
+
+Load packages
+```{r load-libraries}
+library(tidyverse)
+library(showtext)
+library(grid)
+library(gridExtra)
+```
+
+Set font family for figures
+```{r set-font}
+font_add("Helvetica", "./configuration/fonts/Helvetica.ttc")
+showtext_auto()
+```
+
+Load ggplot theme
+```{r ggplot-theme}
+source("./configuration/rmarkdown/ggplot_theme.R")
+```
+
+Load color palettes
+```{r color-palettes}
+source("./configuration/rmarkdown/color_palettes.R")
+```
+
+## Data wrangling
+```{r}
+use_data_raw <- read_tsv(file = 'data/patients/ctc_frequency_patients.tsv.txt') %>% 
+  mutate(
+   n_active = `Single CTCs active phase` + `CTC Clusters active phase` +`CTC-WBC clusters active phase`,
+   n_rest = `Single CTCs rest phase` + `CTC Clusters rest phase` + `CTC-WBC clusters rest phase`,
+   p_active = n_active / (n_active + n_rest)
+  ) %>% 
+  pivot_longer(cols = contains("CTC"), names_to = 'timepoint_sample_type_legend', values_to = 'n') %>% 
+  mutate(
+    donor = paste('Patient', Patient),
+    Status = ifelse(`AJCC Stage 8th Edition` == 'IV', 'Late', 'Early'),
+    timepoint_sample_type_legend = recode(
+      timepoint_sample_type_legend,
+      `CTC Clusters active phase` = 'Active phase CTC Clusters',
+      `CTC Clusters rest phase` = 'Rest phase CTC Clusters',
+      `CTC-WBC clusters active phase` = 'Active phase CTC-WBC Clusters',
+      `CTC-WBC clusters rest phase` = 'Rest phase CTC-WBC Clusters',
+      `Single CTCs active phase` = 'Active phase Single CTCs',
+      `Single CTCs rest phase` = 'Rest phase Single CTCs',
+    ),
+    timepoint_sample_type_legend = factor(
+      timepoint_sample_type_legend,
+      levels = c('Active phase Single CTCs', 'Active phase CTC Clusters', 'Active phase CTC-WBC Clusters',
+                    'Rest phase Single CTCs', 'Rest phase CTC Clusters', 'Rest phase CTC-WBC Clusters')
+    )
+  ) %>% 
+  filter(n > 0) %>% 
+  select(Status, donor, timepoint_sample_type_legend, n, p_active) %>% 
+  unique
+
+use_data_all <- use_data_raw %>% 
+  group_by(donor) %>% 
+  summarise(t = sum(n)) %>% 
+  right_join(use_data_raw) %>% 
+  mutate(p = n/t) %>% 
+  mutate(
+    donor = fct_reorder(donor, t),
+    id = gsub(".* ", "", donor) %>% as.numeric)
+```
+
+## Setup polar plot early status
+```{r ctc_patients_early_plot}
+use_data <- use_data_all %>% filter(Status == 'Early')
+# Get the name and the y position of each label
+label_data <- use_data %>% dplyr::select(donor, id, t) %>% unique
+number_of_bar <- nrow(label_data)
+angle <- 90 - 360 * (label_data$id-0.5) / (number_of_bar +0.5)   # I substract 0.5 because the letter must have the angle of the center of the bars. Not extreme right(1) or extreme left (0)
+label_data$hjust <- ifelse( angle < -90, 1, 0)
+label_data$angle <- ifelse(angle < -90, angle+180, angle)
+
+
+# prepare a data frame for grid (scales)
+grid_data <- data.frame(start = 1, end = (use_data$donor %>% unique %>% length))
+
+# Add two additional donor levels to have additional space for grid labels
+use_data_to_plot <- rbind(
+    c('empty1', rep(NA, ncol(use_data)-1)), 
+    c('empty2',rep(NA, ncol(use_data)-1)), 
+    use_data
+  ) %>% 
+  mutate(p = as.numeric(p))
+
+# Generate plot
+ctc_dist_plot_early <- use_data_to_plot %>% 
+  # mutate(donor = fct_reorder(donor, t)) %>% 
+  ggplot(aes(x = donor, y = p, fill = timepoint_sample_type_legend, label = donor)) +
+  geom_bar(stat="identity", position = "fill", width=0.8, size = 0.2) +
+  # Add a val=100/75/50/25 lines. I do it at the beginning to make sur barplots are OVER it.
+  geom_segment(data=grid_data, aes(x = end, y = 0, xend = start-0.5, yend = 0), colour = "grey50", alpha=1, size=0.2, inherit.aes = FALSE ) +
+  geom_segment(data=grid_data, aes(x = end, y = 0.25, xend = start-0.5, yend = 0.25), colour = "grey50", alpha=1, size=0.2 , inherit.aes = FALSE ) +
+  geom_segment(data=grid_data, aes(x = end, y = 0.50, xend = start-0.5, yend = 0.50), colour = "grey50", alpha=1, size=0.2 , inherit.aes = FALSE ) +
+  geom_segment(data=grid_data, aes(x = end, y = 0.75, xend = start-0.5, yend = 0.75), colour = "grey50", alpha=1, size=0.2 , inherit.aes = FALSE ) +
+  geom_segment(data=grid_data, aes(x = end, y = 1, xend = start-0.5, yend = 1), colour = "grey50", alpha=1, size=0.2 , inherit.aes = FALSE ) +
+  # Add text showing the value of each 100/75/50/25 lines
+  annotate("text", x = rep(grid_data$end + 3 ,5), y = c(0, 0.25, 0.50, 0.75, 1), label = c('0%', '25%', '50%', '75%', '100%') , color="black", size=geom_text_size , angle=0, fontface="plain", hjust=1) +
+  geom_bar(stat="identity", position = "fill", width=0.8, color = 'white', size = 0.2) +
+  scale_fill_manual(values = timepoint_sample_type_legend_palette_2) +
+  # scale_y_continuous(breaks = seq(0 , 1, 0.1), minor_breaks = seq(0 , 1, 0.1)) +
+  ylim(-0.5, 1.5) +
+  labs (fill = '') +
+  theme(
+    axis.text = element_blank(),
+    axis.title = element_blank(),
+    axis.ticks = element_blank(),
+    axis.line = element_blank(),
+    panel.grid = element_blank(),
+    plot.margin = unit(rep(-1,4), "cm")
+  ) +
+  coord_polar(start = 0) #+
+  # geom_text(data=label_data, aes(x=id, y=1+0.1, label=donor, hjust=hjust), color="black", fontface="plain",alpha=0.6, size=geom_text_size, angle= label_data$angle, inherit.aes = FALSE )
+```
+
+## Setup polar plot early status
+```{r ctc_patients_late_plot}
+use_data <- use_data_all %>% filter(Status == 'Late')
+# Get the name and the y position of each label
+label_data <- use_data %>% dplyr::select(donor, id, t) %>% unique
+number_of_bar <- nrow(label_data)
+angle <- 90 - 360 * (label_data$id-5-0.5) / (number_of_bar +0.5)   # I substract 0.5 because the letter must have the angle of the center of the bars. Not extreme right(1) or extreme left (0)
+label_data$hjust <- ifelse( angle < -90, 1, 0)
+label_data$angle <- ifelse(angle < -90, angle+180, angle)
+
+# prepare a data frame for grid (scales)
+grid_data <- data.frame(start = 1, end = (use_data$donor %>% unique %>% length))
+
+# Add two additional donor levels to have additional space for grid labels
+use_data_to_plot <- rbind(
+  c('empty1', rep(NA, ncol(use_data)-1)), 
+  use_data) %>% 
+  mutate(p = as.numeric(p))
+
+
+ctc_dist_plot_late <- use_data_to_plot %>% 
+  # mutate(donor = fct_reorder(donor, t)) %>% 
+  ggplot(aes(x = donor, y = p, fill = timepoint_sample_type_legend, label = donor)) +
+  geom_bar(stat="identity", position = "fill", width=0.8, size = 0.2) +
+  # Add a val=100/75/50/25 lines. I do it at the beginning to make sur barplots are OVER it.
+  geom_segment(data=grid_data, aes(x = end, y = 0, xend = start-0.5, yend = 0), colour = "grey50", alpha=1, size=0.2, inherit.aes = FALSE ) +
+  geom_segment(data=grid_data, aes(x = end, y = 0.25, xend = start-0.5, yend = 0.25), colour = "grey50", alpha=1, size=0.2 , inherit.aes = FALSE ) +
+  geom_segment(data=grid_data, aes(x = end, y = 0.50, xend = start-0.5, yend = 0.50), colour = "grey50", alpha=1, size=0.2 , inherit.aes = FALSE ) +
+  geom_segment(data=grid_data, aes(x = end, y = 0.75, xend = start-0.5, yend = 0.75), colour = "grey50", alpha=1, size=0.2 , inherit.aes = FALSE ) +
+  geom_segment(data=grid_data, aes(x = end, y = 1, xend = start-0.5, yend = 1), colour = "grey50", alpha=1, size=0.2 , inherit.aes = FALSE ) +
+  # Add text showing the value of each 100/75/50/25 lines
+  annotate("text", x = rep(grid_data$end + 2 ,5), y = c(0, 0.25, 0.50, 0.75, 1), label = c('0%', '25%', '50%', '75%', '100%') , color="black", size=geom_text_size , angle=0, fontface="plain", hjust=1) +
+  geom_bar(stat="identity", position = "fill", width=0.8, color = 'white', size = 0.2) +
+  scale_fill_manual(values = timepoint_sample_type_legend_palette_2) +
+  # scale_y_continuous(breaks = seq(0 , 1, 0.1), minor_breaks = seq(0 , 1, 0.1)) +
+  ylim(-0.5, 1.5) +
+  labs (fill = '') +
+  theme(
+    axis.text = element_blank(),
+    axis.title = element_blank(),
+    axis.ticks = element_blank(),
+    axis.line = element_blank(),
+    panel.grid = element_blank(),
+    plot.margin = unit(rep(-1,4), "cm")
+  ) +
+  coord_polar(start = 0) #+
+  # geom_text(data=label_data, aes(x=id-5, y=1+0.1, label=donor, hjust=hjust), color="black", fontface="plain",alpha=0.6, size=geom_text_size, angle= label_data$angle, inherit.aes = FALSE )
+```
+
+## Plot polar distribution
+The radial histograms show the percent of single CTCs, CTC clusters and CTC-WBC clusters isolated during the rest or active phase in early- or late-stage breast cancer patients. n=21 early-stage and n=9 late-stage patients.
+```{r ctc_patients_dist_polar}
+plot_grid(
+  ctc_dist_plot_early + theme( legend.position = "none"),
+  ctc_dist_plot_late + theme( legend.position = "none"),
+  labels = c("Early", "Late"),
+  label_size = 8,
+  label_x = 0.35
+)
+```
+
+## Plot legend
+```{r ctc_patients_dist_polar_legend}
+legend <- cowplot::get_legend(ctc_dist_plot_late)
+grid.newpage()
+grid.draw(legend)
+```
+

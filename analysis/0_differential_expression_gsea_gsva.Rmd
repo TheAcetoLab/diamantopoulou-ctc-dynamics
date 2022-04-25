@@ -1,0 +1,496 @@
+---
+title: "Run differential gene expression and gene-sets analysis"
+author: "Francesc Castro-Giner"
+date: "2022-02-23"
+output: workflowr::wflow_html
+editor_options:
+  chunk_output_type: console
+params:
+  date: '`r format(Sys.Date(), "%B %d, %Y")`'
+  sce_dir: ./data/sce
+  min_counts: 5
+  min_present_prop: 0.50
+---
+
+## Load libraries, additional functions and data
+
+Setup environment
+```{r setup, include=TRUE, warning=FALSE, message=FALSE}
+knitr::opts_chunk$set(results='asis', echo=TRUE, message=FALSE, warning=FALSE, error=FALSE, fig.align = 'center', fig.width = 3.5, fig.asp = 0.618, dpi = 600, dev = c("png", "pdf"), fig.showtext = TRUE)
+
+options(stringsAsFactors = FALSE)
+```
+
+Load packages
+```{r load-libraries}
+library(tidyverse)
+library(scater)
+library(scran)
+library(edgeR)
+library(clusterProfiler)
+library(GSVA)
+library(foreach)
+```
+
+Load shared variables
+```{r load-shared-variables}
+source("./configuration/rmarkdown/shared_variables.R")
+```
+
+Load custom functions
+```{r load-functions}
+source('./code/R-functions/dge_wrappers.r')
+source('./code/R-functions/gse_omnibus.r')
+source('./code/R-functions/gse_report.r')
+clean_msigdb_names <- function(x) x %>% gsub('REACTOME_', '', .) %>% gsub('WP_', '', .) %>% gsub('BIOCARTA_', '', .) %>% gsub('KEGG_', '', .) %>% gsub('PID_', '', .) %>% gsub('GOBP_', '', .) %>% gsub('_', ' ', .)
+```
+
+Load MSigDB gene sets
+```{r load-msigdb}
+gmt_files_symbols <- list(
+  msigdb.c2.cp = './data/resources/MSigDB/v7.4/c2.cp.v7.4.symbols.gmt',
+  msigdb.c5.bp = './data/resources/MSigDB/v7.4/c5.go.bp.v7.4.symbols.gmt'
+)
+
+gmt_files_entrez <- list(
+  msigdb.c2.cp = './data/resources/MSigDB/v7.4/c2.cp.v7.4.entrez.gmt',
+  msigdb.c5.bp = './data/resources/MSigDB/v7.4/c5.go.bp.v7.4.entrez.gmt'
+)
+
+# combine MSigDB.C2.CP and GO:BP
+new_file <- gsub('c2.cp', 'c2.cp.c5.bp', gmt_files_symbols$msigdb.c2.cp)
+cat_cmd <- paste('cat', gmt_files_symbols$msigdb.c5.bp,  gmt_files_symbols$msigdb.c2.cp, '>',new_file)
+system(cat_cmd)
+gmt_files_symbols$msigdb.c2.cp.c5.bp <- new_file
+
+gmt_sets <- lapply(gmt_files_symbols, function(x) read.gmt(x) %>% collect %>% .[['term']] %>% levels)
+```
+
+## NSG-CDX-BR16 : all samples
+Configuration
+```{r load_sce_br16}
+use_sce <- readRDS(file = file.path(params$sce_dir, 'sce_br16.rds'))
+output_dir <- './data/differential_expression/br16'
+if(!file.exists(output_dir))
+  dir.create(output_dir, recursive = TRUE)
+```
+
+Run DGE analysis
+```{r run_dge_br16, eval = FALSE}
+dge <- edgeR_dge(
+  use_sce,
+  # Desing configuration for differential expression
+  group_var =  'timepoint',
+  group_sample = 'resting',
+  group_ref = 'active',
+  numeric_covar = NULL,
+  batch_vars = NULL,
+  design_formula = "~ 0 + timepoint",
+  coef = 'last',
+  # Conversion from SingleCellExperiment to DGEList
+  spike_normalization = FALSE,
+  assay_to_DGEList = 'counts',
+  assay_to_row_filter = "counts",
+  use_colData = NULL,
+  use_rowData = NULL,
+  # Feature filtering parameters
+  use_filterByExpr = TRUE,
+  min_counts = params$min_counts,
+  min_present_prop = params$min_present_prop,
+  # EdgeR workflow configuration
+  run_calcNormFactors = 'TMM',
+  estimateDisp_robust = FALSE,
+  estimateDisp_trend.method = "locfit",
+  glmQLFit_robust = TRUE,
+  glm_approach = "QLF",
+  # Output configuration
+  adjust_method = 'BH',
+  assays_from_SingleCellExperiment = NULL
+  )
+
+# Add gene description
+httr::set_config(httr::config(ssl_verifypeer = FALSE))
+ensembl <-  biomaRt::useEnsembl(biomart="ensembl", dataset="hsapiens_gene_ensembl")
+gene_desc <- biomaRt::getBM(attributes=c('external_gene_name','description'), filters = 'external_gene_name', values = dge$results$gene_name, mart =ensembl) %>% 
+  dplyr::rename('gene_name' = 'external_gene_name')
+use_res <- dge$results %>%  left_join(., gene_desc)
+dge$results <- use_res %>% 
+  filter(!duplicated(feature)) %>% 
+  mutate(rownames = feature) %>% 
+  column_to_rownames('rownames')
+
+detach("package:biomaRt", unload=TRUE)
+
+saveRDS(dge, file = file.path(output_dir, 'dge_edgeR_QLF_robust.rds'))
+```
+
+Run GSEA
+```{r run_gsea_br16, eval = FALSE}
+dge <- readRDS(file.path(output_dir, 'dge_edgeR_QLF_robust.rds'))
+res_gse <- gse_omnibus(
+    feature_names = dge$results$gene_name,
+    p = dge$results$FDR,
+    fc = dge$results$logFC,
+    gmt_files = gmt_files_symbols, 
+
+    save_intermediates = file.path(output_dir, 'gse_omnibus'),
+    
+    run_all_ora = FALSE,
+    run_all_gsea = FALSE,
+    run_GSEA = TRUE,
+    run_gseGO = FALSE,
+
+    args_gse = list(minGSSize = 10, maxGSSize = 500, pvalueCutoff = 1),
+
+    )
+saveRDS(res_gse, file = file.path(output_dir, 'gse_gsea.rds'))
+```
+
+Clean data
+```{r clean_data_br16, eval = FALSE}
+rm(use_sce)
+rm(dge)
+rm(res_gse)
+```
+
+## NSG-CDX-BR16 : CTC-Cluster and CTC-WBC
+Configuration
+```{r load_sce_br16_clusters_g}
+use_sce <- use_sce[,use_sce$sample_type_g == 'ctc_cluster']
+output_dir <- './data/differential_expression/br16-ctc_cluster_and_wbc'
+if(!file.exists(output_dir))
+  dir.create(output_dir, recursive = TRUE)
+```
+
+Run DGE analysis
+```{r run_dge_br16_clusters_g, eval = FALSE}
+dge <- edgeR_dge(
+  use_sce,
+  # Desing configuration for differential expression
+  group_var =  'timepoint',
+  group_sample = 'resting',
+  group_ref = 'active',
+  numeric_covar = NULL,
+  batch_vars = NULL,
+  design_formula = "~ 0 + timepoint",
+  coef = 'last',
+  # Conversion from SingleCellExperiment to DGEList
+  spike_normalization = FALSE,
+  assay_to_DGEList = 'counts',
+  assay_to_row_filter = "counts",
+  use_colData = NULL,
+  use_rowData = NULL,
+  # Feature filtering parameters
+  use_filterByExpr = TRUE,
+  min_counts = params$min_counts,
+  min_present_prop = params$min_present_prop,
+  # EdgeR workflow configuration
+  run_calcNormFactors = 'TMM',
+  estimateDisp_robust = FALSE,
+  estimateDisp_trend.method = "locfit",
+  glmQLFit_robust = TRUE,
+  glm_approach = "QLF",
+  # Output configuration
+  adjust_method = 'BH',
+  assays_from_SingleCellExperiment = NULL
+  )
+
+# Add gene description
+httr::set_config(httr::config(ssl_verifypeer = FALSE))
+ensembl <-  biomaRt::useEnsembl(biomart="ensembl", dataset="hsapiens_gene_ensembl")
+gene_desc <- biomaRt::getBM(attributes=c('external_gene_name','description'), filters = 'external_gene_name', values = dge$results$gene_name, mart =ensembl) %>% 
+  dplyr::rename('gene_name' = 'external_gene_name')
+use_res <- dge$results %>%  left_join(., gene_desc)
+dge$results <- use_res %>% 
+  filter(!duplicated(feature)) %>% 
+  mutate(rownames = feature) %>% 
+  column_to_rownames('rownames')
+
+detach("package:biomaRt", unload=TRUE)
+
+saveRDS(dge, file = file.path(output_dir, 'dge_edgeR_QLF_robust.rds'))
+```
+
+Run GSEA
+```{r run_gsea_br16_clusters_g, eval = FALSE}
+dge <- readRDS(file.path(output_dir, 'dge_edgeR_QLF_robust.rds'))
+res_gse <- gse_omnibus(
+    feature_names = dge$results$gene_name,
+    p = dge$results$FDR,
+    fc = dge$results$logFC,
+    gmt_files = gmt_files_symbols, 
+
+    save_intermediates = file.path(output_dir, 'gse_omnibus'),
+    
+    run_all_ora = FALSE,
+    run_all_gsea = FALSE,
+    run_GSEA = TRUE,
+    run_gseGO = FALSE,
+
+    args_gse = list(minGSSize = 10, maxGSSize = 500, pvalueCutoff = 1),
+
+    )
+saveRDS(res_gse, file = file.path(output_dir, 'gse_gsea.rds'))
+```
+
+Clean data
+```{r lean_data_br16_clusters_g, eval = FALSE}
+rm(use_sce)
+rm(dge)
+rm(res_gse)
+```
+
+
+## NSG-CDX-BR16 : CTC-Single
+Configuration
+```{r load_sce_br16_single}
+use_sce <- use_sce[,use_sce$sample_type_g == 'ctc_single']
+output_dir <- './data/differential_expression/br16-ctc_single'
+if(!file.exists(output_dir))
+  dir.create(output_dir, recursive = TRUE)
+```
+
+Run DGE analysis
+```{r run_dge_br16_single, eval = FALSE}
+dge <- edgeR_dge(
+  use_sce,
+  # Desing configuration for differential expression
+  group_var =  'timepoint',
+  group_sample = 'resting',
+  group_ref = 'active',
+  numeric_covar = NULL,
+  batch_vars = NULL,
+  design_formula = "~ 0 + timepoint",
+  coef = 'last',
+  # Conversion from SingleCellExperiment to DGEList
+  spike_normalization = FALSE,
+  assay_to_DGEList = 'counts',
+  assay_to_row_filter = "counts",
+  use_colData = NULL,
+  use_rowData = NULL,
+  # Feature filtering parameters
+  use_filterByExpr = TRUE,
+  min_counts = params$min_counts,
+  min_present_prop = params$min_present_prop,
+  # EdgeR workflow configuration
+  run_calcNormFactors = 'TMM',
+  estimateDisp_robust = FALSE,
+  estimateDisp_trend.method = "locfit",
+  glmQLFit_robust = TRUE,
+  glm_approach = "QLF",
+  # Output configuration
+  adjust_method = 'BH',
+  assays_from_SingleCellExperiment = NULL
+  )
+
+# Add gene description
+httr::set_config(httr::config(ssl_verifypeer = FALSE))
+ensembl <-  biomaRt::useEnsembl(biomart="ensembl", dataset="hsapiens_gene_ensembl")
+gene_desc <- biomaRt::getBM(attributes=c('external_gene_name','description'), filters = 'external_gene_name', values = dge$results$gene_name, mart =ensembl) %>% 
+  dplyr::rename('gene_name' = 'external_gene_name')
+use_res <- dge$results %>%  left_join(., gene_desc)
+dge$results <- use_res %>% 
+  filter(!duplicated(feature)) %>% 
+  mutate(rownames = feature) %>% 
+  column_to_rownames('rownames')
+
+detach("package:biomaRt", unload=TRUE)
+
+saveRDS(dge, file = file.path(output_dir, 'dge_edgeR_QLF_robust.rds'))
+```
+
+Run GSEA
+```{r run_gsea_br16_single, eval = FALSE}
+dge <- readRDS(file.path(output_dir, 'dge_edgeR_QLF_robust.rds'))
+res_gse <- gse_omnibus(
+    feature_names = dge$results$gene_name,
+    p = dge$results$FDR,
+    fc = dge$results$logFC,
+    gmt_files = gmt_files_symbols, 
+
+    save_intermediates = file.path(output_dir, 'gse_omnibus'),
+    
+    run_all_ora = FALSE,
+    run_all_gsea = FALSE,
+    run_GSEA = TRUE,
+    run_gseGO = FALSE,
+
+    args_gse = list(minGSSize = 10, maxGSSize = 500, pvalueCutoff = 1),
+
+    )
+saveRDS(res_gse, file = file.path(output_dir, 'gse_gsea.rds'))
+```
+
+Clean data
+```{r lean_data_br16_single, eval = FALSE}
+rm(use_sce)
+rm(dge)
+rm(res_gse)
+```
+
+
+
+
+## NSG-LM2
+Configuration
+```{r load_sce_lm2}
+use_sce <- readRDS(file = file.path(params$sce_dir, 'sce_lm2.rds'))
+output_dir <- './data/differential_expression/lm2'
+if(!file.exists(output_dir))
+  dir.create(output_dir, recursive = TRUE)
+```
+
+Run DGE analysis
+```{r run_dge_lm2, eval = FALSE}
+dge <- edgeR_dge(
+  use_sce,
+  # Desing configuration for differential expression
+  group_var =  'timepoint',
+  group_sample = 'resting',
+  group_ref = 'active',
+  numeric_covar = NULL,
+  batch_vars = NULL,
+  design_formula = "~ 0 + timepoint",
+  coef = 'last',
+  # Conversion from SingleCellExperiment to DGEList
+  spike_normalization = FALSE,
+  assay_to_DGEList = 'counts',
+  assay_to_row_filter = "counts",
+  use_colData = NULL,
+  use_rowData = NULL,
+  # Feature filtering parameters
+  use_filterByExpr = TRUE,
+  min_counts = params$min_counts,
+  min_present_prop = params$min_present_prop,
+  # EdgeR workflow configuration
+  run_calcNormFactors = 'TMM',
+  estimateDisp_robust = FALSE,
+  estimateDisp_trend.method = "locfit",
+  glmQLFit_robust = TRUE,
+  glm_approach = "QLF",
+  # Output configuration
+  adjust_method = 'BH',
+  assays_from_SingleCellExperiment = NULL
+  )
+
+# Add gene description
+httr::set_config(httr::config(ssl_verifypeer = FALSE))
+ensembl <-  biomaRt::useEnsembl(biomart="ensembl", dataset="hsapiens_gene_ensembl")
+gene_desc <- biomaRt::getBM(attributes=c('external_gene_name','description'), filters = 'external_gene_name', values = dge$results$gene_name, mart =ensembl) %>% 
+  dplyr::rename('gene_name' = 'external_gene_name')
+use_res <- dge$results %>%  left_join(., gene_desc)
+dge$results <- use_res %>% 
+  filter(!duplicated(feature)) %>% 
+  mutate(rownames = feature) %>% 
+  column_to_rownames('rownames')
+
+detach("package:biomaRt", unload=TRUE)
+
+saveRDS(dge, file = file.path(output_dir, 'dge_edgeR_QLF_robust.rds'))
+```
+
+Clean data
+```{r clean_data_lm2, eval = FALSE}
+rm(use_sce)
+rm(dge)
+```
+
+
+## Patient
+Configuration
+```{r load_sce_patient}
+use_sce <- readRDS(file = file.path(params$sce_dir, 'sce_patient.rds'))
+output_dir <- './data/differential_expression/patient'
+if(!file.exists(output_dir))
+  dir.create(output_dir, recursive = TRUE)
+```
+
+Run DGE analysis
+```{r run_dge_patient, eval = FALSE}
+dge <- edgeR_dge(
+  use_sce,
+  # Desing configuration for differential expression
+  group_var =  'timepoint',
+  group_sample = 'resting',
+  group_ref = 'active',
+  numeric_covar = NULL,
+  batch_vars = NULL,
+  design_formula = "~ 0 + timepoint",
+  coef = 'last',
+  # Conversion from SingleCellExperiment to DGEList
+  spike_normalization = FALSE,
+  assay_to_DGEList = 'counts',
+  assay_to_row_filter = "counts",
+  use_colData = NULL,
+  use_rowData = NULL,
+  # Feature filtering parameters
+  use_filterByExpr = TRUE,
+  min_counts = params$min_counts,
+  min_present_prop = params$min_present_prop,
+  # EdgeR workflow configuration
+  run_calcNormFactors = 'TMM',
+  estimateDisp_robust = FALSE,
+  estimateDisp_trend.method = "locfit",
+  glmQLFit_robust = TRUE,
+  glm_approach = "QLF",
+  # Output configuration
+  adjust_method = 'BH',
+  assays_from_SingleCellExperiment = NULL
+  )
+
+# Add gene description
+httr::set_config(httr::config(ssl_verifypeer = FALSE))
+ensembl <-  biomaRt::useEnsembl(biomart="ensembl", dataset="hsapiens_gene_ensembl")
+gene_desc <- biomaRt::getBM(attributes=c('external_gene_name','description'), filters = 'external_gene_name', values = dge$results$gene_name, mart =ensembl) %>% 
+  dplyr::rename('gene_name' = 'external_gene_name')
+use_res <- dge$results %>%  left_join(., gene_desc)
+dge$results <- use_res %>% 
+  filter(!duplicated(feature)) %>% 
+  mutate(rownames = feature) %>% 
+  column_to_rownames('rownames')
+
+detach("package:biomaRt", unload=TRUE)
+
+saveRDS(dge, file = file.path(output_dir, 'dge_edgeR_QLF_robust.rds'))
+```
+
+Clean data
+```{r clean_data_patient, eval = FALSE}
+rm(use_sce)
+rm(dge)
+```
+
+## LM2 time kinetics
+Configuration
+```{r load_sce_lm2_tk}
+use_sce <- readRDS(file = file.path(params$sce_dir, 'sce_lm2_tk.rds'))
+output_dir <- './data/differential_expression/lm2_tk'
+if(!file.exists(output_dir))
+  dir.create(output_dir, recursive = TRUE)
+```
+
+Run [GSVA](https://www.bioconductor.org/packages/release/bioc/vignettes/GSVA/inst/doc/GSVA.html) run with gene-set size between 5 and 700. Original GSEA analysis was performed with 10-500, but with this new treshold we make sure that all the gene sets from BR16 results are included in the analysis, as the effective gene set (expressed genes) might be different in GSVA analysis.
+
+For this analysis we remove samples from timepoint ZT0 (06:00). It only contains one replicate and can bias results. The timepoint will be added for visualization.
+```{r run_gsva_lm2_tk, eval = FALSE}
+use_sce <- use_sce[,!use_sce$timepoint %in% c('0600')]
+rownames(use_sce) <- rowData(use_sce)$gene_name
+use_gmt_file <- "./data/resources/MSigDB/v7.4/c2.cp.c5.bp.v7.4.symbols.gmt"
+gset <- GSEABase::getGmt(use_gmt_file)
+gset_db <- foreach(x = gset, .combine = rbind) %do% {c(term_size = length(x@geneIds))} %>% data.frame()
+gset_db$term_name <- names(gset)
+
+gsva_res <- gsva(assay(use_sce, 'logcpm'), 
+                   method = 'gsva',
+                   gset.idx.list = gset, 
+                   min.sz = 5, 
+                   max.sz = 700, 
+                   kcdf = "Gaussian",
+                   mx.diff = TRUE, 
+                   verbose = FALSE)
+
+saveRDS(gsva_res, file = file.path(output_dir, 'gsva_c2.cp.c5.bp.rds'))
+```
+
+
+

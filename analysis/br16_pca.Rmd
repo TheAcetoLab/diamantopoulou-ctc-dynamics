@@ -1,0 +1,280 @@
+---
+title: "PCA of gene expression in CTCs from NSG-CDX-BR16 mice"
+author: "Francesc Castro-Giner"
+date: "2022-02-23"
+output: workflowr::wflow_html
+editor_options:
+  chunk_output_type: console
+params:
+  date: '`r format(Sys.Date(), "%B %d, %Y")`'
+  sce_dir: ./data/sce
+---
+
+
+## Load libraries, additional functions and data
+
+Setup environment
+```{r setup, include=TRUE, warning=FALSE, message=FALSE}
+knitr::opts_chunk$set(results='asis', echo=TRUE, message=FALSE, warning=FALSE, error=FALSE, fig.align = 'center', fig.width = 3.5, fig.asp = 0.618, dpi = 600, dev = c("png", "pdf"), fig.showtext = TRUE)
+
+options(stringsAsFactors = FALSE)
+```
+
+Load packages
+```{r load-libraries}
+library(tidyverse)
+library(showtext)
+library(scater)
+library(scran)
+library(PCAtools)
+library(cowplot)
+library(ggalt)
+library(grid)
+library(gridExtra)
+library(knitr)
+library(kableExtra)
+```
+
+Set font family for figures
+```{r set-font}
+font_add("Helvetica", "./configuration/fonts/Helvetica.ttc")
+showtext_auto()
+```
+
+Load ggplot theme
+```{r ggplot-theme}
+source("./configuration/rmarkdown/ggplot_theme.R")
+```
+
+Load color palettes
+```{r color-palettes}
+source("./configuration/rmarkdown/color_palettes.R")
+```
+
+Load functions
+```{r load-functions}
+source('./code/R-functions/pca_tools.r')
+source('./code/R-functions/color_tools.r')
+```
+
+Load SingleCellExpression data
+```{r load-sce}
+use_sce <- readRDS(file.path(params$sce_dir, 'sce_br16.rds'))
+```
+
+
+## PCA analysis Data
+Configuration
+```{r pca-conf}
+use_metavars <-   c(`Library size` = "sum", 
+                    `Detected genes` = "detected", 
+                    `Mitochondrial\nproportion` = "subsets_Mito_percent", 
+                    `CTC type` = "sample_type", 
+                    `Number of CTC` = "ctc_n", 
+                    `Time point` = "timepoint",
+                    `G1 score` = 'G1_score',
+                    `G2M score` = 'G2M_score',
+                    `S score` = 'S_score')
+```
+
+Quantify per-gene variation and select top-500 highly variable genes
+```{r hvg-selection}
+fit_res <- modelGeneVar(use_sce, assay.type = "logcpm")
+fit_md <- metadata(fit_res)
+hvg_var_bio <- getTopHVGs(fit_res, n=500)
+use_genes <- hvg_var_bio
+```
+
+Generate PCA object and calculate elbow point. 
+```{r pca-obj}
+mat <- logcounts(use_sce)[use_genes,]
+rownames(mat) <- rowData(use_sce[use_genes,])$gene_name
+p <- PCAtools::pca(mat, metadata = colData(use_sce) %>% data.frame)
+p$metadata$timepointf <- factor(p$metadata$timepoint, levels = c('active', 'resting'))
+p$metadata$timepoint_sample_type_f <- factor(
+  p$metadata$timepoint_sample_type,
+  levels = c('active_ctc_single', 'active_ctc_cluster', 'active_ctc_cluster_wbc', 'resting_ctc_single', 'resting_ctc_cluster', 'resting_ctc_cluster_wbc'))
+```
+
+Calculate elbow point
+```{r elbow-point}
+elbow_point <- findElbowPoint(p$variance)
+```
+
+Add additional metadata to PCA object
+```{r add-metavars}
+p$metadata <- p$metadata %>% 
+  mutate(`Library size` = sum, 
+         `Detected genes` = detected, 
+         `Mitochondrial\nproportion` = subsets_Mito_percent, 
+         `CTC type` = sample_type, 
+         `Number of CTC` = ctc_n, 
+         `Time point` = timepoint,
+         `G1 score` = G1_score,
+         `G2M score` = G2M_score,
+         `S score` = S_score)
+```
+
+## Correlation of PC eigenvectors with metadata
+Heatmap showing the Pearson’s correlation coefficient of PC1-`r elbow_point` eigenvectors from gene expression with technical and biological variables in BR16-CDX CTCs. P values by two-sided Pearson’s correlation test (\*P < 0.01, \*\*P <0.001, \*\*\*P <0.0001).
+```{r br16_pca_eigencorplot, fig.width = 5.1}
+use_cex <- 8/12
+eigencorplot(
+  p,
+  components = getComponents(p, 1:elbow_point),
+  metavars =  names(use_metavars),
+  col = c( "blue2", "blue1", "black", "red1", "red2"),
+  colCorval = 'white',
+  scale = TRUE,
+  main = 'PCs clinical correlations',
+  plotRsquared = FALSE,
+  signifSymbols = c("***", "**", "*", ""),
+  signifCutpoints = c(0, 0.0001, 0.001, 0.01, 1),
+  cexTitleX= use_cex,
+  cexTitleY= use_cex,
+  cexLabX = use_cex,
+  cexLabY = use_cex,
+  cexMain = use_cex,
+  cexLabColKey = use_cex,
+  cexCorval = use_cex
+)
+```
+
+### Table : Percentage of variance associated to each PC
+```{r pca_variance_tab}
+p$variance[1:elbow_point] %>% data.frame %>% set_names('Variance') %>% 
+  kable(caption = "Percentage of variance associated to each PC") %>% 
+  kable_styling(bootstrap_options = c("striped", "hover"), full_width = F)
+```
+
+### Table : Pearson r values
+```{r pca_cor_r}
+pca_cor_val <- pca_eigencorplot(p, components = getComponents(p, 1:elbow_point), metavars =  names(use_metavars), returnPlot = FALSE)
+pca_cor_val$corvals %>% t %>% 
+  kable(caption = "Pearson r values correlation values") %>% 
+  kable_styling(bootstrap_options = c("striped", "hover"), full_width = F)
+```
+
+### Table : Pearson correlation P-values
+```{r pca_cor_p}
+pca_cor_val$pvals_format <- apply(pca_cor_val$pvals, 2, format.pval, digits = 2)
+dimnames(pca_cor_val$pvals_format) <- dimnames(pca_cor_val$pvals)
+pca_cor_val$pvals_format %>% t %>% 
+  kable(caption = "Pearson correlation P-values") %>% 
+  kable_styling(bootstrap_options = c("striped", "hover"), full_width = F)
+```
+
+## Biplot PC4 and PC5
+Scatter plot showing the principal component PC4 and PC5 of gene expression in CTCs from NSG-CDX-BR16 mice. Upper (PC4) and right (PC5) panels show the density of PC values for active (blue) and rest phase (red) samples.
+```{r br16_pca_4_5_conf}
+PCx <- 'PC4'
+PCy<- 'PC5'
+
+zt_sample_type_legend_palette_t <- sapply(zt_sample_type_legend_palette, transparent_col, percent = 50) 
+
+use_palette <- c(zt_sample_type_legend_palette, timepoint_palette)
+use_shapes <- c(
+  'ZT16 Single CTCs' = 16,
+  'ZT16 CTC-Clusters' = 17,
+  'ZT16 CTC-WBC Clusters' = 15,
+  'ZT4 Single CTCs' = 16,
+  'ZT4 CTC-Clusters' = 17,
+  'ZT4 CTC-WBC Clusters' = 15,
+  active = 1,
+  resting = 1
+)
+use_palette_sel <- c(
+  'ZT16 Single CTCs' = use_palette['active'] %>% unname,
+  'ZT16 CTC-Clusters' = use_palette['active'] %>% unname,
+  'ZT16 CTC-WBC Clusters' = use_palette['active'] %>% unname,
+  'ZT4 Single CTCs' = use_palette['resting'] %>% unname,
+  'ZT4 CTC-Clusters' = use_palette['resting'] %>% unname,
+  'ZT4 CTC-WBC Clusters' = use_palette['resting'] %>% unname,
+  use_palette['active'],
+  use_palette['resting']
+  
+)
+circle_data <- cbind(p$metadata, 
+                     x = p$rotated[,PCx],
+                     y = p$rotated[,PCy])
+
+xlab_name <- paste0(PCx,', ', p$variance[PCx] %>% round(2) %>% unname, '% variation')
+ylab_name <- paste0(PCy,', ', p$variance[PCy] %>% round(2) %>% unname, '% variation')
+
+biplot_res <- circle_data %>% 
+  ggplot(aes(x, y)) +
+  geom_point(
+    aes(fill = zt_sample_type_legend, color = zt_sample_type_legend, shape = zt_sample_type_legend), 
+    alpha = 0.4, size = 3
+  ) +
+  geom_encircle(
+    aes(color = timepoint),
+    alpha = 0.6,
+    size = 1.5,
+    s_shape = 1.5,
+    show.legend = FALSE,
+    na.rm = TRUE, 
+    expand = 0) +
+  scale_color_manual(values = use_palette_sel) +
+  scale_fill_manual(values = use_palette_sel) +
+  scale_shape_manual(values = use_shapes) +
+  theme_cowplot(font_family = "Helvetica", font_size = 8, rel_small = 8/8, rel_tiny = 8/8, rel_large = 8/8)  +
+  theme (
+    axis.line = element_line(size = rel(0.25)),
+    axis.ticks = element_line(size = rel(0.25)), 
+    panel.border = element_rect(size = rel(1), fill = NA, colour = "black")
+    ) +
+  # guides(shape = FALSE) +
+  # background_grid() +
+  labs(
+    x = xlab_name,
+    y = ylab_name
+  )
+```
+
+Main plot
+```{r br16_pca_4_5, fig.asp = 0.9}
+x_density_plot <- ggplot(circle_data, aes(x = x, fill = timepoint)) +
+  geom_density(alpha = 0.5, show.legend = FALSE) +
+  scale_fill_manual(values = timepoint_palette) +
+  theme (
+    axis.line = element_blank(),
+    axis.ticks = element_blank(),
+    axis.text = element_blank(),
+    axis.title = element_blank()
+    )
+
+
+y_density_plot <- ggplot(circle_data, aes(x = y, fill = timepoint)) +
+  geom_density(alpha = 0.5, show.legend = FALSE) +
+  scale_fill_manual(values = timepoint_palette) +
+  theme (
+    axis.line = element_blank(),
+    axis.ticks = element_blank(),
+    axis.text = element_blank(),
+    axis.title = element_blank()
+    ) +
+  coord_flip()
+
+
+plot_grid(
+  x_density_plot, NULL, NULL, 
+  NULL, NULL, NULL, 
+  biplot_res + theme(legend.position = "none"), NULL, y_density_plot,
+  nrow = 3,
+  ncol = 3,
+  align="hv",
+  axis = "tblr",
+  rel_heights = c(1.1, -0.45, 3),
+  rel_widths = c(3, -0.45, 1)
+  )
+
+```
+
+Plot legend
+```{r br16_pca_4_5_legend}
+legend <- cowplot::get_legend(biplot_res)
+grid.newpage()
+grid.draw(legend)
+```
+

@@ -1,0 +1,302 @@
+---
+title: "Analysis of genes from candidate gene sets"
+author: "Francesc Castro-Giner"
+date: "2022-02-23"
+output: workflowr::wflow_html
+editor_options:
+  chunk_output_type: console
+params:
+  date: '`r format(Sys.Date(), "%B %d, %Y")`'
+  sce_dir: ./data/sce
+  dge_dir: ./data/differential_expression
+---
+
+## Load libraries, additional functions and data
+
+Setup environment
+```{r setup, include=TRUE, warning=FALSE, message=FALSE}
+knitr::opts_chunk$set(results='asis', echo=TRUE, message=FALSE, warning=FALSE, error=FALSE, fig.align = 'center', fig.width = 3.5, fig.asp = 0.618, dpi = 600, dev = c("png", "pdf"), fig.showtext = TRUE)
+
+options(stringsAsFactors = FALSE)
+```
+
+Load packages
+```{r load-libraries}
+library(tidyverse)
+library(showtext)
+library(cowplot)
+library(scater)
+library(ggbeeswarm)
+library(ggpubr)
+library(ggrepel)
+```
+
+Set font family for figures
+```{r set-font}
+font_add("Helvetica", "./configuration/fonts/Helvetica.ttc")
+showtext_auto()
+```
+
+Load ggplot theme
+```{r ggplot-theme}
+source("./configuration/rmarkdown/ggplot_theme.R")
+```
+
+Load color palettes
+```{r color-palettes}
+source("./configuration/rmarkdown/color_palettes.R")
+```
+
+Load shared variables
+```{r load-shared-variables}
+source("./configuration/rmarkdown/shared_variables.R")
+```
+
+Load functions
+```{r load-functions}
+source('./code/R-functions/gse_report.r')
+clean_msigdb_names <- function(x) x %>% gsub('REACTOME_', '', .) %>% gsub('WP_', '', .) %>% gsub('BIOCARTA_', '', .) %>% gsub('KEGG_', '', .) %>% gsub('PID_', '', .) %>% gsub('GOBP_', '', .) %>% gsub('_', ' ', .)
+```
+
+Load NSG-BR16 data
+```{r load-br16-data}
+sce_br16 <- readRDS(file.path(params$sce_dir, 'sce_br16.rds'))
+sce_br16$sample_type <- recode(sce_br16$sample_type, ctc_single = 'Single CTCs', ctc_cluster = 'CTC-clusters', ctc_cluster_wbc = 'CTC-WBC Clusters')
+dge_br16 <- readRDS(file.path('./data/differential_expression/br16', 'dge_edgeR_QLF_robust.rds'))
+dge_br16 <- dge_br16$results
+```
+
+Load SingleCellExpression raw data
+```{r load-raw-data}
+sce_raw <- readRDS(file.path(params$sce_dir, 'sce_raw.rds'))
+```
+
+
+## Core circadian genes in NSG-CDX-BR16
+Initial configuration
+```{r circadian-genes-conf}
+use_sce <- sce_br16
+use_dge <- dge_br16
+```
+
+Read core circadian genes list
+```{r load-circadian-genes}
+key_circadian_genes_sel <- key_circadian_genes[key_circadian_genes %in% rowData(use_sce)$gene_name]
+key_circadian_genes_ens <- rowData(use_sce)[match(key_circadian_genes_sel, rowData(use_sce)$gene_name), 'gene_id'] %>% set_names(names(key_circadian_genes_sel)) %>% gsub("\\.[0-9]+", "", .)
+```
+
+Subset of SCE and DGE objects
+```{r subset-sce-dge}
+use_sce <- use_sce[key_circadian_genes_ens,]
+rownames(use_sce) <- names(key_circadian_genes_sel)
+use_dge <- use_dge[key_circadian_genes_ens,]
+rownames(use_dge) <- names(key_circadian_genes_sel)
+use_dge$gene <- names(key_circadian_genes_sel)
+use_dge <- use_dge %>%
+  mutate(group1 = 'active', group2 = 'resting') %>% # for stat_pvalue_manual
+  arrange(PValue) %>% 
+  mutate(
+    gene = factor(gene, levels = gene)
+  )
+```
+
+### Expression distribution of core circadian genes in NSG-CDX-BR16
+Plot showing the expression distribution of core circadian genes in CTCs from NSG-CDX-BR16 mice. The fold change (FC, in log2 scale) and P value from the differential expression analysis are shown for each gene.
+```{r circadian_expression_levels_by_timepoint, fig.width = 7.2, fig.asp = 0.75}
+expr_long <- logcounts(use_sce) %>% data.frame %>% rownames_to_column('gene') %>% pivot_longer(-gene, names_to = 'sample_alias', values_to = 'exprs')
+use_data <- colData(use_sce) %>% 
+  data.frame %>% 
+  dplyr::select(sample_alias, timepoint, sample_type) %>% 
+  left_join(expr_long) %>% 
+  mutate(
+    gene = factor(gene, levels = use_dge$gene),
+    timepoint = recode(timepoint, resting = 'Rest phase', active = 'Active phase')
+    )
+
+
+use_ylim <- c(0, 2 + max(use_data$exprs))
+use_breaks <- seq(use_ylim[1],  max(use_data$exprs), by = 2)
+use_dge <- use_dge %>%
+  mutate(
+    group1 = 'Rest phase', group2 = 'Active phase',
+    label = paste0('FC=', round(logFC,2),", P= ", format.pval(PValue, 1))
+  )
+timepoint_palette['Rest phase'] <- timepoint_palette['resting']
+timepoint_palette['Active phase'] <- timepoint_palette['active']
+
+use_data %>% 
+  ggplot(aes(timepoint, exprs, color = timepoint)) +
+  geom_quasirandom(alpha = 0.6, wdth = 0.4, groupOnX=TRUE, bandwidth=1) +
+  geom_violin(color = 'black', alpha = 0, scale = "width", width = 0.8, draw_quantiles = 0.5) +
+  scale_color_manual(values =timepoint_palette) +
+  facet_wrap(~gene, ncol = 3) +
+  stat_pvalue_manual(use_dge, label = "label", y.position = 9, size = geom_text_size) +
+  scale_y_continuous(limits = use_ylim, breaks = use_breaks) +
+  guides(color = FALSE) +
+  labs(
+    x = '',
+    y = expression(paste("lo", g[2],"(Normalized counts)"))
+  ) +
+  background_grid(minor = 'none', major = 'y', size.major = 0.2)
+
+```
+
+### Density plot of core circadian genes in NSG-CDX-BR16
+Density plot showing the distribution of the average expression (log2 counts per million) of genes in CTCs from NSG-CDX-BR16 mice. Core circadian genes are labeled in the X-axis.
+```{r circadian_expression_background_density}
+avg_counts <- data.frame(
+  median_expr = logcounts(sce_br16) %>% rowMedians,
+  mean_expr = logcounts(sce_br16) %>% rowMeans,
+  gene_name = rowData(sce_br16)$gene_name
+  )
+
+avg_counts_circadian <- data.frame(
+  median_expr = logcounts(use_sce) %>% rowMedians,
+  mean_expr = logcounts(use_sce) %>% rowMeans
+  ) %>% 
+  rownames_to_column('gene_name')
+
+ggplot(avg_counts, aes(x = median_expr)) +
+  geom_density(fill="#dbd8be") +
+  geom_vline(aes(xintercept=median(median_expr)), color="#043665", linetype="dashed", size=0.5)  +
+  geom_point(
+    data = avg_counts_circadian, 
+    mapping = aes(y = 0.01, x = median_expr, label = gene_name, color = keep), 
+    alpha = 0.8, 
+    color = '#d37d0a') +
+  geom_text_repel(
+    data = avg_counts_circadian, 
+    mapping = aes(y = 0.01, x = median_expr, label = gene_name),
+    force_pull   = 0, # do not pull toward data points
+    nudge_y      = 0.02,
+    direction    = "x",
+    angle        = 90,
+    hjust        = 0,
+    segment.size = 0.2,
+    max.iter = 1e4, 
+    max.time = 1,
+    size = geom_text_size
+    ) +
+  labs(
+    x = 'Median expression (logcounts)',
+    y = 'Density',
+    caption = 'Blue dashed line represents the median across all genes'
+  )
+```
+
+
+## Expression of TEAD genes in CTCs from NSG-CDX-BR16
+Plot showing the expression distribution of TEAD genes in CTCs from NSG-CDX-BR16 mice. The fold change (FC, in log2 scale) and P value from the differential expression analysis are shown for each gene.
+```{r tead_expression_levels_by_timepoint, fig.width=5}
+use_sce <- sce_br16
+use_dge <- dge_br16
+
+use_genes_name <- grep('TEAD[0-9]', rowData(use_sce)$gene_name, value = TRUE)
+use_rows <- grepl('TEAD[0-9]', rowData(use_sce)$gene_name)
+sel_sce <- use_sce[use_rows,]
+use_features <- rownames(sel_sce)
+rownames(sel_sce) <- use_genes_name
+
+sel_dge <- use_dge[use_features,]
+rownames(sel_dge) <- use_genes_name
+sel_dge$gene <- rownames(sel_dge)
+sel_dge <- sel_dge %>%
+  mutate(group1 = 'active', group2 = 'resting') %>% # for stat_pvalue_manual
+  arrange(PValue) %>%
+  mutate(
+    gene = factor(gene, levels = gene)
+  )
+
+expr_long <- logcounts(sel_sce) %>% data.frame %>% rownames_to_column('gene') %>% pivot_longer(-gene, names_to = 'sample_alias', values_to = 'exprs')
+use_data <- colData(sel_sce) %>% 
+  data.frame %>% 
+  dplyr::select(sample_alias, timepoint, sample_type) %>% 
+  left_join(expr_long) %>% 
+  mutate(
+    gene = factor(gene, levels = sel_dge$gene),
+    timepoint = recode(timepoint, resting = 'Rest phase', active = 'Active phase')
+    )
+
+
+use_ylim <- c(0, 1 + max(use_data$exprs))
+use_breaks <- seq(use_ylim[1],  max(use_data$exprs), by = 2)
+sel_dge <- sel_dge %>%
+  mutate(
+    group1 = 'Rest phase', group2 = 'Active phase',
+    label = paste0('FC=', round(logFC,2),", P= ", format.pval(PValue, 1))
+  )
+timepoint_palette['Rest phase'] <- timepoint_palette['resting']
+timepoint_palette['Active phase'] <- timepoint_palette['active']
+
+use_data %>% 
+  ggplot(aes(timepoint, exprs, color = timepoint)) +
+  geom_quasirandom(alpha = 0.6, wdth = 0.4, groupOnX=TRUE, bandwidth=1) +
+  geom_violin(color = 'black', alpha = 0, scale = "width", width = 0.8, draw_quantiles = 0.5) +
+  scale_color_manual(values =timepoint_palette) +
+  facet_wrap(~gene, ncol = 3) +
+  stat_pvalue_manual(sel_dge, label = "label", y.position = 0.5+max(use_data$exprs), size = geom_text_size) +
+  scale_y_continuous(limits = use_ylim, breaks = use_breaks) +
+  guides(color = 'none') +
+  labs(
+    x = '',
+    y = expression(paste("lo", g[2],"(Normalized counts)"))
+  ) +
+  background_grid(minor = 'none', major = 'y', size.major = 0.2)
+
+```
+
+## Expression of receptors activated by circadian rhythm regulated ligands
+Density plots showing the distribution of the average expression (log2 counts per million) of genes encoding for receptors of circadian-regulated hormones, growth factors or molecules in CTCs from NSG-CDX-BR16 mice, NSG-LM2 mice and patients with breast cancer. Genes for the glucocorticoid receptor, androgen receptor and insulin receptor are labeled in the X-axis.
+
+Load list of genes
+```{r}
+use_genes_1 <- read_csv(file =  './data/resources/HGNC/group-71-nuclear_hormone_receptors.csv', skip = 1)$`Approved symbol`
+use_genes_2 <- read_tsv(file =  './data/resources/user_input/circadian_regulated_hormones_and_gf.txt', col_names = 'genes')$genes
+use_genes <- c(use_genes_1, use_genes_2, c('INSR', 'IGF1R', 'IGF2R', 'NR2C2', 'AR')) %>% unique
+rm_genes <- use_genes[!use_genes %in% rowData(sce_raw)$gene_name]
+```
+
+Plot expression distributions
+```{r receptores_expression_avrg_density_plot, fig.asp = 1}
+use_rows <- rowData(sce_raw)$gene_name %in% use_genes
+use_sce <- sce_raw[use_rows,]
+rownames(use_sce) <- rowData(use_sce)$gene_name
+
+use_data <- assay(use_sce, 'logcpm') %>% data.frame %>% rownames_to_column('gene_name') %>% pivot_longer(cols =  -gene_name, names_to = 'sample_alias', values_to = 'exprs') %>% 
+  left_join(colData(use_sce) %>% data.frame) %>% 
+  mutate(
+    genes_sel = gene_name %in% c('INSR', 'IGF1R', 'IGF2R', 'NR2C2', 'AR')
+    )
+
+mean_data <- use_data %>% group_by(donor, gene_name) %>% summarise(avrg_exprs = mean(exprs)) 
+mean_data_selected <- mean_data %>% filter(gene_name %in% c('INSR', 'IGF1R', 'IGF2R', 'NR2C2', 'AR'))
+mean_data %>% 
+  ggplot(aes(avrg_exprs)) +
+  geom_density(fill="#dbd8be") +
+  geom_vline(aes(xintercept=mean(avrg_exprs)), color="#043665", linetype="dashed", size=0.5)  +
+  facet_grid(rows = vars(donor), scales = 'free') +
+  geom_point(
+    data = mean_data_selected, 
+    mapping = aes(y = 0.01, x = avrg_exprs, label = gene_name), 
+    alpha = 0.8,
+    color = '#d37d0a') +
+  geom_text_repel(
+    mean_data_selected, 
+    mapping = aes(y = 0.01, x = avrg_exprs, label = gene_name),
+    force_pull   = 0, # do not pull toward data points
+    nudge_y      = 0.4,
+    direction    = "x",
+    angle        = 90,
+    hjust        = 0,
+    segment.size = 0.2,
+    max.iter = 1e4, 
+    max.time = 1,
+    size = geom_text_size) +
+  labs(
+    x = expression(paste("Average lo", g[2],"(counts per million reads)")),
+    y = 'Density',
+    caption = 'Blue dashed line represents the average across all genes'
+  )
+
+```
+

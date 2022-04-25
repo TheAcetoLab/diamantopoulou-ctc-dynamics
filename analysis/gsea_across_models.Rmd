@@ -1,0 +1,661 @@
+---
+title: "Report of GSEA results for NSG-CDX-BR16, NSG-LM2 models and patient data"
+author: "Francesc Castro-Giner"
+date: "2022-02-23"
+output: workflowr::wflow_html
+editor_options:
+  chunk_output_type: console
+params:
+  date: '`r format(Sys.Date(), "%B %d, %Y")`'
+  sce_dir: ./data/sce
+  dge_dir: ./data/differential_expression
+---
+
+## Load libraries, additional functions and data
+
+Setup environment
+```{r setup, include=TRUE, warning=FALSE, message=FALSE}
+knitr::opts_chunk$set(results='asis', echo=TRUE, message=FALSE, warning=FALSE, error=FALSE, fig.align = 'center', fig.width = 3.5, fig.asp = 0.618, dpi = 600, dev = c("png", "pdf"), fig.showtext = TRUE)
+
+options(stringsAsFactors = FALSE)
+```
+
+Load packages
+```{r load-libraries}
+library(tidyverse)
+library(showtext)
+library(scater)
+library(clusterProfiler)
+library(enrichplot)
+library(ComplexHeatmap)
+library(circlize)
+library(RColorBrewer)
+library(cowplot)
+library(DT)
+library(GSVA)
+library(limma)
+library(colorblindr)
+library(ggbeeswarm)
+```
+
+Set font family for figures
+```{r set-font}
+font_add("Helvetica", "./configuration/fonts/Helvetica.ttc")
+showtext_auto()
+```
+
+Load ggplot theme
+```{r ggplot-theme}
+source("./configuration/rmarkdown/ggplot_theme.R")
+```
+
+Load color palettes
+```{r color-palettes}
+source("./configuration/rmarkdown/color_palettes.R")
+```
+
+Load functions
+```{r load-functions}
+source('./code/R-functions/gse_report.r')
+clean_msigdb_names <- function(x) x %>% gsub('REACTOME_', '', .) %>% gsub('WP_', '', .) %>% gsub('BIOCARTA_', '', .) %>% gsub('KEGG_', '', .) %>% gsub('PID_', '', .) %>% gsub('GOBP_', '', .) %>% gsub('_', ' ', .)
+```
+
+Load MSigDB gene sets
+```{r load-msigdb}
+gmt_files_symbols <- list(
+  msigdb.c2.cp = './data/resources/MSigDB/v7.4/c2.cp.v7.4.symbols.gmt',
+  msigdb.c5.bp = './data/resources/MSigDB/v7.4/c5.go.bp.v7.4.symbols.gmt'
+)
+
+gmt_files_entrez <- list(
+  msigdb.c2.cp = './data/resources/MSigDB/v7.4/c2.cp.v7.4.entrez.gmt',
+  msigdb.c5.bp = './data/resources/MSigDB/v7.4/c5.go.bp.v7.4.entrez.gmt'
+)
+
+# combine MSigDB.C2.CP and GO:BP
+msigdb.c2.cp_file <- gsub('c2.cp', 'c2.cp.c5.bp', gmt_files_symbols$msigdb.c2.cp)
+if(!file.exists(msigdb.c2.cp_file)) {
+  cat_cmd <- paste('cat', gmt_files_symbols$msigdb.c5.bp,  gmt_files_symbols$msigdb.c2.cp, '>',msigdb.c2.cp_file)
+  system(cat_cmd)
+}
+gmt_files_symbols$msigdb.c2.cp.c5.bp <- msigdb.c2.cp_file
+
+gmt_sets <- lapply(gmt_files_symbols, function(x) read.gmt(x) %>% collect %>% .[['term']] %>% levels)
+```
+
+Load results from differential gene expression analyses
+```{r load-dge}
+dge_lm2 <- readRDS(file.path(params$dge_dir, 'lm2', 'dge_edgeR_QLF_robust.rds'))
+dge_patient <- readRDS(file.path(params$dge_dir, 'patient', 'dge_edgeR_QLF_robust.rds'))
+```
+
+Load GSEA results
+```{r load-gsea}
+gse_gsea_br16 <- readRDS(file.path(params$dge_dir, 'br16', 'gse_gsea.rds'))
+```
+
+Load LM2 timekinetics data
+```{r load-lm2-tk-data}
+sce_lm2tk <- readRDS(file.path(params$sce_dir, 'sce_lm2_tk.rds'))
+gsva_lm2tk <- readRDS(file.path(params$dge_dir, 'lm2_tk', 'gsva_c2.cp.c5.bp.rds'))
+```
+
+## NSG-CDX-BR16 GSEA results
+Gene set enrichment analysis from differentially expressed genes in CTCs of NSG-CDX-BR16 mice during the rest phase versus active phase.Table listing the enriched gene sets (n = 138, adjusted P value < 0.05) in CTCs obtained in rest versus active phase from NSG-CDX-BR16 mice. The gene set enrichment analysis (GSEA) was performed using ranking genes as input, according to fold-change as shown in Supplementary table 2.
+```{r br6-gsea-table}
+gse_gsea_br16$GSEA$msigdb.c2.cp.c5.bp@result %>% 
+  filter(p.adjust < 0.05) %>% 
+  dplyr::select(ID, setSize, enrichmentScore, NES, pvalue, p.adjust, leading_edge, core_enrichment) %>% 
+  mutate(
+    NES = round(NES, 2),
+    pvalue = format.pval(pvalue, digits = 2),
+    p.adjust = format.pval(p.adjust, digits = 2)
+  ) %>% 
+  rename(
+    `Term ID` = ID,
+    `Set size` = setSize,
+    `Enrichment score` = enrichmentScore,
+    `P value` = pvalue,
+    `Adjusted P value` = p.adjust,
+    `Leading edge` = leading_edge, 
+    `Core enrichment` = core_enrichment
+  ) %>% 
+  datatable(., 
+            rownames = FALSE, 
+            filter = 'top', 
+            caption = 'Gene set enrichment analysis from differentially expressed genes in CTCs of NSG-CDX-BR16 mice during the rest phase versus active phase.',
+            extensions = 'Buttons', 
+            options = list(
+              dom = 'Blfrtip',
+              buttons = c('csv', 'excel'),
+              title = paste('', params$prefix)
+              ))
+
+```
+
+
+## NSG-CDX-BR16 : similarity matrix for enriched gene sets
+Generate the data for the similarity heatmap
+```{r br16_sim_data}
+use_gse_res <- gse_gsea_br16$GSEA$msigdb.c2.cp.c5.bp
+
+# Number of terms to show
+showCategoryN <- 30
+
+# Calculate jaccard simialrity index
+use_gse_res <- pairwise_termsim(use_gse_res, method = 'JC')
+
+# Collect sim matrix for top N terms
+use_terms <- use_gse_res@result %>% 
+  filter(p.adjust < 0.001) %>% head(showCategoryN) %>% collect %>% .[['ID']]
+use_mat <- use_gse_res@termsim[use_terms,use_terms]
+
+# Collect results for selected terms
+use_res <- use_gse_res@result[use_terms,]
+
+# Transform matrix to symmetric
+for(x in rownames(use_mat)){
+  for(y in colnames(use_mat)) {
+    if(x == y) {
+       use_mat[x,y] <- 1
+    } else {
+      max_sim <- max(c(use_mat[x,y], use_mat[y,x]), na.rm = TRUE)
+      use_mat[x,y] <- max_sim
+      use_mat[y,x] <- max_sim
+    }
+  }
+}
+
+# Collect FC values for ridge plot. Values are capped at -2 and 2
+gs2id <- geneInCategory(use_gse_res)[seq_len(showCategoryN)]
+gs2val <- lapply(gs2id, function(id) {
+        res <- use_gse_res@geneList[id]
+        res <- res[!is.na(res)]
+    })
+gs2val_capped <- lapply(gs2val, function(x) {x[x > 2] <- 2; x[x < -2] <- -2; x} )
+lt = lapply(gs2val_capped, function(x) data.frame(density(x)[c("x", "y")]))
+
+# Save matrix for future use
+br16_gsea_sim_mat <- use_mat
+```
+
+Generate row annotation
+```{r br16_sim_rowannot}
+nes_colors <- c(
+  brewer.pal(n = 7, name ="BrBG")[6],
+  brewer.pal(n = 7, name ="BrBG")[2]
+)
+
+ha_row_nes = rowAnnotation(
+  NES = anno_barplot(
+    use_res$NES, 
+    baseline = 0,
+    width =  unit(1, "cm"), 
+    bar_width = 0.7,
+    gp = gpar(
+      fill = ifelse(use_res$NES < 0 ,  nes_colors[1],  nes_colors[2]),
+      col = ifelse(use_res$NES < 0 ,  nes_colors[1],  nes_colors[2])
+      )
+    ),
+  annotation_name_gp = gpar(fontsize = 8)
+  )
+
+col_fun_nes = colorRamp2(
+  seq(max(use_res$NES), min(use_res$NES), length.out = 8), 
+  brewer.pal(n = 8, name ="BrBG") %>% rev)
+
+ha_row_nes_ht = rowAnnotation(
+  NES = use_res$NES,
+  border = c( NES = TRUE), 
+  col = list( NES = col_fun_nes),
+  simple_anno_size = unit(0.8, "cm"),
+  annotation_name_rot = 0,
+  annotation_name_gp = gpar(fontsize = 8)
+)
+
+col_fun_pval = colorRamp2(
+  seq(max(-log10(use_res$p.adjust)), -log10(0.05), length.out = 8), 
+  brewer.pal(n = 8, name ="Reds") %>% rev)
+
+ha_row_pval = rowAnnotation(
+  `-log10\n(adjusted\np value)` = -log10(use_res$p.adjust),
+  border = c( `-log10\n(adjusted\np value)` = TRUE), 
+  col = list( `-log10\n(adjusted\np value)` = col_fun_pval),
+  simple_anno_size = unit(0.8, "cm"),
+  annotation_name_rot = 0,
+  annotation_name_gp = gpar(fontsize = 8),
+  annotation_legend_param = list(title_gp = gpar(fontsize = 8),labels_gp = gpar(fontsize = 8))
+)
+
+```
+
+
+### Similarity matrix without row names
+Heatmap showing the pair-wise similarity matrix of enriched gene sets (gene set enrichment analysis (GSEA), adjusted P value ≤ 0.0001) using differential expression between CTCs of rest and active phase from NSG-CDX-BR16 mice. Heatmap colors represent the Jaccard similarity coefficient. The heatmap on the right represents the adjusted P value as obtained in GSEA.
+
+```{r br16_gse_heatsim_c2, fig.width=7.2, fig.asp=0.7}
+col_fun <- colorRamp2(seq(0, 1, length.out = 4), brewer.pal(4, "GnBu"))
+n_split <- 2
+ha_top <- HeatmapAnnotation(
+  foo = anno_block(
+    labels = c("Translation", "Cell division"), 
+    labels_gp = gpar(col = "black", fontsize = 8),
+    gp = gpar(lwd = 0, lty = 0))
+  )
+
+ht <- Heatmap(
+  use_mat, 
+  name = 'Similarity',
+  column_split = n_split, 
+  row_split = n_split, 
+  column_title = NULL,
+  row_title = NULL,
+  col = col_fun,
+  show_column_dend = FALSE,
+  show_column_names = FALSE, 
+  border = TRUE,
+  top_annotation = ha_top, 
+  heatmap_legend_param = list(title_gp = gpar(fontsize = 8),labels_gp = gpar(fontsize = 8)),
+  width = unit(7, "cm"))
+
+ht_br16_c2 <-  draw(ht + ha_row_pval + ha_row_nes, ht_gap = unit(c(0.2, 0.3, 0.3), "cm"))
+
+for (slice in 1:n_split) {
+  decorate_annotation("NES", {
+    grid.lines(unit(c(0, 0), "native"), unit(c(0, 1), "npc"), gpar(lty = 2))
+  }, slice = slice)
+}
+cat("\n\n")
+
+
+
+```
+
+### Similarity matrix with row names
+Heatmap showing the pair-wise similarity matrix of enriched gene sets (gene set enrichment analysis (GSEA), adjusted P value ≤ 0.0001) using differential expression between CTCs of rest and active phase from NSG-CDX-BR16 mice. Heatmap colors represent the Jaccard similarity coefficient. The heatmap on the right represents the adjusted P value as obtained in GSEA.
+
+```{r br16_gse_heatsim_c2_rownames, fig.width=7.2, fig.asp=0.7}
+use_mat_rn <- use_mat
+rownames(use_mat_rn) <- rownames(use_mat_rn) %>% 
+  gsub("REACTOME_", "", .) %>% 
+  gsub("BIOCARTA_", "", .) %>% 
+  gsub("^PID_", "", .) %>%
+  gsub("^WP_", "", .) %>%
+  gsub("^PID_", "", .) %>%
+  gsub("^GOBP_", "", .) %>%
+  gsub("_", " ", .)
+
+ht <- Heatmap(
+  use_mat_rn, 
+  name = 'Similarity',
+  column_split = n_split, 
+  row_split = n_split, 
+  column_title = NULL,
+  row_title = NULL,
+  col = col_fun,
+  show_column_dend = FALSE,
+  show_column_names = FALSE, 
+  show_row_dend = FALSE,
+  row_names_side = "left",
+  row_names_gp = gpar(fontsize = 8),
+  row_names_max_width = unit(7, "cm"),
+  border = TRUE,
+  top_annotation = ha_top, 
+  heatmap_legend_param = list(title_gp = gpar(fontsize = 8),
+                              labels_gp = gpar(fontsize = 8)
+                              ),
+  width = unit(6, "cm"))
+
+draw(ht + ha_row_pval + ha_row_nes, ht_gap = unit(c(0.2, 0.3, 0.3), "cm"))
+
+for (slice in 1:n_split) {
+  decorate_annotation("NES", {
+    grid.lines(unit(c(0, 0), "native"), unit(c(0, 1), "npc"), gpar(lty = 2))
+  }, slice = slice)
+}
+
+cat("\n\n")
+```
+
+### Save selected gsets for future use
+```{r save-br16-data}
+gse_gsea_br16_f <- gse_gsea_br16$GSEA$msigdb.c2.cp.c5.bp@result %>% filter(p.adjust < 0.001)
+row_order <- row_order(ht_br16_c2) %>% unlist
+use_gsets <- rownames(br16_gsea_sim_mat)[row_order]
+use_gmt_gsets <- read.gmt(gmt_files_symbols$msigdb.c2.cp.c5.bp)
+use_gmt_gsets <- use_gmt_gsets %>% filter(term %in% use_gsets)
+saveRDS(use_gsets, file = file.path(params$dge_dir, 'br16', 'ht_br16_c2_gene_sets.Rmd'))
+```
+
+## GSEA for NSG-LM2 and Patient
+
+Run GSEA using candidate pathways from NSG-CDX-BR16.
+
+NSG-LM2
+```{r lm2_gsea}
+# use_sce <- sce_lm2
+output_dir <- file.path(params$dge_dir, 'lm2')
+dge <- dge_lm2
+fc_list <- dge$results$logFC %>% set_names(dge$results$gene_name) %>% sort(decreasing = TRUE)
+gsea_lm2 <- GSEA(fc_list, TERM2GENE=use_gmt_gsets, pvalueCutoff = 1)
+gsea_lm2 <-  pairwise_termsim(gsea_lm2)
+```
+
+Patient
+```{r patient_gsea}
+# use_sce <- sce_lm2
+output_dir <- file.path(params$dge_dir, 'patient')
+dge <- dge_patient
+fc_list <- dge$results$logFC %>% set_names(dge$results$gene_name) %>% sort(decreasing = TRUE)
+gsea_patient <- GSEA(fc_list, TERM2GENE=use_gmt_gsets, pvalueCutoff = 1)
+gsea_patient <-  pairwise_termsim(gsea_patient)
+```
+
+Combine NSG-CDX-BR16, NSG-LM2 and patient GSEA data
+```{r combined_gsea_data}
+gsea_lm2@result$donor <- 'LM2'
+gsea_patient@result$donor <- 'Patient'
+gsea_br16 <- gse_gsea_br16_f %>%
+  mutate(donor = 'Br16') %>%
+  dplyr::select(one_of(colnames(gsea_lm2@result)))
+gsea_comb <- rbind(gsea_br16, gsea_lm2@result, gsea_patient@result)
+gsea_comb <- gsea_comb %>% 
+  left_join(gse_gsea_br16_f %>% dplyr::select(ID, NES, p.adjust),
+            by = 'ID',
+            suffix = c("", ".br16")) %>% 
+  mutate(ID = factor(ID, levels = rev(use_gsets)))
+```
+
+## GSEA for NSG-CDX-BR16 and NSG-LM2
+Plot comparing the normalized enrichment score (NES) and adjusted P value (dot size) obtained using GSEA for gene sets shown in “d”. Left and right panels show the results for NSG-CDX-BR16 and NSG-LM2 models, respectively. Gene sets with an adjusted P value ≤ 0.05 in each sample set are highlighted in red.
+
+```{r br16_lm2_nes_dotplot_c2, fig.asp=0.7753844, fig.width = 5.2}
+label_func <- default_labeller(18)
+xlim <- (gsea_comb$NES %>% abs %>% max) + 0.25
+dotplot_br16 <- gsea_comb %>% 
+  filter(donor == 'Br16') %>% 
+  mutate(
+    color = ifelse(pvalue <= 0.05, 'P <= 0.05', 'P > 0.05'),
+    row_split = ifelse(NES.br16 < 0, 'Translation', 'Cell division') %>% factor(levels=c('Translation', 'Cell division'))
+    ) %>% 
+  ggplot(aes(x = NES, y = ID, size = -log10(pvalue), color = color)) +
+    geom_point(alpha = 0.7) +
+    scale_color_manual(values = c(`P <= 0.05` = 'firebrick', `P > 0.05` = 'grey70')) +
+    scale_y_discrete(labels = label_func) +
+    scale_size(range = c(1.5, 3.8)) +
+    labs(
+      x = 'Normalized enrichment score',
+      y = NULL,
+      color = NULL,
+      size = bquote("-log"[10] ~ .(paste0("(P-value)")))
+    ) +
+  facet_grid(cols = vars(donor), row = vars(row_split), scales = 'free_y', space = 'free', switch = "y") +
+  xlim(c(-xlim, xlim)) +
+  geom_vline(xintercept = 0, lty = 3) +
+  panel_border(color = "black") +
+  theme(
+    axis.title.y=element_blank(),
+    axis.ticks.y=element_blank(),
+    axis.text.y=element_blank(),
+    strip.background = element_rect(fill = 'white'),
+    strip.placement = "outside"
+    )
+
+dotplot_lm2<- gsea_comb %>% 
+  filter(donor == 'LM2') %>% 
+  mutate(
+    color = ifelse(pvalue <= 0.05, 'P <= 0.05', 'P > 0.05'),
+    row_split = ifelse(NES.br16 < 0, 'Translation', 'Cell division') %>% factor(levels=c('Translation', 'Cell division'))
+    ) %>% 
+  ggplot(aes(x = NES, y = ID, size = -log10(pvalue), color = color)) +
+    geom_point(alpha = 0.7) +
+    scale_color_manual(values = c(`P <= 0.05` = 'firebrick', `P > 0.05` = 'grey70')) +
+    scale_y_discrete(labels = label_func) +
+    scale_size(range = c(1.5, 3.8)) +
+    labs(
+      x = 'Normalized enrichment score',
+      y = NULL,
+      color = NULL,
+      size = bquote("-log"[10] ~ .(paste0("(P-value)")))
+    ) +
+  facet_grid(cols = vars(donor), row = vars(row_split), scales = 'free_y', space = 'free', switch = "y") +
+  xlim(c(-xlim, xlim)) +
+  geom_vline(xintercept = 0, lty = 3) +
+  panel_border(color = "black") +
+  theme(
+    axis.title.y=element_blank(),
+    axis.ticks.y=element_blank(),
+    axis.text.y=element_blank(),
+    strip.background = element_rect(fill = 'white'),
+    strip.placement = "outside"
+    )
+
+plot_grid(dotplot_br16, dotplot_lm2)
+```
+
+## GSEA for Patient
+Plot showing the NES and P value (dot size) in patient CTCs obtained using GSEA for gene sets shown in “d”. Gene sets with an P value ≤ 0.05 are highlighted in red (bottom).
+```{r patient_nes_dotplot_c2, fig.asp=1.550769, fig.width = 2.6}
+label_func <- default_labeller(18)
+xlim <- (gsea_comb$NES %>% abs %>% max) + 0.25
+gsea_comb %>% 
+  filter(donor == 'Patient') %>% 
+  mutate(
+    color = ifelse(pvalue <= 0.05, 'P <= 0.05', 'P > 0.05'),
+    row_split = ifelse(NES.br16 < 0, 'Translation', 'Cell division') %>% factor(levels=c('Translation', 'Cell division'))
+    ) %>% 
+  ggplot(aes(x = NES, y = ID, size = -log10(pvalue), color = color)) +
+    geom_point(alpha = 0.7) +
+    scale_color_manual(values = c(`P <= 0.05` = 'firebrick', `P > 0.05` = 'grey70')) +
+    scale_y_discrete(labels = label_func) +
+    scale_size(range = c(1.5, 3.8)) +
+    labs(
+      x = 'Normalized enrichment score',
+      y = NULL,
+      color = NULL,
+      size = bquote("-log"[10] ~ .(paste0("(P-value)")))
+    ) +
+  facet_grid(cols = vars(donor), row = vars(row_split), scales = 'free_y', space = 'free', switch = "y") +
+  xlim(c(-xlim, xlim)) +
+  geom_vline(xintercept = 0, lty = 3) +
+  panel_border(color = "black") +
+  theme(
+    axis.title.y=element_blank(),
+    axis.ticks.y=element_blank(),
+    axis.text.y=element_blank(),
+    strip.background = element_rect(fill = 'white'),
+    strip.placement = "outside"
+    )
+```
+
+## GSEA for NSG-CDX-BR16, NSG-LM2 and patient
+Plots comparing the normalized enrichment score (NES) and adjusted P value (dot size) obtained using GSEA for gene sets shown in “d”. Gene sets with an adjusted P value ≤ 0.05 in each sample set are highlighted in red
+```{r br16_lm2_patient_nes_dotplot, fig.width=5.8, fig.asp=0.9344828}
+label_func <- default_labeller(18)
+xlim <- (gsea_comb$NES %>% abs %>% max) + 0.25
+gsea_comb %>% 
+  mutate(
+    color = ifelse(pvalue <= 0.05, 'P <= 0.05', 'P > 0.05'),
+    row_split = ifelse(NES.br16 < 0, 'Translation', 'Cell division') %>% factor(levels=c('Translation', 'Cell division'))
+    ) %>% 
+  ggplot(aes(x = NES, y = ID, size = -log10(pvalue), color = color)) +
+    geom_point(alpha = 0.7) +
+    scale_color_manual(values = c(`P <= 0.05` = 'firebrick', `P > 0.05` = 'grey70')) +
+    scale_y_discrete(labels = label_func) +
+    scale_size(range = c(1.5, 3.8)) +
+    labs(
+      x = 'Normalized enrichment score',
+      y = NULL,
+      color = NULL,
+      size = bquote("-log"[10] ~ .(paste0("(P-value)")))
+    ) +
+  facet_grid(cols = vars(donor), row = vars(row_split), scales = 'free_y', space = 'free', switch = "y") +
+  xlim(c(-xlim, xlim)) +
+  geom_vline(xintercept = 0, lty = 3) +
+  panel_border(color = "black") +
+  theme(
+    axis.title.y=element_blank(),
+    axis.ticks.y=element_blank(),
+    axis.text.y=element_blank(),
+    strip.background = element_rect(fill = 'white'),
+    strip.placement = "outside"
+    )
+```
+
+
+
+
+
+
+## GSVA for NSG-LM2
+### Run differential expression
+Run differential expression at pathway level removing timepoint 0600 (ZT = 0, only 1 biological replicate) and using only candidate pathways from BR16 analysis. We use [limma](https://bioconductor.org/packages/3.14/limma) (Smyth 2004) as suggested in [GSVA vignette](https://www.bioconductor.org/packages/release/bioc/vignettes/GSVA/inst/doc/GSVA.html). For several groups (timepoints) we are using the strategy defined at [limma vignette](https://bioconductor.org/packages/release/bioc/vignettes/limma/inst/doc/usersguide.pdf) Section 9.3 
+```{r lm2tk-dgse}
+use_sce <- sce_lm2tk
+gsva_res <- gsva_lm2tk
+use_gsets_nes <-  gse_gsea_br16$GSEA$msigdb.c2.cp.c5.bp@result[use_gsets, 'NES'] %>% set_names(use_gsets)
+use_gsets_cat <- ifelse(use_gsets_nes < 0, 'Translation', 'Cell division') %>% factor(levels=c('Translation', 'Cell division'))
+use_gmt_gsets <- read.gmt(gmt_files_symbols$msigdb.c2.cp.c5.bp)
+use_gmt_gsets <- use_gmt_gsets %>% filter(term %in% use_gsets)
+
+# Remove 06000 samples
+use_samples <- intersect(colnames(gsva_res), use_sce[,use_sce$timepoint!='0600']$sample_alias)
+
+# limma
+f <- use_sce[,use_samples]$timepoint %>% factor
+design <- model.matrix(~ 0 + f)
+gsva_res_sel <- gsva_res[use_gsets,use_samples]
+fit <- lmFit(gsva_res_sel, design)
+contrast_to_eval <- combn(colnames(design), 2, simplify = TRUE) %>% apply(., 2, function(x) paste(x, collapse = '-'))
+contrast.matrix <- makeContrasts(contrasts = contrast_to_eval, levels = colnames(design))                                  
+fit2 <- contrasts.fit(fit, contrast.matrix)
+fit2 <- eBayes(fit2)
+# fit2$F.p.value
+limma_res <- topTable(fit2, number=100000) %>% 
+  rownames_to_column('Term') %>% 
+  mutate(to_rownames = Term) %>% 
+  column_to_rownames('to_rownames')
+limma_res$Term_cat <- use_gsets_cat[limma_res$Term]
+```
+
+Additional objects for plotting
+```{r}
+coldata_ord <- colData(use_sce) %>% data.frame %>% arrange(zt, sample_type)
+gsva_mat <- gsva_res[use_gsets, coldata_ord$sample_alias]
+gsva_df <- gsva_mat %>% data.frame %>% 
+  rownames_to_column('term') %>% 
+  pivot_longer(-term, names_to = 'sample_alias') %>% 
+  left_join(coldata_ord) %>% 
+  mutate(term = factor(term, levels = use_gsets))
+gsva_df$term_cat <- use_gsets_cat[gsva_df$term]
+
+gsva_avg_df <- gsva_df %>%
+  group_by(zt, timepoint, term) %>% 
+  summarise(mean_gsva = mean(value)) %>% 
+  mutate(term = factor(term, levels = use_gsets))
+gsva_avg_df$term_cat <- use_gsets_cat[gsva_avg_df$term]
+
+gsva_df$term <- clean_msigdb_names(gsva_df$term) %>% factor(., clean_msigdb_names(use_gsets))
+gsva_avg_df$term <- clean_msigdb_names(gsva_avg_df$term) %>% factor(., clean_msigdb_names(use_gsets))
+
+gsva_avg_mat <- gsva_avg_df %>% 
+  ungroup() %>% 
+  dplyr::select(-term_cat, -timepoint) %>% 
+  pivot_wider(names_from = zt, values_from = mean_gsva) %>% 
+  column_to_rownames('term') %>% 
+  as.matrix
+
+gsva_avg_mat <- gsva_avg_mat[clean_msigdb_names(use_gsets),]
+```
+
+### GSVA across time series
+GSVA score for translation (yellow, n= 5) and cell division (blue, n= 17) gene sets in CTCs obtained from the NSG-LM2 time-kinetics experiment. Yellow and blue lines represent
+the average at each time point. Individual points represent the enrichment score for each CTC sample. The white and grey backgrounds represent environmental light
+(rest period) and dark conditions (active period), respectively. Differential expression adjusted P values as obtained from limma are shown for each individual gene set.
+
+```{r lm2_s1_gsva_timeseries_facet_5tp, fig.width = 7.2, fig.asp = 0.8}
+bg_color <- data.frame(
+  xmin = c(-2, 0, 12),
+  xmax = c(0, 12, 22),
+  fill_bg = c('night', 'day', 'night')
+)
+
+adj_p_df <- limma_res %>% 
+  mutate(
+    term = clean_msigdb_names(limma_res$Term) %>% factor(., clean_msigdb_names(use_gsets)),
+    label = format.pval(adj.P.Val, digits = 1),
+    label = paste("italic('P=')~", label),
+    ypos = ifelse(Term_cat == 'Translation', -0.45, 0.45)
+  )
+
+
+ggplot() +
+  geom_rect(data = bg_color, aes(xmin = xmin, xmax = xmax, ymin = -Inf, ymax = Inf, fill = fill_bg), alpha = 0.5) +
+  geom_hline(yintercept = 0, lty = 2, size = 0.2) +
+  geom_quasirandom(data = gsva_df, aes(zt, value, group = term, color = term_cat), size = 1, pch = 16, alpha = 0.4, width = 0.3) +
+  geom_line(data = gsva_avg_df, aes(zt, mean_gsva, group = term, color = term_cat), size = 0.6, alpha = 1) +
+  facet_wrap(~term, labeller = label_wrap_gen(width = 25), ncol = 5, scales = 'free_x') +
+  scale_fill_manual(values = c('night' = "grey80", 'day' = "white")) +
+  scale_color_OkabeIto() +
+  labs(
+      x = 'Time (ZT)',
+      y = 'GSVA enrichment score',
+      color = NULL,
+      fill = NULL
+    ) +
+  guides(fill = FALSE) +
+  scale_x_continuous(
+    expand = c(0,0),
+    breaks=c(0, 4, 12, 16, 20)
+  ) +
+  scale_y_continuous(
+    expand = c(0,0),
+    limits = c(-0.55, 0.55)
+  ) +
+  theme(
+    legend.position="top",
+    plot.margin = margin(14, 7, 3, 1.5),
+    strip.background = element_rect(fill = 'white'),
+    strip.text = element_text(size = 6)
+  ) +
+  geom_text(x = 16, aes(label = label, y = ypos), data = adj_p_df, size = 1.8, hjust = 0, parse = TRUE)
+```
+
+### Average GSVA score across time series 
+
+Average GSVA score for translation (yellow, n=5) and cell division (blue, n=17) gene sets in CTCs obtained in the NSG-LM2 time-kinetics experiment. The average was calculated for each gene set and time point across all CTC samples (ZT0 n=1, ZT4 n=9, ZT12 n=6, ZT16 n=3, ZT20 n=5). The white and grey backgrounds represent environmental light (rest period) and dark conditions (active period), respectively.
+```{r lm2_tk_gsva_timeseries_avg}
+bg_color <- data.frame(
+  xmin = c(-2, 0, 12),
+  xmax = c(0, 12, 22),
+  fill_bg = c('night', 'day', 'night')
+)
+
+ggplot() +
+  geom_rect(data = bg_color, aes(xmin = xmin, xmax = xmax, ymin = -Inf, ymax = Inf, fill = fill_bg), alpha = 0.5) +
+  geom_hline(yintercept = 0, lty = 2, size = 0.3) +
+  geom_line(data = gsva_avg_df, aes(zt, mean_gsva, group = term, color = term_cat), size = 0.6, alpha = 0.3) +
+  geom_point(data = gsva_avg_df, aes(zt, mean_gsva, group = term, color = term_cat), size = 1, pch = 16, alpha = 0.5) +
+  scale_fill_manual(values = c('night' = "grey80", 'day' = "white")) +
+  scale_color_OkabeIto() +
+  labs(
+      x = 'Time (ZT)',
+      y = 'Mean GSVA\nenrichment score',
+      color = NULL,
+      fill = NULL
+    ) +
+  guides(fill = "none") +
+  scale_x_continuous(
+    expand = c(0,0),
+    breaks=c(0, 4, 12, 16, 20)
+  ) +
+  scale_y_continuous(
+    expand = c(0,0),
+    limits = c(-0.55, 0.55)
+  ) +
+  theme(
+    legend.position="top",
+    plot.margin = margin(14, 7, 3, 1.5)
+  )
+```
+

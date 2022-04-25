@@ -1,0 +1,314 @@
+---
+title: "PCA of gene expression in CTCs from NSG-CDX-BR16 mice"
+author: "Francesc Castro-Giner"
+date: "2022-02-23"
+output: workflowr::wflow_html
+editor_options:
+  chunk_output_type: console
+params:
+  date: '`r format(Sys.Date(), "%B %d, %Y")`'
+  sce_dir: ./data/sce
+  dge_dir: ./data/differential_expression
+---
+
+## Load libraries, additional functions and data
+
+Setup environment
+```{r setup, include=TRUE, warning=FALSE, message=FALSE}
+knitr::opts_chunk$set(results='asis', echo=TRUE, message=FALSE, warning=FALSE, error=FALSE, fig.align = 'center', fig.width = 3.5, fig.asp = 0.618, dpi = 600, dev = c("png", "pdf"), fig.showtext = TRUE)
+
+options(stringsAsFactors = FALSE)
+```
+
+Load packages
+```{r load-libraries}
+library(tidyverse)
+library(showtext)
+library(scater)
+library(ComplexHeatmap)
+library(circlize)
+library(RColorBrewer)
+library(DT)
+```
+
+Set font family for figures
+```{r set-font}
+font_add("Helvetica", "./configuration/fonts/Helvetica.ttc")
+showtext_auto()
+```
+
+Load ggplot theme
+```{r ggplot-theme}
+source("./configuration/rmarkdown/ggplot_theme.R")
+```
+
+Load color palettes
+```{r color-palettes}
+source("./configuration/rmarkdown/color_palettes.R")
+```
+
+Load SingleCellExpression data
+```{r load-sce}
+use_sce <- readRDS(file.path(params$sce_dir, 'sce_br16.rds'))
+```
+
+Load results from differential gene expression analyses
+```{r load-dge}
+dge_all <- readRDS(file.path(params$dge_dir, 'br16', 'dge_edgeR_QLF_robust.rds'))
+dge_cluster_g <- readRDS(file.path(params$dge_dir,'br16-ctc_cluster_and_wbc', 'dge_edgeR_QLF_robust.rds'))
+dge_single <- readRDS(file.path(params$dge_dir,'br16-ctc_single', 'dge_edgeR_QLF_robust.rds'))
+```
+
+## Genes differentially expressed in CTCs of NSG-CDX-BR16
+Genes differentially expressed in CTCs of NSG-CDX-BR16 mice during the rest phase versus active phase. Table listing the differentially expressed genes comparing CTCs obtained in the rest phase (n = 65) versus the active phase (n = 73) of NSG-CDX-BR16 mice. All genes evaluated are included in the table (n = 12,261). For fold-change calculation, active phase samples were used in the denominator.
+
+```{r table-dge-br16}
+dge_all$results %>% 
+  dplyr::select(gene_name, gene_type, logFC, logCPM, PValue, FDR, description) %>% 
+  rownames_to_column('Ensemble ID') %>% 
+  mutate(
+    logFC = round(logFC, 2),
+    logCPM = round(logCPM, 2),
+    PValue = format.pval(PValue, digits = 2),
+    FDR = format.pval(FDR, digits = 2),
+    description = gsub(" \\[.*\\]", "", description)
+  ) %>% 
+  dplyr::rename(
+    `Gene name` = gene_name,
+    `Gene type` = gene_type
+  ) %>% 
+  datatable(., 
+            rownames = FALSE, 
+            filter = 'top', 
+            caption = 'Genes differentially expressed in CTCs of NSG-CDX-BR16 mice during the rest phase versus active phase.',
+            extensions = 'Buttons', 
+            options = list(
+              dom = 'Blfrtip',
+              buttons = c('csv', 'excel'),
+              title = paste('', params$prefix)
+              ))
+
+```
+
+## Heatmap differential expression NSG-CDX-BR16 mice
+Heatmap showing expression levels (row scaled z-scores using normalized counts) of differentially-expressed genes between rest and active phase (absolute log2 fold change ≥ 0.5 and FDR ≤ 0.05) in CTCs from NSG-BR16-CDX mice.
+
+```{r br16_dge_heatmap, fig.asp = 0.8}
+dge <- dge_all
+use_genes <- dge$results %>% filter(FDR <= 0.05 & abs(logFC) >= 0.5) %>% collect %>% .[['feature']]
+use_genes_name <- rowData(use_sce[use_genes,]) %>% data.frame %>% collect %>% .[['gene_name']]
+n_up <- dge$results %>% filter(FDR <= 0.05 & logFC >= 0.5) %>% nrow
+n_down <- dge$results %>% filter(FDR <= 0.05 & logFC <= -0.5) %>% nrow
+expr_values <- logcounts(use_sce[use_genes,])
+heat_values <- t(apply(expr_values, 1, scale, center = TRUE, scale = TRUE)) # Z-score
+# heat_values <- expr_values - rowMeans2(expr_values)
+rownames(heat_values) <- use_genes_name
+colnames(heat_values) <- colnames(expr_values)
+
+coldata_ord <- colData(use_sce) %>% data.frame %>% arrange(zt_sample_type_legend) 
+heat_values <- heat_values[,coldata_ord$sample_alias]
+
+ha_top <- HeatmapAnnotation(
+  show_legend = FALSE,
+  `CTC type` = coldata_ord$zt_sample_type_legend,
+  col = list(`CTC type` = zt_sample_type_legend_palette),
+  annotation_legend_param = list(
+    title = NULL,
+    title_gp = gpar(fontsize = 8),
+    labels_gp = gpar(col = "black", fontsize = 8),
+    grid_width = unit(3, "mm")
+    ),
+  show_annotation_name = FALSE,
+  simple_anno_size = unit(3, "mm")
+  )
+
+# zlim <- c(-max(abs(heat_values)), max(abs(heat_values)))
+zlim <- c(-3, 3)
+heat_values[heat_values < zlim[1]] <- zlim[1]
+heat_values[heat_values > zlim[2]] <- zlim[2]
+
+col_fun <-  colorRamp2(seq(zlim[1], zlim[2], length.out = 11), rev(brewer.pal(n = 11, name ="BrBG")))
+
+Heatmap(
+  heat_values,
+  name = 'z\nscore',
+  col =  col_fun,
+  row_split = 2, 
+  row_gap = unit(2, "mm"),
+  cluster_columns = FALSE,
+  column_title = NULL,
+  row_title = NULL,
+  show_column_dend = FALSE,
+  show_column_names = FALSE, 
+  show_row_dend = FALSE,
+  show_row_names = FALSE, 
+  top_annotation = ha_top,
+  left_annotation = rowAnnotation(foo = anno_block(
+        labels = c(
+          paste0("Upregulated in\nZT4 (N=", n_up, ")"), 
+          paste0("Upregulated in\nZT16 (N=", n_down, ")")
+        ),
+        labels_gp = gpar(col = "black", fontsize = 8),
+        gp = gpar(lwd = 0, lty = 0)
+        )
+  ),
+  heatmap_legend_param = list(
+    title_gp = gpar(fontsize = 8),
+    labels_gp = gpar(fontsize = 8),
+    grid_width = unit(3, "mm")
+    )
+)
+```
+
+```{r br16_dge_heatmap_legend, fig.asp = 0.7}
+use_genes <- dge$results %>% filter(FDR <= 0.05 & abs(logFC) >= 0.5) %>% collect %>% .[['feature']]
+use_genes_name <- rowData(use_sce[use_genes,]) %>% data.frame %>% collect %>% .[['gene_name']]
+n_up <- dge$results %>% filter(FDR <= 0.05 & logFC >= 0.5) %>% nrow
+n_down <- dge$results %>% filter(FDR <= 0.05 & logFC <= -0.5) %>% nrow
+expr_values <- logcounts(use_sce[use_genes,])
+heat_values <- t(apply(expr_values, 1, scale, center = TRUE, scale = TRUE)) # Z-score
+# heat_values <- expr_values - rowMeans2(expr_values)
+rownames(heat_values) <- use_genes_name
+colnames(heat_values) <- colnames(expr_values)
+
+coldata_ord <- colData(use_sce) %>% data.frame %>% arrange(zt_sample_type_legend) 
+heat_values <- heat_values[,coldata_ord$sample_alias]
+
+ha_top <- HeatmapAnnotation(
+  show_legend = TRUE,
+  `CTC type` = coldata_ord$zt_sample_type_legend,
+  col = list(`CTC type` = zt_sample_type_legend_palette),
+  annotation_legend_param = list(
+    title = NULL,
+    title_gp = gpar(fontsize = 8),
+    labels_gp = gpar(col = "black", fontsize = 8),
+    grid_width = unit(3, "mm")
+    ),
+  show_annotation_name = FALSE,
+  simple_anno_size = unit(3, "mm")
+  )
+
+# zlim <- c(-max(abs(heat_values)), max(abs(heat_values)))
+zlim <- c(-3, 3)
+heat_values[heat_values < zlim[1]] <- zlim[1]
+heat_values[heat_values > zlim[2]] <- zlim[2]
+
+col_fun <-  colorRamp2(seq(zlim[1], zlim[2], length.out = 11), rev(RColorBrewer::brewer.pal(n = 11, name ="BrBG")))
+
+
+Heatmap(
+  heat_values,
+  name = 'z\nscore',
+  col =  col_fun,
+  row_split = 2, 
+  row_gap = unit(2, "mm"),
+  cluster_columns = FALSE,
+  column_title = NULL,
+  row_title = NULL,
+  show_column_dend = FALSE,
+  show_column_names = FALSE, 
+  show_row_dend = FALSE,
+  show_row_names = FALSE, 
+  top_annotation = ha_top,
+  left_annotation = rowAnnotation(foo = anno_block(
+        labels = c(
+          paste0("Upregulated in\nrest phase\n(N=", n_up, ")"), 
+          paste0("Upregulated in\nactive phase\n(N=", n_down, ")")
+        ),
+        labels_gp = gpar(col = "black", fontsize = 8),
+        gp = gpar(lwd = 0, lty = 0)
+        )
+  ),
+  heatmap_legend_param = list(
+    title_gp = gpar(fontsize = 8),
+    labels_gp = gpar(fontsize = 8),
+    grid_width = unit(3, "mm")
+    )
+)
+```
+
+## Correlation DEG single CTC versus CTC clusters and CTC-WBC
+Scatter plot showing the correlation of the fold-change between active and rest phase in single CTC (Y-axis) versus CTC clusters and CTC-WBC (X-axis), using genes with FDR ≤ 0.05 in any of the two sets (two-sided Pearson’s correlation coefficient 0.57, P value ≤ 2.22e-16). Points are colored according to the dataset where they were found with a FDR ≤ 0.05 (both, single CTC or CTC clusters and CTC-WBC clusters). The dashed red line represents the linear regression line using all the points in the plot.
+
+```{r br16_single_vs_cluster_g_fc_corr, fig.asp = 0.81}
+# Fold-change correlation
+res_cl <- dge_cluster_g$results %>% dplyr::select(feature, gene_name, description, logFC, PValue, FDR) %>% mutate(logFDR = -log10(FDR), logPValue = -log10(PValue))
+res_s <- dge_single$results %>% dplyr::select(feature, logFC, PValue, FDR) %>% mutate(logFDR = -log10(FDR), logPValue = -log10(PValue))
+
+data_corrset <- res_cl %>% left_join(res_s, by = 'feature', suffix = c(".cl", ".s")) %>% 
+  filter(FDR.s <= 0.05 | FDR.cl <= 0.05) %>% 
+  mutate(
+    sign = ifelse(FDR.s <= 0.05 & FDR.cl <= 0.05, 'Both sets', NA),
+    sign = ifelse(is.na(sign) & FDR.cl <= 0.05, 'CTC clusters and CTC-WBC clusters', sign),
+    sign = ifelse(is.na(sign) & FDR.s <= 0.05, 'Single CTCs', sign),
+    sign = factor(sign, levels = c('CTC clusters and CTC-WBC clusters', 'Both sets', 'Single CTCs'))
+    ) %>% 
+  na.omit()
+
+# Generate plot
+maxlogFC <- max(abs(c(data_corrset$logFC.cl, data_corrset$logFC.s)), na.rm = TRUE)
+use_palette <- c('#1b9e77', '#e6ab02', '#7570b3') %>% set_names(data_corrset$sign %>% levels)
+# data_labels <- data_corrset %>% filter(sign != 'CTC cluster and CTC-WBC cluster')
+fc_plot <- data_corrset %>% 
+  ggplot(aes(logFC.cl,logFC.s, color = sign, label = gene_name)) +
+  geom_point(size = 2, alpha = 0.3) +
+  geom_hline(yintercept = 0, lty = 3, color = 'grey80') +
+  geom_vline(xintercept = 0, lty = 3, color = 'grey80') +
+  geom_smooth(method = lm, se = FALSE, inherit.aes = FALSE, aes(logFC.cl, logFC.s), color = 'firebrick', lty = 2, fullrange = TRUE, size = 0.5) +
+  # geom_text_repel(data = data_labels, aes(label = gene_name), color = 'black', size=geom_text_size, box.padding = 0.1) +
+  geom_point(size = 2, alpha = 1, pch = 16, data = data_corrset[data_corrset$sign != 'CTC clusters and CTC-WBC clusters', ]) +
+  scale_color_manual(values = use_palette) +
+  # scale_color_brewer(palette = 'Dark2') +
+  xlim(c(-maxlogFC, maxlogFC)) +
+  ylim(c(-maxlogFC, maxlogFC)) +
+  labs(
+    x = expression(paste("lo", g[2],"(Fold change) in CTC clusters and CTC-WBC clusters")),
+    y = expression(paste("lo", g[2],"(Fold change) in Single CTCs")),
+    color = 'FDR <= 0.05'
+  ) +
+  guides(alpha = "none")
+
+fc_plot_2_legend <- data_corrset %>% 
+  ggplot(aes(logFC.s,logFC.cl, color = sign, label = gene_name)) +
+  geom_point(size = 1.5, alpha = 0.8) +
+  scale_color_manual(values = use_palette)
+  # scale_color_brewer(palette = 'Dark2') 
+
+fc_plot + theme(legend.position = "none")
+```
+
+```{r br16_single_vs_cluster_g_fc_corr_legend}
+legend <- cowplot::get_legend(fc_plot_2_legend)
+
+grid.newpage()
+grid.draw(legend)
+```
+
+## Compare DEG CTC versus CTC clusters and CTC-WBC
+Bar plot showing the number of differentially expressed genes (absolute log2 fold change ≥ 0.5 and FDR ≤ 0.05) using all the samples (‘All’), using clustered CTCs (CTC clusters and CTC-WBC clusters) and using single CTCs.
+```{r br16_single_vs_cluster_g_ngenes_barplot}
+results_comb <- rbind(
+  dge_all$results %>% filter(FDR <= 0.05 & abs(logFC) >= 0.5) %>% mutate(sample_set = 'All'),
+  dge_cluster_g$results %>% filter(FDR <= 0.05 & abs(logFC) >= 0.5) %>% mutate(sample_set = 'CTC clusters and\nCTC-WBC clusters'),
+  dge_single$results %>% filter(FDR <= 0.05 & abs(logFC) >= 0.5) %>% mutate(sample_set = 'Single CTCs')
+)
+results_comb_Nlabels <- results_comb$sample_set %>% table %>% data.frame %>% set_names(c('sample_set', 'Freq'))
+
+results_comb %>% 
+  ggplot(aes(sample_set)) +
+  geom_bar() +
+  ylim(c(0, 50+(results_comb_Nlabels$Freq %>% max))) +
+  geom_text(aes(y=Freq, label=Freq), vjust=-0.05, color="black", size=geom_text_size, data = results_comb_Nlabels) +
+  labs(
+    x = '',
+    y = 'Number of\ndifferential expressed genes'
+  ) + 
+  scale_y_continuous(expand = c(0, 0), limits = c(0, 305)) +
+  theme(
+      panel.grid.major.y   = element_line(colour = 'grey90', size = 0.5),
+      axis.ticks        = element_line(colour = 'grey90', size = 0.5),
+      axis.line.x       = element_line(colour = 'grey90', size = 0.5),
+      axis.line.y       = element_blank(),
+    )
+
+```
