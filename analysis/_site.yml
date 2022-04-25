@@ -1,17 +1,19 @@
-name: "Transcriptomic analysis of CTC at different timepoints"
+name: diamantopoulou-ctc-circadian
 output_dir: ../docs
 navbar:
-  title: "Transcriptomic analysis of CTC at different timepoints"
-  left:
-  - text: Home
-    href: index.html
-  - text: About
-    href: about.html
-  - text: License
-    href: license.html
+  title: CIRCADIAN-CTC
+  left: ~
+  right:
+  - icon: fa-github
+    text: Source code
+    href: https://github.com/TheAcetoLab/diamantopoulou-ctc-circadian
 output:
   workflowr::wflow_html:
+    keep_md: yes
     toc: yes
     toc_float: yes
-    theme: cosmo
-    highlight: textmate
+    toc_depth: 4
+    theme: journal
+    highlight: pygments
+    code_folding: hide
+    css: style.css

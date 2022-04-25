@@ -1,0 +1,12 @@
+/*----------LOGO above TOC---------*/
+#TOC::before {
+  content: "";
+  display: block;
+  height: 50px;
+  margin: 0px 0px 0px 0px;
+  background-href: 'https://www.theacetolab.com';
+  background-image: url("images/logo-theacetolab-small.png");
+  background-size: contain;
+  background-position: center center;
+  background-repeat: no-repeat;
+}
