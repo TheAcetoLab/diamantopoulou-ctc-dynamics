@@ -9,9 +9,10 @@
 <meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
 
 
+<meta name="author" content="Francesc Castro-Giner" />
 
 
-<title>Home</title>
+<title>Transcriptomic analysis of CTC at different timepoints</title>
 
 <script src="site_libs/header-attrs-2.11/header-attrs.js"></script>
 <script src="site_libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
@@ -29,6 +30,9 @@
        h6 {font-size: 12px;}
        code {color: inherit; background-color: rgba(0, 0, 0, 0.04);}
        pre:not([class]) { background-color: white }</style>
+<script src="site_libs/jqueryui-1.11.4/jquery-ui.min.js"></script>
+<link href="site_libs/tocify-1.9.1/jquery.tocify.css" rel="stylesheet" />
+<script src="site_libs/tocify-1.9.1/jquery.tocify.js"></script>
 <script src="site_libs/navigation-1.1/tabsets.js"></script>
 <script src="site_libs/navigation-1.1/codefolding.js"></script>
 <link href="site_libs/font-awesome-5.1.0/css/all.css" rel="stylesheet" />
@@ -223,6 +227,69 @@ $(document).ready(function () {
 
 
 
+<style type="text/css">
+
+#TOC {
+  margin: 25px 0px 20px 0px;
+}
+@media (max-width: 768px) {
+#TOC {
+  position: relative;
+  width: 100%;
+}
+}
+
+@media print {
+.toc-content {
+  /* see https://github.com/w3c/csswg-drafts/issues/4434 */
+  float: right;
+}
+}
+
+.toc-content {
+  padding-left: 30px;
+  padding-right: 40px;
+}
+
+div.main-container {
+  max-width: 1200px;
+}
+
+div.tocify {
+  width: 20%;
+  max-width: 260px;
+  max-height: 85%;
+}
+
+@media (min-width: 768px) and (max-width: 991px) {
+  div.tocify {
+    width: 25%;
+  }
+}
+
+@media (max-width: 767px) {
+  div.tocify {
+    width: 100%;
+    max-width: none;
+  }
+}
+
+.tocify ul, .tocify li {
+  line-height: 20px;
+}
+
+.tocify-subheader .tocify-item {
+  font-size: 0.90em;
+}
+
+.tocify .list-group-item {
+  border-radius: 0px;
+}
+
+
+</style>
+
+
 
 </head>
 
@@ -230,6 +297,16 @@ $(document).ready(function () {
 
 
 <div class="container-fluid main-container">
+
+
+<!-- setup 3col/9col grid for toc_float and main content  -->
+<div class="row">
+<div class="col-xs-12 col-sm-4 col-md-3">
+<div id="TOC" class="tocify">
+</div>
+</div>
+
+<div class="toc-content col-xs-12 col-sm-8 col-md-9">
 
 
 
@@ -250,64 +327,10 @@ $(document).ready(function () {
       </ul>
       <ul class="nav navbar-nav navbar-right">
         <li>
-  <a href="index.html">
-    <span class="fa fa-home"></span>
-     
-    Home
-  </a>
-</li>
-<li>
-  <a href="about.html">
-    <span class="fa fa-info"></span>
-     
-    About
-  </a>
-</li>
-<li class="dropdown">
-  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
-    <span class="fa fa-bar-chart"></span>
-     
-    Analyses
-     
-    <span class="caret"></span>
-  </a>
-  <ul class="dropdown-menu" role="menu">
-    <li class="dropdown-header">Data generation</li>
-    <li>
-      <a href="0_differential_expression_gsea_gsva.html">Run differential gene expression analysis, GSEA and GSVA</a>
-    </li>
-    <li class="divider"></li>
-    <li class="dropdown-header">Main results</li>
-    <li>
-      <a href="patients_ctc_counts_distribution.html">CTC counts distribution in breast cancer patients</a>
-    </li>
-    <li>
-      <a href="br16_pca.html">PCA analysis of CTC gene expression in NSG-CDX-BR16 mice</a>
-    </li>
-    <li>
-      <a href="br16_dge.html">Differential gene expression report for NSG-CDX-BR16 data</a>
-    </li>
-    <li>
-      <a href="gsea_across_models.html">Report of GSEA and GSVA analysis in NSG-CDX-BR16, NSG-LM2, Patient and NSG-LM2 time kinetics</a>
-    </li>
-    <li>
-      <a href="core_gene_sets.html">Analysis of genes from candidate pathways</a>
-    </li>
-  </ul>
-</li>
-<li>
-  <a href="license.html">License</a>
-</li>
-<li>
-  <a href="https://github.com/TheAcetoLab/diamantopoulou-ctc-circadian">
+  <a href="https://github.com/TheAcetoLab/diamantopoulou-ctc-dynamics">
     <span class="fa fa-github"></span>
      
-  </a>
-</li>
-<li>
-  <a href="https://www.theacetolab.com">
-    <span class="fa fa-flask"></span>
-     
+    Source code
   </a>
 </li>
       </ul>
@@ -327,7 +350,9 @@ $(document).ready(function () {
 
 
 
-<h1 class="title toc-ignore">Home</h1>
+<h1 class="title toc-ignore">Transcriptomic analysis of CTC at different
+timepoints</h1>
+<h4 class="author">Francesc Castro-Giner</h4>
 
 </div>
 
@@ -335,7 +360,7 @@ $(document).ready(function () {
 <p>
 <button type="button" class="btn btn-default btn-workflowr btn-workflowr-report" data-toggle="collapse" data-target="#workflowr-report">
 <span class="glyphicon glyphicon-list" aria-hidden="true"></span>
-workflowr <span class="glyphicon glyphicon-ok text-success"
+workflowr <span class="glyphicon glyphicon-exclamation-sign text-danger"
 aria-hidden="true"></span>
 </button>
 </p>
@@ -346,8 +371,8 @@ aria-hidden="true"></span>
 </li>
 <li>
 <a data-toggle="tab" href="#checks"> Checks <span
-class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span>
-</a>
+class="glyphicon glyphicon-exclamation-sign text-danger"
+aria-hidden="true"></span> </a>
 </li>
 <li>
 <a data-toggle="tab" href="#versions">Past versions</a>
@@ -356,13 +381,13 @@ class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span>
 <div class="tab-content">
 <div id="summary" class="tab-pane fade in active">
 <p>
-<strong>Last updated:</strong> 2022-04-25
+<strong>Last updated:</strong> 2022-04-26
 </p>
 <p>
 <strong>Checks:</strong> <span
-class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> 2
+class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> 1
 <span class="glyphicon glyphicon-exclamation-sign text-danger"
-aria-hidden="true"></span> 0
+aria-hidden="true"></span> 1
 </p>
 <p>
 <strong>Knit directory:</strong>
@@ -386,31 +411,36 @@ versions</em> tab lists the development history.
 <div class="panel panel-default">
 <div class="panel-heading">
 <p class="panel-title">
-<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRMarkdownfilestronguptodate">
-<span class="glyphicon glyphicon-ok text-success"
-aria-hidden="true"></span> <strong>R Markdown file:</strong> up-to-date
-</a>
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRMarkdownfilestronguncommittedchanges">
+<span class="glyphicon glyphicon-exclamation-sign text-danger"
+aria-hidden="true"></span> <strong>R Markdown file:</strong> uncommitted
+changes </a>
 </p>
 </div>
-<div id="strongRMarkdownfilestronguptodate"
+<div id="strongRMarkdownfilestronguncommittedchanges"
 class="panel-collapse collapse">
 <div class="panel-body">
-<p>Great! Since the R Markdown file has been committed to the Git
-repository, you know the exact version of the code that produced these
-results.</p>
+<p>The R Markdown file has unstaged changes. To know which version of
+the R Markdown file created these results, you’ll want to first commit
+it to the Git repo. If you’re still working on the analysis, you can
+ignore this warning. When you’re finished, you can run
+<code>wflow_publish</code> to commit the R Markdown file and build the
+HTML.</p>
 </div>
 </div>
 </div>
 <div class="panel panel-default">
 <div class="panel-heading">
 <p class="panel-title">
-<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRepositoryversionstrong4277859">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRepositoryversionstrongahrefhttpsgithubcomTheAcetoLabdiamantopoulouctcdynamicstree1977b53e4d40004cf0f6614f84a58778a97e0d50targetblank1977b53a">
 <span class="glyphicon glyphicon-ok text-success"
-aria-hidden="true"></span> <strong>Repository version:</strong> 4277859
+aria-hidden="true"></span> <strong>Repository version:</strong>
+<a href="https://github.com/TheAcetoLab/diamantopoulou-ctc-dynamics/tree/1977b53e4d40004cf0f6614f84a58778a97e0d50" target="_blank">1977b53</a>
 </a>
 </p>
 </div>
-<div id="strongRepositoryversionstrong4277859"
+<div
+id="strongRepositoryversionstrongahrefhttpsgithubcomTheAcetoLabdiamantopoulouctcdynamicstree1977b53e4d40004cf0f6614f84a58778a97e0d50targetblank1977b53a"
 class="panel-collapse collapse">
 <div class="panel-body">
 <p>
@@ -419,7 +449,8 @@ and connecting the code version to the results is critical for
 reproducibility.
 </p>
 <p>
-The results in this page were generated with repository version 4277859.
+The results in this page were generated with repository version
+<a href="https://github.com/TheAcetoLab/diamantopoulou-ctc-dynamics/tree/1977b53e4d40004cf0f6614f84a58778a97e0d50" target="_blank">1977b53</a>.
 See the <em>Past versions</em> tab to see a history of the changes made
 to the R Markdown and HTML files.
 </p>
@@ -438,13 +469,32 @@ Ignored files:
     Ignored:    .Rproj.user/
 
 Untracked files:
+    Untracked:  analysis/0_differential_expression_gsea_gsva.Rmd
+    Untracked:  analysis/0_differential_expression_gsea_gsva.md
     Untracked:  analysis/about.md
+    Untracked:  analysis/br16_dge.Rmd
+    Untracked:  analysis/br16_dge.md
+    Untracked:  analysis/br16_pca.Rmd
+    Untracked:  analysis/br16_pca.md
+    Untracked:  analysis/core_gene_sets.Rmd
+    Untracked:  analysis/core_gene_sets.md
+    Untracked:  analysis/gsea_across_models.Rmd
+    Untracked:  analysis/gsea_across_models.md
     Untracked:  analysis/index.md
     Untracked:  analysis/license.md
+    Untracked:  analysis/patients_ctc_counts_distribution.Rmd
+    Untracked:  analysis/patients_ctc_counts_distribution.md
+    Untracked:  code/R-functions/
+    Untracked:  configuration/
+    Untracked:  data/differential_expression/
+    Untracked:  data/patients/
+    Untracked:  data/resources/
+    Untracked:  data/sce/
 
 Unstaged changes:
-    Modified:   README.md
-    Modified:   analysis/_site.yml
+    Modified:   analysis/about.Rmd
+    Modified:   analysis/index.Rmd
+    Modified:   analysis/license.Rmd
 
 </code></pre>
 <p>
@@ -494,7 +544,24 @@ Message
 html
 </td>
 <td>
-4277859
+<a href="https://rawcdn.githack.com/TheAcetoLab/diamantopoulou-ctc-dynamics/a1ff2cdd3eeea7b524377b7838d06d6025710b7a/docs/index.html" target="_blank">a1ff2cd</a>
+</td>
+<td>
+fcg-bio
+</td>
+<td>
+2022-04-25
+</td>
+<td>
+Build site.
+</td>
+</tr>
+<tr>
+<td>
+html
+</td>
+<td>
+<a href="https://rawcdn.githack.com/TheAcetoLab/diamantopoulou-ctc-dynamics/4277859c29b16dbb3e8abaa66d86e268df0a820e/docs/index.html" target="_blank">4277859</a>
 </td>
 <td>
 fcg-bio
@@ -511,7 +578,7 @@ Build site.
 Rmd
 </td>
 <td>
-d9e45e9
+<a href="https://github.com/TheAcetoLab/diamantopoulou-ctc-dynamics/blob/d9e45e9aab7c5c0ec86bc50c9a7f493aeab82662/analysis/index.Rmd" target="_blank">d9e45e9</a>
 </td>
 <td>
 fcg-bio
@@ -530,7 +597,155 @@ Start workflowr project.
 </div>
 </div>
 </div>
-<p>Welcome to my research website.</p>
+<div id="publication" class="section level2">
+<h2>Publication</h2>
+<p>Diamantopoulou, Z., Castro-Giner, F., Schwab F.D., Foerster C.,
+Saini, M., Budinjas, S., Strittmatter, K., Krol, I., Seifert, B.,
+Heinzelmann-Schwarz, V., Kurzeder, C., Rochlitz, C., Vetter, M., Weber,
+W.P., &amp; Aceto N. The metastatic spread of breast cancer is
+accomplished during sleep time. (2022)</p>
+</div>
+<div id="abstract" class="section level2">
+<h2>Abstract</h2>
+<p>We isolated live circulating tumor cells (CTCs) from a breast cancer
+patient (number of CTCs = 36) and two breast cancer xenografts,
+NSG-CDX-BR16 (number of CTCs = 138) and NSG-LM2 (number of CTCs = 108)
+at different time points. Isolated CTCs were categorized into three
+different types : single CTC, CTC clusters and CTC-white blood cells
+(CTC-WBC) clusters. Amplified cDNA was prepared according to the
+Smart-seq2 protocol. Libraries were prepared using with Nextera XT
+(Illumina) and sequenced on Illumina NextSeq500 instrument in 75-bp
+single-read mode.</p>
+</div>
+<div id="data-pre-processing" class="section level2">
+<h2>Data pre-processing</h2>
+<p>Raw data is available at Gene Expression Omnibus (GEO, NCBI;
+accession number <a
+href="https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSE180097">GSE180097</a>).
+Data processing is computationally expensive and is not covered in this
+repository. We provide description of the data pre-processing workflow
+together with software version in the original publication. Processed
+data, large result files, additional functions, references and metadata
+are were archived at <a href="https://doi.org/10.5281/zenodo.6358987"
+class="uri">https://doi.org/10.5281/zenodo.6358987</a> .</p>
+</div>
+<div id="data-and-code-availability" class="section level2">
+<h2>Data and code availability</h2>
+<p>To reproduce our analysis, first clone source code from the <a
+href="https://github.com/TheAcetoLab/diamantopoulou-ctc-dynamics">GitHub
+repository</a></p>
+<pre><code>git clone https://github.com/TheAcetoLab/diamantopoulou-ctc-dynamics.git</code></pre>
+<p>Next, download processed data deposited in <a
+href="https://doi.org/10.5281/zenodo.6358987">Zenodo</a> into the cloned
+project folder ./data directory and untar the files.</p>
+<pre><code>for file in *.tar.gz; do tar xzvf &quot;${file}&quot; &amp;&amp; rm &quot;${file}&quot;; done</code></pre>
+</div>
+<div id="reproducibility" class="section level2">
+<h2>Reproducibility</h2>
+<p>The results form our analyses are listed below in webpage format.
+They were generated from R Markdown documents deposited in the <a
+href="https://github.com/TheAcetoLab/diamantopoulou-ctc-dynamics">GitHub
+repository</a>. The workflow of the analysis was created using the <a
+href="https://cran.r-project.org/web/packages/workflowr/index.html">workflowr</a>
+R package and can be reproduced in its totality using <a
+href="https://cran.r-project.org/web/packages/workflowr/index.html">workflowr</a>
+<a
+href="https://jdblischak.github.io/workflowrBeta/reference/wflow_build.html">wflow_build</a>
+command after the installation of the proper R-packages. Session info,
+including R and package versions, was automatically included at the end
+of each analysis file.</p>
+<p>Some files containing results from differential expression or
+gene-set enrichment analyses were deposited in <a
+href="https://doi.org/10.5281/zenodo.6358987">Zenodo</a>. In order to
+generate those files again change the option <code>eval = FALSE</code>
+to <code>eval = TRUE</code> in the specific code chunk from the R
+Markdown file.</p>
+</div>
+<div id="analyses" class="section level2">
+<h2>Analyses</h2>
+<ul>
+<li><a href="0_differential_expression_gsea_gsva.html">Run differential
+gene expression analysis, GSEA and GSVA</a></li>
+<li><a href="patients_ctc_counts_distribution.html">CTC counts
+distribution in breast cancer patients</a> : Generate the radial
+histograms show the percent of single CTCs, CTC clusters and CTC-WBC
+clusters isolated during the rest or active phase in early- or
+late-stage breast cancer patients.</li>
+<li><a href="br16_pca.html">PCA analysis of CTC gene expression in
+NSG-CDX-BR16 mice</a></li>
+<li><a href="br16_dge.html">Differential gene expression report for
+NSG-CDX-BR16 data</a></li>
+<li><a href="gsea_across_models.html">Report of GSEA and GSVA analysis
+in NSG-CDX-BR16, NSG-LM2, Patient and NSG-LM2 time kinetics</a></li>
+<li><a href="core_gene_sets.html">Analysis of genes from candidate
+pathways</a></li>
+</ul>
+</div>
+<div id="paper-figures-and-tables" class="section level2">
+<h2>Paper figures and tables</h2>
+<ul>
+<li>Main figures
+<ul>
+<li><a
+href="patients_ctc_counts_distribution.html#Plot_polar_distribution">Figure
+1a</a></li>
+<li><a href="br16_pca.html#Biplot_PC4_and_PC5">Figure 3b</a></li>
+<li><a
+href="br16_dge.html#Heatmap_diferential_expression_NSG-CDX-BR16_mice">Figure
+3c</a></li>
+<li><a
+href="gsea_across_models.html#Similarity_matrix_without_row_names">Figure
+3d</a></li>
+<li><a
+href="gsea_across_models.html#GSEA_for_NSG-CDX-BR16_and_NSG-LM2">Figure
+3e</a></li>
+<li><a href="gsea_across_models.html#GSEA_for_Patient">Figure
+3f</a></li>
+<li><a
+href="gsea_across_models.html#Average_GSVA_score_across_time_series">Figure
+3g</a></li>
+</ul></li>
+<li>Extended data figures
+<ul>
+<li><a
+href="br16_pca.html#Correlation_of_PC_eigenvectors_with_metadata">Extended
+data Figure 6a</a></li>
+<li><a
+href="br16_dge.html#Correlation_DEG_single_CTC_versus_CTC_clusters_and_CTC-WBC">Extended
+data Figure 6b</a></li>
+<li><a
+href="br16_dge.html#Compare_DEG_CTC_versus_CTC_clusters_and_CTC-WBC">Extended
+data Figure 6c</a></li>
+<li><a
+href="gsea_across_models.html#Similarity_matrix_with_row_names">Extended
+data Figure 6d</a></li>
+<li><a
+href="gsea_across_models.html#GSEA_for_NSG-CDX-BR16,_NSG-LM2_and_patient">Extended
+data Figure 6e</a></li>
+<li><a
+href="gsea_across_models.html#GSVA_score_across_time_series">Extended
+data Figure 6f</a></li>
+<li><a
+href="core_gene_sets.html#Expression_distribution_of_core_circadian_genes_in_NSG-CDX-BR16">Extended
+data Figure 8a</a></li>
+<li><a
+href="core_gene_sets.html#Expression_of_TEAD_genes_in_CTCs_from_NSG-CDX-BR16">Extended
+data Figure 8b</a></li>
+<li><a
+href="core_gene_sets.html#Expression_of_receptors_activated_by_circadian_rhythm_regulated_ligands">Extended
+data Figure 9b</a></li>
+</ul></li>
+<li>Supplementary tables
+<ul>
+<li><a
+href="br16_dge.html#Genes_differentially_expressed_in_CTCs_of_NSG-CDX-BR16">Supplementary
+Table 2</a></li>
+<li><a
+href="gsea_across_models.html#NSG-CDX-BR16_GSEA_results">Supplementary
+Table 3</a></li>
+</ul></li>
+</ul>
+</div>
 
 
 <!-- Adjust MathJax settings so that all math formulae are shown using
@@ -548,6 +763,8 @@ footer is added to webpages before the MathJax javascript. -->
 
 
 
+</div>
+</div>
 
 </div>
 
@@ -585,6 +802,35 @@ $(document).ready(function () {
 });
 </script>
 
+<script>
+$(document).ready(function ()  {
+
+    // temporarily add toc-ignore selector to headers for the consistency with Pandoc
+    $('.unlisted.unnumbered').addClass('toc-ignore')
+
+    // move toc-ignore selectors from section div to header
+    $('div.section.toc-ignore')
+        .removeClass('toc-ignore')
+        .children('h1,h2,h3,h4,h5').addClass('toc-ignore');
+
+    // establish options
+    var options = {
+      selectors: "h1,h2,h3,h4",
+      theme: "bootstrap3",
+      context: '.toc-content',
+      hashGenerator: function (text) {
+        return text.replace(/[.\\/?&!#<>]/g, '').replace(/\s/g, '_');
+      },
+      ignoreSelector: ".toc-ignore",
+      scrollTo: 0
+    };
+    options.showAndHide = true;
+    options.smoothScroll = true;
+
+    // tocify
+    var toc = $("#TOC").tocify(options).data("toc-tocify");
+});
+</script>
 
 <!-- dynamically load mathjax for compatibility with self-contained -->
 <script>

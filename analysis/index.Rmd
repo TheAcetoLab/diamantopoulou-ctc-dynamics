@@ -1,11 +1,74 @@
 ---
-title: "Home"
+title: "Transcriptomic analysis of CTC at different timepoints"
+author: "Francesc Castro-Giner"
 site: workflowr::wflow_site
 output:
   workflowr::wflow_html:
-    toc: false
+    toc: true
 editor_options:
   chunk_output_type: console
 ---
 
-Welcome to my research website.
+## Publication
+
+Diamantopoulou, Z., Castro-Giner, F., Schwab F.D., Foerster C., Saini, M., Budinjas, S., Strittmatter, K., Krol, I., Seifert, B., Heinzelmann-Schwarz, V., Kurzeder, C., Rochlitz, C., Vetter, M., Weber, W.P., & Aceto N. The metastatic spread of breast cancer is accomplished during sleep time. (2022)
+
+
+## Abstract
+
+We isolated live circulating tumor cells (CTCs) from a breast cancer patient (number of CTCs = 36) and two breast cancer xenografts, NSG-CDX-BR16 (number of CTCs = 138) and NSG-LM2 (number of CTCs = 108) at different time points. Isolated CTCs were categorized into three different types : single CTC, CTC clusters and CTC-white blood cells (CTC-WBC) clusters. Amplified cDNA was prepared according to the Smart-seq2 protocol. Libraries were prepared using with Nextera XT (Illumina) and sequenced on Illumina NextSeq500 instrument in 75-bp single-read mode.
+
+
+## Data pre-processing
+
+Raw data is available at Gene Expression Omnibus (GEO, NCBI; accession number [GSE180097](https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSE180097)). Data processing is computationally expensive and is not covered in this repository. We provide description of the data pre-processing workflow together with software version in the original publication. Processed data, large result files, additional functions, references and metadata are were archived at https://doi.org/10.5281/zenodo.6358987 .
+
+
+##  Data and code availability
+
+To reproduce our analysis, first clone source code from the [GitHub repository](https://github.com/TheAcetoLab/diamantopoulou-ctc-dynamics)
+
+    git clone https://github.com/TheAcetoLab/diamantopoulou-ctc-dynamics.git
+
+Next, download processed data deposited in [Zenodo](https://doi.org/10.5281/zenodo.6358987) into the cloned project folder ./data directory and untar the files.
+
+    for file in *.tar.gz; do tar xzvf "${file}" && rm "${file}"; done
+
+## Reproducibility
+
+The results form our analyses are listed below in webpage format. They were generated from R Markdown documents deposited in the [GitHub repository](https://github.com/TheAcetoLab/diamantopoulou-ctc-dynamics). The workflow of the analysis was created using the [workflowr](https://cran.r-project.org/web/packages/workflowr/index.html) R package and can be reproduced in its totality using [workflowr](https://cran.r-project.org/web/packages/workflowr/index.html) [wflow_build](https://jdblischak.github.io/workflowrBeta/reference/wflow_build.html) command after the installation of the proper R-packages. Session info, including R and package versions, was automatically included at the end of each analysis file.
+
+Some files containing results from differential expression or gene-set enrichment analyses were deposited in [Zenodo](https://doi.org/10.5281/zenodo.6358987). In order to generate those files again change the option `eval = FALSE` to `eval = TRUE` in the specific code chunk from the R Markdown file.
+
+## Analyses
+
+-   [Run differential gene expression analysis, GSEA and GSVA](0_differential_expression_gsea_gsva.html)
+-   [CTC counts distribution in breast cancer patients](patients_ctc_counts_distribution.html) : Generate the radial histograms show the percent of single CTCs, CTC clusters and CTC-WBC clusters isolated during the rest or active phase in early- or late-stage breast cancer patients.
+-   [PCA analysis of CTC gene expression in NSG-CDX-BR16 mice](br16_pca.html)
+-   [Differential gene expression report for NSG-CDX-BR16 data](br16_dge.html)
+-   [Report of GSEA and GSVA analysis in NSG-CDX-BR16, NSG-LM2, Patient and NSG-LM2 time kinetics](gsea_across_models.html)
+-   [Analysis of genes from candidate pathways](core_gene_sets.html)
+
+## Paper figures and tables
+
+-   Main figures
+    -   [Figure 1a](patients_ctc_counts_distribution.html#Plot_polar_distribution)
+    -   [Figure 3b](br16_pca.html#Biplot_PC4_and_PC5)
+    -   [Figure 3c](br16_dge.html#Heatmap_diferential_expression_NSG-CDX-BR16_mice)
+    -   [Figure 3d](gsea_across_models.html#Similarity_matrix_without_row_names)
+    -   [Figure 3e](gsea_across_models.html#GSEA_for_NSG-CDX-BR16_and_NSG-LM2)
+    -   [Figure 3f](gsea_across_models.html#GSEA_for_Patient)
+    -   [Figure 3g](gsea_across_models.html#Average_GSVA_score_across_time_series)
+-   Extended data figures
+    -   [Extended data Figure 6a](br16_pca.html#Correlation_of_PC_eigenvectors_with_metadata)
+    -   [Extended data Figure 6b](br16_dge.html#Correlation_DEG_single_CTC_versus_CTC_clusters_and_CTC-WBC)
+    -   [Extended data Figure 6c](br16_dge.html#Compare_DEG_CTC_versus_CTC_clusters_and_CTC-WBC)
+    -   [Extended data Figure 6d](gsea_across_models.html#Similarity_matrix_with_row_names)
+    -   [Extended data Figure 6e](gsea_across_models.html#GSEA_for_NSG-CDX-BR16,_NSG-LM2_and_patient)
+    -   [Extended data Figure 6f](gsea_across_models.html#GSVA_score_across_time_series)
+    -   [Extended data Figure 8a](core_gene_sets.html#Expression_distribution_of_core_circadian_genes_in_NSG-CDX-BR16)
+    -   [Extended data Figure 8b](core_gene_sets.html#Expression_of_TEAD_genes_in_CTCs_from_NSG-CDX-BR16)
+    -   [Extended data Figure 9b](core_gene_sets.html#Expression_of_receptors_activated_by_circadian_rhythm_regulated_ligands)
+-   Supplementary tables
+    -   [Supplementary Table 2](br16_dge.html#Genes_differentially_expressed_in_CTCs_of_NSG-CDX-BR16)
+    -   [Supplementary Table 3](gsea_across_models.html#NSG-CDX-BR16_GSEA_results)

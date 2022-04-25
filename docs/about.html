@@ -250,64 +250,10 @@ $(document).ready(function () {
       </ul>
       <ul class="nav navbar-nav navbar-right">
         <li>
-  <a href="index.html">
-    <span class="fa fa-home"></span>
-     
-    Home
-  </a>
-</li>
-<li>
-  <a href="about.html">
-    <span class="fa fa-info"></span>
-     
-    About
-  </a>
-</li>
-<li class="dropdown">
-  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
-    <span class="fa fa-bar-chart"></span>
-     
-    Analyses
-     
-    <span class="caret"></span>
-  </a>
-  <ul class="dropdown-menu" role="menu">
-    <li class="dropdown-header">Data generation</li>
-    <li>
-      <a href="0_differential_expression_gsea_gsva.html">Run differential gene expression analysis, GSEA and GSVA</a>
-    </li>
-    <li class="divider"></li>
-    <li class="dropdown-header">Main results</li>
-    <li>
-      <a href="patients_ctc_counts_distribution.html">CTC counts distribution in breast cancer patients</a>
-    </li>
-    <li>
-      <a href="br16_pca.html">PCA analysis of CTC gene expression in NSG-CDX-BR16 mice</a>
-    </li>
-    <li>
-      <a href="br16_dge.html">Differential gene expression report for NSG-CDX-BR16 data</a>
-    </li>
-    <li>
-      <a href="gsea_across_models.html">Report of GSEA and GSVA analysis in NSG-CDX-BR16, NSG-LM2, Patient and NSG-LM2 time kinetics</a>
-    </li>
-    <li>
-      <a href="core_gene_sets.html">Analysis of genes from candidate pathways</a>
-    </li>
-  </ul>
-</li>
-<li>
-  <a href="license.html">License</a>
-</li>
-<li>
-  <a href="https://github.com/TheAcetoLab/diamantopoulou-ctc-circadian">
+  <a href="https://github.com/TheAcetoLab/diamantopoulou-ctc-dynamics">
     <span class="fa fa-github"></span>
      
-  </a>
-</li>
-<li>
-  <a href="https://www.theacetolab.com">
-    <span class="fa fa-flask"></span>
-     
+    Source code
   </a>
 </li>
       </ul>
@@ -335,7 +281,7 @@ $(document).ready(function () {
 <p>
 <button type="button" class="btn btn-default btn-workflowr btn-workflowr-report" data-toggle="collapse" data-target="#workflowr-report">
 <span class="glyphicon glyphicon-list" aria-hidden="true"></span>
-workflowr <span class="glyphicon glyphicon-ok text-success"
+workflowr <span class="glyphicon glyphicon-exclamation-sign text-danger"
 aria-hidden="true"></span>
 </button>
 </p>
@@ -346,8 +292,8 @@ aria-hidden="true"></span>
 </li>
 <li>
 <a data-toggle="tab" href="#checks"> Checks <span
-class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span>
-</a>
+class="glyphicon glyphicon-exclamation-sign text-danger"
+aria-hidden="true"></span> </a>
 </li>
 <li>
 <a data-toggle="tab" href="#versions">Past versions</a>
@@ -356,13 +302,13 @@ class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span>
 <div class="tab-content">
 <div id="summary" class="tab-pane fade in active">
 <p>
-<strong>Last updated:</strong> 2022-04-25
+<strong>Last updated:</strong> 2022-04-26
 </p>
 <p>
 <strong>Checks:</strong> <span
-class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> 2
+class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> 1
 <span class="glyphicon glyphicon-exclamation-sign text-danger"
-aria-hidden="true"></span> 0
+aria-hidden="true"></span> 1
 </p>
 <p>
 <strong>Knit directory:</strong>
@@ -386,31 +332,36 @@ versions</em> tab lists the development history.
 <div class="panel panel-default">
 <div class="panel-heading">
 <p class="panel-title">
-<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRMarkdownfilestronguptodate">
-<span class="glyphicon glyphicon-ok text-success"
-aria-hidden="true"></span> <strong>R Markdown file:</strong> up-to-date
-</a>
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRMarkdownfilestronguncommittedchanges">
+<span class="glyphicon glyphicon-exclamation-sign text-danger"
+aria-hidden="true"></span> <strong>R Markdown file:</strong> uncommitted
+changes </a>
 </p>
 </div>
-<div id="strongRMarkdownfilestronguptodate"
+<div id="strongRMarkdownfilestronguncommittedchanges"
 class="panel-collapse collapse">
 <div class="panel-body">
-<p>Great! Since the R Markdown file has been committed to the Git
-repository, you know the exact version of the code that produced these
-results.</p>
+<p>The R Markdown file has unstaged changes. To know which version of
+the R Markdown file created these results, you’ll want to first commit
+it to the Git repo. If you’re still working on the analysis, you can
+ignore this warning. When you’re finished, you can run
+<code>wflow_publish</code> to commit the R Markdown file and build the
+HTML.</p>
 </div>
 </div>
 </div>
 <div class="panel panel-default">
 <div class="panel-heading">
 <p class="panel-title">
-<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRepositoryversionstrong4277859">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRepositoryversionstrongahrefhttpsgithubcomTheAcetoLabdiamantopoulouctcdynamicstree1977b53e4d40004cf0f6614f84a58778a97e0d50targetblank1977b53a">
 <span class="glyphicon glyphicon-ok text-success"
-aria-hidden="true"></span> <strong>Repository version:</strong> 4277859
+aria-hidden="true"></span> <strong>Repository version:</strong>
+<a href="https://github.com/TheAcetoLab/diamantopoulou-ctc-dynamics/tree/1977b53e4d40004cf0f6614f84a58778a97e0d50" target="_blank">1977b53</a>
 </a>
 </p>
 </div>
-<div id="strongRepositoryversionstrong4277859"
+<div
+id="strongRepositoryversionstrongahrefhttpsgithubcomTheAcetoLabdiamantopoulouctcdynamicstree1977b53e4d40004cf0f6614f84a58778a97e0d50targetblank1977b53a"
 class="panel-collapse collapse">
 <div class="panel-body">
 <p>
@@ -419,7 +370,8 @@ and connecting the code version to the results is critical for
 reproducibility.
 </p>
 <p>
-The results in this page were generated with repository version 4277859.
+The results in this page were generated with repository version
+<a href="https://github.com/TheAcetoLab/diamantopoulou-ctc-dynamics/tree/1977b53e4d40004cf0f6614f84a58778a97e0d50" target="_blank">1977b53</a>.
 See the <em>Past versions</em> tab to see a history of the changes made
 to the R Markdown and HTML files.
 </p>
@@ -438,13 +390,27 @@ Ignored files:
     Ignored:    .Rproj.user/
 
 Untracked files:
+    Untracked:  analysis/0_differential_expression_gsea_gsva.Rmd
+    Untracked:  analysis/0_differential_expression_gsea_gsva.md
     Untracked:  analysis/about.md
+    Untracked:  analysis/br16_dge.Rmd
+    Untracked:  analysis/br16_pca.Rmd
+    Untracked:  analysis/core_gene_sets.Rmd
+    Untracked:  analysis/gsea_across_models.Rmd
     Untracked:  analysis/index.md
     Untracked:  analysis/license.md
+    Untracked:  analysis/patients_ctc_counts_distribution.Rmd
+    Untracked:  code/R-functions/
+    Untracked:  configuration/
+    Untracked:  data/differential_expression/
+    Untracked:  data/patients/
+    Untracked:  data/resources/
+    Untracked:  data/sce/
 
 Unstaged changes:
-    Modified:   README.md
-    Modified:   analysis/_site.yml
+    Modified:   analysis/about.Rmd
+    Modified:   analysis/index.Rmd
+    Modified:   analysis/license.Rmd
 
 </code></pre>
 <p>
@@ -494,7 +460,24 @@ Message
 html
 </td>
 <td>
-4277859
+<a href="https://rawcdn.githack.com/TheAcetoLab/diamantopoulou-ctc-dynamics/a1ff2cdd3eeea7b524377b7838d06d6025710b7a/docs/about.html" target="_blank">a1ff2cd</a>
+</td>
+<td>
+fcg-bio
+</td>
+<td>
+2022-04-25
+</td>
+<td>
+Build site.
+</td>
+</tr>
+<tr>
+<td>
+html
+</td>
+<td>
+<a href="https://rawcdn.githack.com/TheAcetoLab/diamantopoulou-ctc-dynamics/4277859c29b16dbb3e8abaa66d86e268df0a820e/docs/about.html" target="_blank">4277859</a>
 </td>
 <td>
 fcg-bio
@@ -511,7 +494,7 @@ Build site.
 Rmd
 </td>
 <td>
-d9e45e9
+<a href="https://github.com/TheAcetoLab/diamantopoulou-ctc-dynamics/blob/d9e45e9aab7c5c0ec86bc50c9a7f493aeab82662/analysis/about.Rmd" target="_blank">d9e45e9</a>
 </td>
 <td>
 fcg-bio
@@ -530,7 +513,62 @@ Start workflowr project.
 </div>
 </div>
 </div>
-<p>Describe your project.</p>
+<div
+id="the-metastatic-spread-of-breast-cancer-is-accomplished-during-sleep-time"
+class="section level2">
+<h2>The metastatic spread of breast cancer is accomplished during sleep
+time</h2>
+<p><strong>Abstract</strong></p>
+<p>The metastatic spread of cancer is achieved by the hematogenous
+dissemination of circulating tumor cells (CTCs). Generally, however, the
+temporal dynamics that dictate the generation of metastasis-competent
+CTCs are largely uncharacterized, often assuming that CTCs are
+constantly shed from growing tumors or shed as a consequence of
+mechanical insults. Here, we observe a striking and unexpected pattern
+of CTC generation dynamics in both patients with breast cancer and mouse
+models, highlighting that the vast majority of spontaneous CTC
+intravasation events occur during the rest phase. Further, we
+demonstrate that rest-phase CTCs are highly metastasis-prone, while CTCs
+generated during active phase are devoid of metastatic potential.
+Mechanistically, single cell-resolution RNA sequencing analysis of CTCs
+reveals a dramatic upregulation of mitotic genes exclusively during the
+rest phase in both patients and mouse models, leading to metastasis
+proficiency. Systemically, we find that key circadian rhythm hormones
+such as melatonin, testosterone and glucocorticoids dictate CTC
+generation dynamics, and as a consequence, that insulin directly
+promotes tumor cell proliferation in vivo, yet in a time-dependent
+manner. Thus, the spontaneous generation of CTCs with a high proclivity
+to metastasize does not occur continuously but it is concentrated within
+the rest phase of the host, providing a new rationale for
+time-controlled interrogation and treatment of metastasis-prone
+cancers.</p>
+<p><strong>Authors</strong></p>
+<p>Zoi Diamantopoulou<sup>1</sup>, Francesc Castro-Giner<sup>1</sup>,
+Fabienne Dominique Schwab<sup>2,3</sup>, Christiane
+Foerster<sup>4</sup>, Massimo Saini<sup>1</sup>, Selina
+Budinjas<sup>1</sup>, Karin Strittmatter<sup>1</sup>, Ilona
+Krol<sup>1</sup>, Bettina Seifert<sup>5</sup>, Viola
+Heinzelmann-Schwarz<sup>3</sup>, Christian Kurzeder<sup>3</sup>,
+Christoph Rochlitz<sup>6</sup>, Marcus Vetter<sup>5</sup>, Walter Paul
+Weber<sup>4</sup>, &amp; Nicola Aceto<sup>1,*</sup>.</p>
+<p><sup>1</sup> Department of Biology, Institute of Molecular Health
+Sciences, Swiss Federal Institute of Technology (ETH) Zurich, 8093
+Zurich, Switzerland</p>
+<p><sup>2</sup> Department of Biomedicine, University of Basel, 4058
+Basel, Switzerland</p>
+<p><sup>3</sup> Department of Gynecologic Oncology, University Hospital
+Basel, 4031 Basel, Switzerland</p>
+<p><sup>4</sup> Breast Care Center, University Hospital Basel, 4031
+Basel, Switzerland</p>
+<p><sup>5</sup> Department of Hematology and Oncology, Cantonal Hospital
+Basel-Land, 4410 Liestal, Switzerland</p>
+<p><sup>6</sup> Department of Medical Oncology, University Hospital
+Basel, 4031 Basel, Switzerland</p>
+<p>*Corresponding author</p>
+</div>
+<div id="citation" class="section level2">
+<h2>Citation</h2>
+</div>
 
 
 <!-- Adjust MathJax settings so that all math formulae are shown using

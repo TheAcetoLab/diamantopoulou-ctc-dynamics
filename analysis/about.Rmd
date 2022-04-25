@@ -7,4 +7,29 @@ editor_options:
   chunk_output_type: console
 ---
 
-Describe your project.
+## The metastatic spread of breast cancer is accomplished during sleep time
+
+**Abstract**
+
+The metastatic spread of cancer is achieved by the hematogenous dissemination of circulating tumor cells (CTCs). Generally, however, the temporal dynamics that dictate the generation of metastasis-competent CTCs are largely uncharacterized, often assuming that CTCs are constantly shed from growing tumors or shed as a consequence of mechanical insults. Here, we observe a striking and unexpected pattern of CTC generation dynamics in both patients with breast cancer and mouse models, highlighting that the vast majority of spontaneous CTC intravasation events occur during the rest phase. Further, we demonstrate that rest-phase CTCs are highly metastasis-prone, while CTCs generated during active phase are devoid of metastatic potential. Mechanistically, single cell-resolution RNA sequencing analysis of CTCs reveals a dramatic upregulation of mitotic genes exclusively during the rest phase in both patients and mouse models, leading to metastasis proficiency. Systemically, we find that key circadian rhythm hormones such as melatonin, testosterone and glucocorticoids dictate CTC generation dynamics, and as a consequence, that insulin directly promotes tumor cell proliferation in vivo, yet in a time-dependent manner. Thus, the spontaneous generation of CTCs with a high proclivity to metastasize does not occur continuously but it is concentrated within the rest phase of the host, providing a new rationale for time-controlled interrogation and treatment of metastasis-prone cancers.
+
+**Authors**
+
+Zoi Diamantopoulou<sup>1</sup>, Francesc Castro-Giner<sup>1</sup>, Fabienne Dominique Schwab<sup>2,3</sup>, Christiane Foerster<sup>4</sup>, Massimo Saini<sup>1</sup>, Selina Budinjas<sup>1</sup>, Karin Strittmatter<sup>1</sup>, Ilona Krol<sup>1</sup>, Bettina Seifert<sup>5</sup>, Viola Heinzelmann-Schwarz<sup>3</sup>, Christian Kurzeder<sup>3</sup>, Christoph Rochlitz<sup>6</sup>, Marcus Vetter<sup>5</sup>, Walter Paul Weber<sup>4</sup>, & Nicola Aceto<sup>1,*</sup>.
+
+<sup>1</sup> Department of Biology, Institute of Molecular Health Sciences, Swiss Federal Institute of Technology (ETH) Zurich, 8093 Zurich, Switzerland
+
+<sup>2</sup> Department of Biomedicine, University of Basel, 4058 Basel, Switzerland
+
+<sup>3</sup> Department of Gynecologic Oncology, University Hospital Basel, 4031 Basel, Switzerland
+
+<sup>4</sup> Breast Care Center, University Hospital Basel, 4031 Basel, Switzerland
+
+<sup>5</sup> Department of Hematology and Oncology, Cantonal Hospital Basel-Land, 4410 Liestal, Switzerland
+
+<sup>6</sup> Department of Medical Oncology, University Hospital Basel, 4031 Basel, Switzerland
+
+*Corresponding author
+
+
+## Citation
