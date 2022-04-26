@@ -127,8 +127,7 @@ gse_gsea_br16$GSEA$msigdb.c2.cp.c5.bp@result %>%
             extensions = 'Buttons', 
             options = list(
               dom = 'Blfrtip',
-              buttons = c('csv', 'excel'),
-              title = paste('', params$prefix)
+              buttons = c('csv', 'excel')
               ))
 
 ```
@@ -366,6 +365,119 @@ gsea_comb <- gsea_comb %>%
   mutate(ID = factor(ID, levels = rev(use_gsets)))
 ```
 
+### Table differential expression in NSG-LM2
+```{r lm2-dge-table}
+dge_lm2$results %>% 
+  dplyr::select(gene_name, gene_type, logFC, logCPM, PValue, FDR, description) %>% 
+  rownames_to_column('Ensemble ID') %>% 
+  mutate(
+    logFC = round(logFC, 2),
+    logCPM = round(logCPM, 2),
+    PValue = format.pval(PValue, digits = 2),
+    FDR = format.pval(FDR, digits = 2),
+    description = gsub(" \\[.*\\]", "", description)
+  ) %>% 
+  dplyr::rename(
+    `Gene name` = gene_name,
+    `Gene type` = gene_type
+  ) %>% 
+  datatable(., 
+            rownames = FALSE, 
+            filter = 'top', 
+            caption = 'Differential expression analysis in CTCs of NSG-LM2 mice during the rest phase versus active phase.',
+            extensions = 'Buttons', 
+            options = list(
+              dom = 'Blfrtip',
+              buttons = c('csv', 'excel')
+              ))
+```
+
+### Table GSEA in NSG-LM2
+```{r lm2-gsea-table}
+gsea_lm2@result %>% 
+  dplyr::select(ID, setSize, enrichmentScore, NES, pvalue, p.adjust, leading_edge, core_enrichment) %>% 
+  mutate(
+    NES = round(NES, 2),
+    pvalue = format.pval(pvalue, digits = 2),
+    p.adjust = format.pval(p.adjust, digits = 2)
+  ) %>% 
+  rename(
+    `Term ID` = ID,
+    `Set size` = setSize,
+    `Enrichment score` = enrichmentScore,
+    `P value` = pvalue,
+    `Adjusted P value` = p.adjust,
+    `Leading edge` = leading_edge, 
+    `Core enrichment` = core_enrichment
+  ) %>% 
+  datatable(., 
+            rownames = FALSE, 
+            filter = 'top', 
+            caption = 'Gene set enrichment analysis in CTCs of NSG-LM2 mice during the rest phase versus active phase. Only enriched gene sets from NSG-CDX-BR16 were analysed.',
+            extensions = 'Buttons', 
+            options = list(
+              dom = 'Blfrtip',
+              buttons = c('csv', 'excel')
+              ))
+```
+
+
+### Table differential expression in Patient
+```{r patient-dge-table}
+dge_patient$results %>% 
+  dplyr::select(gene_name, gene_type, logFC, logCPM, PValue, FDR, description) %>% 
+  rownames_to_column('Ensemble ID') %>% 
+  mutate(
+    logFC = round(logFC, 2),
+    logCPM = round(logCPM, 2),
+    PValue = format.pval(PValue, digits = 2),
+    FDR = format.pval(FDR, digits = 2),
+    description = gsub(" \\[.*\\]", "", description)
+  ) %>% 
+  dplyr::rename(
+    `Gene name` = gene_name,
+    `Gene type` = gene_type
+  ) %>% 
+  datatable(., 
+            rownames = FALSE, 
+            filter = 'top', 
+            caption = 'Differential expression analysis in CTCs of breast cancer patient during the rest phase versus active phase.',
+            extensions = 'Buttons', 
+            options = list(
+              dom = 'Blfrtip',
+              buttons = c('csv', 'excel')
+              ))
+```
+
+### Table GSEA in Patient
+```{r patient-gsea-table}
+gsea_patient@result %>% 
+  dplyr::select(ID, setSize, enrichmentScore, NES, pvalue, p.adjust, leading_edge, core_enrichment) %>% 
+  mutate(
+    NES = round(NES, 2),
+    pvalue = format.pval(pvalue, digits = 2),
+    p.adjust = format.pval(p.adjust, digits = 2)
+  ) %>% 
+  rename(
+    `Term ID` = ID,
+    `Set size` = setSize,
+    `Enrichment score` = enrichmentScore,
+    `P value` = pvalue,
+    `Adjusted P value` = p.adjust,
+    `Leading edge` = leading_edge, 
+    `Core enrichment` = core_enrichment
+  ) %>% 
+  datatable(., 
+            rownames = FALSE, 
+            filter = 'top', 
+            caption = 'Gene set enrichment analysis in CTCs of breast cancer patient during the rest phase versus active phase. Only enriched gene sets from NSG-CDX-BR16 were analysed.',
+            extensions = 'Buttons', 
+            options = list(
+              dom = 'Blfrtip',
+              buttons = c('csv', 'excel')
+              ))
+```
+
 ## GSEA for NSG-CDX-BR16 and NSG-LM2
 Plot comparing the normalized enrichment score (NES) and adjusted P value (dot size) obtained using GSEA for gene sets shown in “d”. Left and right panels show the results for NSG-CDX-BR16 and NSG-LM2 models, respectively. Gene sets with an adjusted P value ≤ 0.05 in each sample set are highlighted in red.
 
@@ -518,7 +630,7 @@ use_gsets_cat <- ifelse(use_gsets_nes < 0, 'Translation', 'Cell division') %>% f
 use_gmt_gsets <- read.gmt(gmt_files_symbols$msigdb.c2.cp.c5.bp)
 use_gmt_gsets <- use_gmt_gsets %>% filter(term %in% use_gsets)
 
-# Remove 06000 samples
+# Remove 06000 samples, only one replicate
 use_samples <- intersect(colnames(gsva_res), use_sce[,use_sce$timepoint!='0600']$sample_alias)
 
 # limma
@@ -539,7 +651,7 @@ limma_res$Term_cat <- use_gsets_cat[limma_res$Term]
 ```
 
 Additional objects for plotting
-```{r}
+```{r lm2tk-plot_obj}
 coldata_ord <- colData(use_sce) %>% data.frame %>% arrange(zt, sample_type)
 gsva_mat <- gsva_res[use_gsets, coldata_ord$sample_alias]
 gsva_df <- gsva_mat %>% data.frame %>% 
@@ -566,6 +678,35 @@ gsva_avg_mat <- gsva_avg_df %>%
   as.matrix
 
 gsva_avg_mat <- gsva_avg_mat[clean_msigdb_names(use_gsets),]
+```
+
+### GSVA table of results
+```{r lm2tk-dgse-table}
+gsva_res_sel %>% 
+  as.data.frame %>% 
+  rownames_to_column('Term') %>% 
+  left_join(limma_res) %>% 
+  mutate(
+    P.Value = format.pval(P.Value, digits = 2),
+    adj.P.Val = format.pval(adj.P.Val, digits = 2)
+  ) %>% 
+  dplyr::select(Term, Term_cat,AveExpr:adj.P.Val, LM2_Clusters_0200_1:LM2_WBC_2200_1) %>% 
+  rename(
+    `Term ID` = Term,
+    `Category` = Term_cat,
+    `Average GSVA score` = AveExpr,
+    `P value` = P.Value,
+    `Adjusted P value` = adj.P.Val,
+  ) %>% 
+  datatable(., 
+            rownames = FALSE, 
+            filter = 'top', 
+            caption = 'Results from differential enrichment across timepoints of NSG-LM2 time kinetics experiment. Only enriched gene sets from NSG-CDX-BR16 were reported. The F statistic and the corresponding P value combine the pair-wise comparisons between all the time points in the experiment with more than three replicates. GSVA scores for each individual sample are listed at the end of the table.',
+            extensions = 'Buttons', 
+            options = list(
+              dom = 'Blfrtip',
+              buttons = c('csv', 'excel')
+              ))
 ```
 
 ### GSVA across time series
