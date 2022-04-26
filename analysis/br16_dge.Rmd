@@ -60,7 +60,7 @@ dge_single <- readRDS(file.path(params$dge_dir,'br16-ctc_single', 'dge_edgeR_QLF
 ```
 
 ## Genes differentially expressed in CTCs of NSG-CDX-BR16
-Genes differentially expressed in CTCs of NSG-CDX-BR16 mice during the rest phase versus active phase. Table listing the differentially expressed genes comparing CTCs obtained in the rest phase (n = 65) versus the active phase (n = 73) of NSG-CDX-BR16 mice. All genes evaluated are included in the table (n = 12,261). For fold-change calculation, active phase samples were used in the denominator.
+**Genes differentially expressed in CTCs of NSG-CDX-BR16 mice during the rest phase versus active phase**. Table listing the differentially expressed genes comparing CTCs obtained in the rest phase (n = 65) versus the active phase (n = 73) of NSG-CDX-BR16 mice. All genes evaluated are included in the table (n = 12,261). Fold-change and *P* values were computed with the quasi-likelihood (QL) approach from edgeR using robust dispersion estimates. For fold-change calculation, active phase samples were used in the denominator.
 
 ```{r table-dge-br16}
 dge_all$results %>% 
@@ -101,7 +101,6 @@ n_up <- dge$results %>% filter(FDR <= 0.05 & logFC >= 0.5) %>% nrow
 n_down <- dge$results %>% filter(FDR <= 0.05 & logFC <= -0.5) %>% nrow
 expr_values <- logcounts(use_sce[use_genes,])
 heat_values <- t(apply(expr_values, 1, scale, center = TRUE, scale = TRUE)) # Z-score
-# heat_values <- expr_values - rowMeans2(expr_values)
 rownames(heat_values) <- use_genes_name
 colnames(heat_values) <- colnames(expr_values)
 
@@ -122,7 +121,6 @@ ha_top <- HeatmapAnnotation(
   simple_anno_size = unit(3, "mm")
   )
 
-# zlim <- c(-max(abs(heat_values)), max(abs(heat_values)))
 zlim <- c(-3, 3)
 heat_values[heat_values < zlim[1]] <- zlim[1]
 heat_values[heat_values > zlim[2]] <- zlim[2]
@@ -167,7 +165,6 @@ n_up <- dge$results %>% filter(FDR <= 0.05 & logFC >= 0.5) %>% nrow
 n_down <- dge$results %>% filter(FDR <= 0.05 & logFC <= -0.5) %>% nrow
 expr_values <- logcounts(use_sce[use_genes,])
 heat_values <- t(apply(expr_values, 1, scale, center = TRUE, scale = TRUE)) # Z-score
-# heat_values <- expr_values - rowMeans2(expr_values)
 rownames(heat_values) <- use_genes_name
 colnames(heat_values) <- colnames(expr_values)
 
@@ -188,7 +185,6 @@ ha_top <- HeatmapAnnotation(
   simple_anno_size = unit(3, "mm")
   )
 
-# zlim <- c(-max(abs(heat_values)), max(abs(heat_values)))
 zlim <- c(-3, 3)
 heat_values[heat_values < zlim[1]] <- zlim[1]
 heat_values[heat_values > zlim[2]] <- zlim[2]
@@ -228,7 +224,7 @@ Heatmap(
 ```
 
 ## Correlation DEG single CTC versus CTC clusters and CTC-WBC
-Scatter plot showing the correlation of the fold-change between active and rest phase in single CTC (Y-axis) versus CTC clusters and CTC-WBC (X-axis), using genes with FDR ≤ 0.05 in any of the two sets (two-sided Pearson’s correlation coefficient 0.57, P value ≤ 2.22e-16). Points are colored according to the dataset where they were found with a FDR ≤ 0.05 (both, single CTC or CTC clusters and CTC-WBC clusters). The dashed red line represents the linear regression line using all the points in the plot.
+Scatter plot showing the correlation of the fold-change between active and rest phase in single CTC (Y-axis) versus CTC clusters and CTC-WBC (X-axis), using genes with *FDR* ≤ 0.05 in any of the two sets (two-sided Pearson’s correlation coefficient 0.57, *P* value ≤ 2.22e-16). Points are colored according to the dataset where they were found with a *FDR* ≤ 0.05 (both, single CTC or CTC clusters and CTC-WBC clusters). The dashed *red* line represents the linear regression line using all the points in the plot.
 
 ```{r br16_single_vs_cluster_g_fc_corr, fig.asp = 0.81}
 # Fold-change correlation
@@ -248,17 +244,14 @@ data_corrset <- res_cl %>% left_join(res_s, by = 'feature', suffix = c(".cl", ".
 # Generate plot
 maxlogFC <- max(abs(c(data_corrset$logFC.cl, data_corrset$logFC.s)), na.rm = TRUE)
 use_palette <- c('#1b9e77', '#e6ab02', '#7570b3') %>% set_names(data_corrset$sign %>% levels)
-# data_labels <- data_corrset %>% filter(sign != 'CTC cluster and CTC-WBC cluster')
 fc_plot <- data_corrset %>% 
   ggplot(aes(logFC.cl,logFC.s, color = sign, label = gene_name)) +
   geom_point(size = 2, alpha = 0.3) +
   geom_hline(yintercept = 0, lty = 3, color = 'grey80') +
   geom_vline(xintercept = 0, lty = 3, color = 'grey80') +
   geom_smooth(method = lm, se = FALSE, inherit.aes = FALSE, aes(logFC.cl, logFC.s), color = 'firebrick', lty = 2, fullrange = TRUE, size = 0.5) +
-  # geom_text_repel(data = data_labels, aes(label = gene_name), color = 'black', size=geom_text_size, box.padding = 0.1) +
   geom_point(size = 2, alpha = 1, pch = 16, data = data_corrset[data_corrset$sign != 'CTC clusters and CTC-WBC clusters', ]) +
   scale_color_manual(values = use_palette) +
-  # scale_color_brewer(palette = 'Dark2') +
   xlim(c(-maxlogFC, maxlogFC)) +
   ylim(c(-maxlogFC, maxlogFC)) +
   labs(
@@ -272,7 +265,6 @@ fc_plot_2_legend <- data_corrset %>%
   ggplot(aes(logFC.s,logFC.cl, color = sign, label = gene_name)) +
   geom_point(size = 1.5, alpha = 0.8) +
   scale_color_manual(values = use_palette)
-  # scale_color_brewer(palette = 'Dark2') 
 
 fc_plot + theme(legend.position = "none")
 ```
@@ -285,7 +277,7 @@ grid.draw(legend)
 ```
 
 ## Compare DEG CTC versus CTC clusters and CTC-WBC
-Bar plot showing the number of differentially expressed genes (absolute log2 fold change ≥ 0.5 and FDR ≤ 0.05) using all the samples (‘All’), using clustered CTCs (CTC clusters and CTC-WBC clusters) and using single CTCs.
+Bar plot showing the number of differentially expressed genes (absolute log2 fold change ≥ 0.5 and *FDR* ≤ 0.05) using all the samples (‘All’), using clustered CTCs (CTC clusters and CTC-WBC clusters) and using single CTCs.
 ```{r br16_single_vs_cluster_g_ngenes_barplot}
 results_comb <- rbind(
   dge_all$results %>% filter(FDR <= 0.05 & abs(logFC) >= 0.5) %>% mutate(sample_set = 'All'),

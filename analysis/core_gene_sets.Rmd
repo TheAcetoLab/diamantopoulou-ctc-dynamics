@@ -101,7 +101,7 @@ use_dge <- use_dge %>%
 ```
 
 ### Expression distribution of core circadian genes in NSG-CDX-BR16
-Plot showing the expression distribution of core circadian genes in CTCs from NSG-CDX-BR16 mice. The fold change (FC, in log2 scale) and P value from the differential expression analysis are shown for each gene.
+Plot showing the expression distribution of core circadian genes in CTCs from NSG-CDX-BR16 mice. The fold change (FC, in log2 scale) and *P* value from the differential expression analysis are shown for each gene.
 ```{r circadian_expression_levels_by_timepoint, fig.width = 7.2, fig.asp = 0.75}
 expr_long <- logcounts(use_sce) %>% data.frame %>% rownames_to_column('gene') %>% pivot_longer(-gene, names_to = 'sample_alias', values_to = 'exprs')
 use_data <- colData(use_sce) %>% 
@@ -186,7 +186,7 @@ ggplot(avg_counts, aes(x = median_expr)) +
 
 
 ## Expression of TEAD genes in CTCs from NSG-CDX-BR16
-Plot showing the expression distribution of TEAD genes in CTCs from NSG-CDX-BR16 mice. The fold change (FC, in log2 scale) and P value from the differential expression analysis are shown for each gene.
+Plot showing the expression distribution of TEAD genes in CTCs from NSG-CDX-BR16 mice. The fold change (FC, in log2 scale) and *P* value from the differential expression analysis are shown for each gene.
 ```{r tead_expression_levels_by_timepoint, fig.width=5}
 use_sce <- sce_br16
 use_dge <- dge_br16

@@ -119,7 +119,6 @@ ctc_dist_plot_early <- use_data_to_plot %>%
   annotate("text", x = rep(grid_data$end + 3 ,5), y = c(0, 0.25, 0.50, 0.75, 1), label = c('0%', '25%', '50%', '75%', '100%') , color="black", size=geom_text_size , angle=0, fontface="plain", hjust=1) +
   geom_bar(stat="identity", position = "fill", width=0.8, color = 'white', size = 0.2) +
   scale_fill_manual(values = timepoint_sample_type_legend_palette_2) +
-  # scale_y_continuous(breaks = seq(0 , 1, 0.1), minor_breaks = seq(0 , 1, 0.1)) +
   ylim(-0.5, 1.5) +
   labs (fill = '') +
   theme(
@@ -130,8 +129,7 @@ ctc_dist_plot_early <- use_data_to_plot %>%
     panel.grid = element_blank(),
     plot.margin = unit(rep(-1,4), "cm")
   ) +
-  coord_polar(start = 0) #+
-  # geom_text(data=label_data, aes(x=id, y=1+0.1, label=donor, hjust=hjust), color="black", fontface="plain",alpha=0.6, size=geom_text_size, angle= label_data$angle, inherit.aes = FALSE )
+  coord_polar(start = 0)
 ```
 
 ## Setup polar plot early status
@@ -155,7 +153,6 @@ use_data_to_plot <- rbind(
 
 
 ctc_dist_plot_late <- use_data_to_plot %>% 
-  # mutate(donor = fct_reorder(donor, t)) %>% 
   ggplot(aes(x = donor, y = p, fill = timepoint_sample_type_legend, label = donor)) +
   geom_bar(stat="identity", position = "fill", width=0.8, size = 0.2) +
   # Add a val=100/75/50/25 lines. I do it at the beginning to make sur barplots are OVER it.
@@ -168,7 +165,6 @@ ctc_dist_plot_late <- use_data_to_plot %>%
   annotate("text", x = rep(grid_data$end + 2 ,5), y = c(0, 0.25, 0.50, 0.75, 1), label = c('0%', '25%', '50%', '75%', '100%') , color="black", size=geom_text_size , angle=0, fontface="plain", hjust=1) +
   geom_bar(stat="identity", position = "fill", width=0.8, color = 'white', size = 0.2) +
   scale_fill_manual(values = timepoint_sample_type_legend_palette_2) +
-  # scale_y_continuous(breaks = seq(0 , 1, 0.1), minor_breaks = seq(0 , 1, 0.1)) +
   ylim(-0.5, 1.5) +
   labs (fill = '') +
   theme(
@@ -179,8 +175,7 @@ ctc_dist_plot_late <- use_data_to_plot %>%
     panel.grid = element_blank(),
     plot.margin = unit(rep(-1,4), "cm")
   ) +
-  coord_polar(start = 0) #+
-  # geom_text(data=label_data, aes(x=id-5, y=1+0.1, label=donor, hjust=hjust), color="black", fontface="plain",alpha=0.6, size=geom_text_size, angle= label_data$angle, inherit.aes = FALSE )
+  coord_polar(start = 0)
 ```
 
 ## Plot polar distribution

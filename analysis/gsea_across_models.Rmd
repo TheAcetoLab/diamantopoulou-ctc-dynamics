@@ -14,6 +14,7 @@ params:
 ## Load libraries, additional functions and data
 
 Setup environment
+
 ```{r setup, include=TRUE, warning=FALSE, message=FALSE}
 knitr::opts_chunk$set(results='asis', echo=TRUE, message=FALSE, warning=FALSE, error=FALSE, fig.align = 'center', fig.width = 3.5, fig.asp = 0.618, dpi = 600, dev = c("png", "pdf"), fig.showtext = TRUE)
 
@@ -21,6 +22,7 @@ options(stringsAsFactors = FALSE)
 ```
 
 Load packages
+
 ```{r load-libraries}
 library(tidyverse)
 library(showtext)
@@ -39,28 +41,33 @@ library(ggbeeswarm)
 ```
 
 Set font family for figures
+
 ```{r set-font}
 font_add("Helvetica", "./configuration/fonts/Helvetica.ttc")
 showtext_auto()
 ```
 
 Load ggplot theme
+
 ```{r ggplot-theme}
 source("./configuration/rmarkdown/ggplot_theme.R")
 ```
 
 Load color palettes
+
 ```{r color-palettes}
 source("./configuration/rmarkdown/color_palettes.R")
 ```
 
 Load functions
+
 ```{r load-functions}
 source('./code/R-functions/gse_report.r')
 clean_msigdb_names <- function(x) x %>% gsub('REACTOME_', '', .) %>% gsub('WP_', '', .) %>% gsub('BIOCARTA_', '', .) %>% gsub('KEGG_', '', .) %>% gsub('PID_', '', .) %>% gsub('GOBP_', '', .) %>% gsub('_', ' ', .)
 ```
 
 Load MSigDB gene sets
+
 ```{r load-msigdb}
 gmt_files_symbols <- list(
   msigdb.c2.cp = './data/resources/MSigDB/v7.4/c2.cp.v7.4.symbols.gmt',
@@ -84,24 +91,29 @@ gmt_sets <- lapply(gmt_files_symbols, function(x) read.gmt(x) %>% collect %>% .[
 ```
 
 Load results from differential gene expression analyses
+
 ```{r load-dge}
 dge_lm2 <- readRDS(file.path(params$dge_dir, 'lm2', 'dge_edgeR_QLF_robust.rds'))
 dge_patient <- readRDS(file.path(params$dge_dir, 'patient', 'dge_edgeR_QLF_robust.rds'))
 ```
 
 Load GSEA results
+
 ```{r load-gsea}
 gse_gsea_br16 <- readRDS(file.path(params$dge_dir, 'br16', 'gse_gsea.rds'))
 ```
 
 Load LM2 timekinetics data
+
 ```{r load-lm2-tk-data}
 sce_lm2tk <- readRDS(file.path(params$sce_dir, 'sce_lm2_tk.rds'))
 gsva_lm2tk <- readRDS(file.path(params$dge_dir, 'lm2_tk', 'gsva_c2.cp.c5.bp.rds'))
 ```
 
 ## NSG-CDX-BR16 GSEA results
-Gene set enrichment analysis from differentially expressed genes in CTCs of NSG-CDX-BR16 mice during the rest phase versus active phase.Table listing the enriched gene sets (n = 138, adjusted P value < 0.05) in CTCs obtained in rest versus active phase from NSG-CDX-BR16 mice. The gene set enrichment analysis (GSEA) was performed using ranking genes as input, according to fold-change as shown in Supplementary table 2.
+
+**Gene set enrichment analysis from differentially expressed genes in CTCs of NSG-CDX-BR16 mice during the rest phase versus active phase.**Table listing the enriched gene sets (n = 138, adjusted *P* value \< 0.05) in CTCs obtained in rest *versus* active phase from NSG-CDX-BR16 mice. The gene set enrichment analysis (GSEA) was performed using ranking genes as input, according to fold-change as shown in Supplementary table 2. *P* values were obtained using FGSEA method with an eps parameter of 1e^-10^.
+
 ```{r br6-gsea-table}
 gse_gsea_br16$GSEA$msigdb.c2.cp.c5.bp@result %>% 
   filter(p.adjust < 0.05) %>% 
@@ -132,9 +144,10 @@ gse_gsea_br16$GSEA$msigdb.c2.cp.c5.bp@result %>%
 
 ```
 
-
 ## NSG-CDX-BR16 : similarity matrix for enriched gene sets
+
 Generate the data for the similarity heatmap
+
 ```{r br16_sim_data}
 use_gse_res <- gse_gsea_br16$GSEA$msigdb.c2.cp.c5.bp
 
@@ -179,6 +192,7 @@ br16_gsea_sim_mat <- use_mat
 ```
 
 Generate row annotation
+
 ```{r br16_sim_rowannot}
 nes_colors <- c(
   brewer.pal(n = 7, name ="BrBG")[6],
@@ -228,9 +242,9 @@ ha_row_pval = rowAnnotation(
 
 ```
 
-
 ### Similarity matrix without row names
-Heatmap showing the pair-wise similarity matrix of enriched gene sets (gene set enrichment analysis (GSEA), adjusted P value ≤ 0.0001) using differential expression between CTCs of rest and active phase from NSG-CDX-BR16 mice. Heatmap colors represent the Jaccard similarity coefficient. The heatmap on the right represents the adjusted P value as obtained in GSEA.
+
+Heatmap showing the pair-wise similarity matrix of enriched gene sets (gene set enrichment analysis (GSEA), adjusted *P* value ≤ 0.0001) using differential expression between CTCs of rest and active phase from NSG-CDX-BR16 mice. Heatmap colors represent the Jaccard similarity coefficient. The heatmap on the right represents the adjusted P value as obtained in GSEA.
 
 ```{r br16_gse_heatsim_c2, fig.width=7.2, fig.asp=0.7}
 col_fun <- colorRamp2(seq(0, 1, length.out = 4), brewer.pal(4, "GnBu"))
@@ -271,6 +285,7 @@ cat("\n\n")
 ```
 
 ### Similarity matrix with row names
+
 Heatmap showing the pair-wise similarity matrix of enriched gene sets (gene set enrichment analysis (GSEA), adjusted P value ≤ 0.0001) using differential expression between CTCs of rest and active phase from NSG-CDX-BR16 mice. Heatmap colors represent the Jaccard similarity coefficient. The heatmap on the right represents the adjusted P value as obtained in GSEA.
 
 ```{r br16_gse_heatsim_c2_rownames, fig.width=7.2, fig.asp=0.7}
@@ -317,6 +332,7 @@ cat("\n\n")
 ```
 
 ### Save selected gsets for future use
+
 ```{r save-br16-data}
 gse_gsea_br16_f <- gse_gsea_br16$GSEA$msigdb.c2.cp.c5.bp@result %>% filter(p.adjust < 0.001)
 row_order <- row_order(ht_br16_c2) %>% unlist
@@ -331,8 +347,8 @@ saveRDS(use_gsets, file = file.path(params$dge_dir, 'br16', 'ht_br16_c2_gene_set
 Run GSEA using candidate pathways from NSG-CDX-BR16.
 
 NSG-LM2
+
 ```{r lm2_gsea}
-# use_sce <- sce_lm2
 output_dir <- file.path(params$dge_dir, 'lm2')
 dge <- dge_lm2
 fc_list <- dge$results$logFC %>% set_names(dge$results$gene_name) %>% sort(decreasing = TRUE)
@@ -341,8 +357,8 @@ gsea_lm2 <-  pairwise_termsim(gsea_lm2)
 ```
 
 Patient
+
 ```{r patient_gsea}
-# use_sce <- sce_lm2
 output_dir <- file.path(params$dge_dir, 'patient')
 dge <- dge_patient
 fc_list <- dge$results$logFC %>% set_names(dge$results$gene_name) %>% sort(decreasing = TRUE)
@@ -351,6 +367,7 @@ gsea_patient <-  pairwise_termsim(gsea_patient)
 ```
 
 Combine NSG-CDX-BR16, NSG-LM2 and patient GSEA data
+
 ```{r combined_gsea_data}
 gsea_lm2@result$donor <- 'LM2'
 gsea_patient@result$donor <- 'Patient'
@@ -366,6 +383,8 @@ gsea_comb <- gsea_comb %>%
 ```
 
 ### Table differential expression in NSG-LM2
+**Genes differentially expressed in CTCs of NSG-LM26 mice during the rest phase versus active phase**. Table listing the differentially expressed genes comparing CTCs obtained in the rest phase (n = 65) versus the active phase (n = 73) of NSG-CDX-BR16 mice. All genes evaluated are included in the table (n = 12,261). Fold-change and *P* values were computed with the quasi-likelihood (QL) approach from edgeR using robust dispersion estimates. For fold-change calculation, active phase samples were used in the denominator.
+
 ```{r lm2-dge-table}
 dge_lm2$results %>% 
   dplyr::select(gene_name, gene_type, logFC, logCPM, PValue, FDR, description) %>% 
@@ -393,6 +412,7 @@ dge_lm2$results %>%
 ```
 
 ### Table GSEA in NSG-LM2
+**Gene set enrichment analysis from gene expression in CTCs of NSG-LM2 mice during the rest phase versus active phase.** Table listing the gene set enrichment results in CTCs obtained in rest versus active phase from NSG-LM2 mice. Only gene sets enriched in NSG-CDX-BR16 were analysed (n = 22, adjusted *P* value ≤ 0.0001). The gene set enrichment analysis (GSEA) was performed using ranked genes by fold-change as input. 
 ```{r lm2-gsea-table}
 gsea_lm2@result %>% 
   dplyr::select(ID, setSize, enrichmentScore, NES, pvalue, p.adjust, leading_edge, core_enrichment) %>% 
@@ -421,8 +441,10 @@ gsea_lm2@result %>%
               ))
 ```
 
+### Table differential expression in Patients
 
-### Table differential expression in Patient
+**Genes differentially expressed in CTCs of breast cancer patients during the rest phase versus active phase**. Table listing the differentially expressed genes comparing CTCs obtained in the rest phase (n = 65) versus the active phase (n = 73) of NSG-CDX-BR16 mice. All genes evaluated are included in the table (n = 12,261). Fold-change and *P* values were computed with the quasi-likelihood (QL) approach from edgeR using robust dispersion estimates. For fold-change calculation, active phase samples were used in the denominator.
+
 ```{r patient-dge-table}
 dge_patient$results %>% 
   dplyr::select(gene_name, gene_type, logFC, logCPM, PValue, FDR, description) %>% 
@@ -449,7 +471,8 @@ dge_patient$results %>%
               ))
 ```
 
-### Table GSEA in Patient
+### Table GSEA in Patients
+**Gene set enrichment analysis from gene expression  in CTCs of breast cancer patients  during the rest phase versus active phase.** Table listing the gene set enrichment results in CTCs obtained in rest versus active phase from breast cancer patients. Only gene sets enriched in NSG-CDX-BR16 were analysed (n = 22, adjusted *P* value ≤ 0.0001). The gene set enrichment analysis (GSEA) was performed using ranked genes by fold-change as input. 
 ```{r patient-gsea-table}
 gsea_patient@result %>% 
   dplyr::select(ID, setSize, enrichmentScore, NES, pvalue, p.adjust, leading_edge, core_enrichment) %>% 
@@ -479,7 +502,8 @@ gsea_patient@result %>%
 ```
 
 ## GSEA for NSG-CDX-BR16 and NSG-LM2
-Plot comparing the normalized enrichment score (NES) and adjusted P value (dot size) obtained using GSEA for gene sets shown in “d”. Left and right panels show the results for NSG-CDX-BR16 and NSG-LM2 models, respectively. Gene sets with an adjusted P value ≤ 0.05 in each sample set are highlighted in red.
+
+Plot comparing the normalized enrichment score (NES) and adjusted P value (dot size) obtained using GSEA for gene sets shown in "d". Left and right panels show the results for NSG-CDX-BR16 and NSG-LM2 models, respectively. Gene sets with an adjusted P value ≤ 0.05 in each sample set are highlighted in red.
 
 ```{r br16_lm2_nes_dotplot_c2, fig.asp=0.7753844, fig.width = 5.2}
 label_func <- default_labeller(18)
@@ -546,7 +570,9 @@ plot_grid(dotplot_br16, dotplot_lm2)
 ```
 
 ## GSEA for Patient
-Plot showing the NES and P value (dot size) in patient CTCs obtained using GSEA for gene sets shown in “d”. Gene sets with an P value ≤ 0.05 are highlighted in red (bottom).
+
+Plot showing the NES and P value (dot size) in patient CTCs obtained using GSEA for gene sets shown in "d". Gene sets with an P value ≤ 0.05 are highlighted in red (bottom).
+
 ```{r patient_nes_dotplot_c2, fig.asp=1.550769, fig.width = 2.6}
 label_func <- default_labeller(18)
 xlim <- (gsea_comb$NES %>% abs %>% max) + 0.25
@@ -581,7 +607,9 @@ gsea_comb %>%
 ```
 
 ## GSEA for NSG-CDX-BR16, NSG-LM2 and patient
-Plots comparing the normalized enrichment score (NES) and adjusted P value (dot size) obtained using GSEA for gene sets shown in “d”. Gene sets with an adjusted P value ≤ 0.05 in each sample set are highlighted in red
+
+Plots comparing the normalized enrichment score (NES) and adjusted *P* value (dot size) obtained using GSEA for gene sets shown in "d". Gene sets with an adjusted P value ≤ 0.05 in each sample set are highlighted in red
+
 ```{r br16_lm2_patient_nes_dotplot, fig.width=5.8, fig.asp=0.9344828}
 label_func <- default_labeller(18)
 xlim <- (gsea_comb$NES %>% abs %>% max) + 0.25
@@ -614,14 +642,12 @@ gsea_comb %>%
     )
 ```
 
-
-
-
-
-
 ## GSVA for NSG-LM2
+
 ### Run differential expression
-Run differential expression at pathway level removing timepoint 0600 (ZT = 0, only 1 biological replicate) and using only candidate pathways from BR16 analysis. We use [limma](https://bioconductor.org/packages/3.14/limma) (Smyth 2004) as suggested in [GSVA vignette](https://www.bioconductor.org/packages/release/bioc/vignettes/GSVA/inst/doc/GSVA.html). For several groups (timepoints) we are using the strategy defined at [limma vignette](https://bioconductor.org/packages/release/bioc/vignettes/limma/inst/doc/usersguide.pdf) Section 9.3 
+
+Run differential expression at pathway level removing timepoint 0600 (ZT = 0, only 1 biological replicate) and using only candidate pathways from BR16 analysis. We use [limma](https://bioconductor.org/packages/3.14/limma) (Smyth 2004) as suggested in [GSVA vignette](https://www.bioconductor.org/packages/release/bioc/vignettes/GSVA/inst/doc/GSVA.html). For several groups (timepoints) we are using the strategy defined at [limma vignette](https://bioconductor.org/packages/release/bioc/vignettes/limma/inst/doc/usersguide.pdf) Section 9.3
+
 ```{r lm2tk-dgse}
 use_sce <- sce_lm2tk
 gsva_res <- gsva_lm2tk
@@ -642,7 +668,7 @@ contrast_to_eval <- combn(colnames(design), 2, simplify = TRUE) %>% apply(., 2, 
 contrast.matrix <- makeContrasts(contrasts = contrast_to_eval, levels = colnames(design))                                  
 fit2 <- contrasts.fit(fit, contrast.matrix)
 fit2 <- eBayes(fit2)
-# fit2$F.p.value
+
 limma_res <- topTable(fit2, number=100000) %>% 
   rownames_to_column('Term') %>% 
   mutate(to_rownames = Term) %>% 
@@ -651,6 +677,7 @@ limma_res$Term_cat <- use_gsets_cat[limma_res$Term]
 ```
 
 Additional objects for plotting
+
 ```{r lm2tk-plot_obj}
 coldata_ord <- colData(use_sce) %>% data.frame %>% arrange(zt, sample_type)
 gsva_mat <- gsva_res[use_gsets, coldata_ord$sample_alias]
@@ -681,6 +708,7 @@ gsva_avg_mat <- gsva_avg_mat[clean_msigdb_names(use_gsets),]
 ```
 
 ### GSVA table of results
+**Gene set variation analysis  in CTCs of  theNSG-LM2 time-kinetics experiment.** Table listing the results from the differential analysis of gene set variation analysis (GSVA) scores  in CTC of the NSG-LM2 time-kinetics experiment. Only gene sets enriched in NSG-CDX-BR16 were analysed (n = 22, adjusted *P* value ≤ 0.0001). The F statistic and the corresponding P value generated by limma, combine the pair-wise comparisons between all the time points in the experiment with more than three replicates (n = 6 comparisons). GSVA scores for each individual sample are listed at the end of the table. 
 ```{r lm2tk-dgse-table}
 gsva_res_sel %>% 
   as.data.frame %>% 
@@ -710,9 +738,8 @@ gsva_res_sel %>%
 ```
 
 ### GSVA across time series
-GSVA score for translation (yellow, n= 5) and cell division (blue, n= 17) gene sets in CTCs obtained from the NSG-LM2 time-kinetics experiment. Yellow and blue lines represent
-the average at each time point. Individual points represent the enrichment score for each CTC sample. The white and grey backgrounds represent environmental light
-(rest period) and dark conditions (active period), respectively. Differential expression adjusted P values as obtained from limma are shown for each individual gene set.
+
+GSVA score for translation (yellow, n= 5) and cell division (blue, n= 17) gene sets in CTCs obtained from the NSG-LM2 time-kinetics experiment. Yellow and blue lines represent the average at each time point. Individual points represent the enrichment score for each CTC sample. The white and grey backgrounds represent environmental light (rest period) and dark conditions (active period), respectively. Differential expression adjusted P values as obtained from limma are shown for each individual gene set.
 
 ```{r lm2_s1_gsva_timeseries_facet_5tp, fig.width = 7.2, fig.asp = 0.8}
 bg_color <- data.frame(
@@ -762,9 +789,10 @@ ggplot() +
   geom_text(x = 16, aes(label = label, y = ypos), data = adj_p_df, size = 1.8, hjust = 0, parse = TRUE)
 ```
 
-### Average GSVA score across time series 
+### Average GSVA score across time series
 
 Average GSVA score for translation (yellow, n=5) and cell division (blue, n=17) gene sets in CTCs obtained in the NSG-LM2 time-kinetics experiment. The average was calculated for each gene set and time point across all CTC samples (ZT0 n=1, ZT4 n=9, ZT12 n=6, ZT16 n=3, ZT20 n=5). The white and grey backgrounds represent environmental light (rest period) and dark conditions (active period), respectively.
+
 ```{r lm2_tk_gsva_timeseries_avg}
 bg_color <- data.frame(
   xmin = c(-2, 0, 12),
@@ -799,4 +827,3 @@ ggplot() +
     plot.margin = margin(14, 7, 3, 1.5)
   )
 ```
-

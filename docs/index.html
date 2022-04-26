@@ -414,7 +414,7 @@ timepoints</h1>
 <p>
 <button type="button" class="btn btn-default btn-workflowr btn-workflowr-report" data-toggle="collapse" data-target="#workflowr-report">
 <span class="glyphicon glyphicon-list" aria-hidden="true"></span>
-workflowr <span class="glyphicon glyphicon-ok text-success"
+workflowr <span class="glyphicon glyphicon-exclamation-sign text-danger"
 aria-hidden="true"></span>
 </button>
 </p>
@@ -425,8 +425,8 @@ aria-hidden="true"></span>
 </li>
 <li>
 <a data-toggle="tab" href="#checks"> Checks <span
-class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span>
-</a>
+class="glyphicon glyphicon-exclamation-sign text-danger"
+aria-hidden="true"></span> </a>
 </li>
 <li>
 <a data-toggle="tab" href="#versions">Past versions</a>
@@ -439,9 +439,9 @@ class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span>
 </p>
 <p>
 <strong>Checks:</strong> <span
-class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> 2
+class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> 1
 <span class="glyphicon glyphicon-exclamation-sign text-danger"
-aria-hidden="true"></span> 0
+aria-hidden="true"></span> 1
 </p>
 <p>
 <strong>Knit directory:</strong>
@@ -465,33 +465,36 @@ versions</em> tab lists the development history.
 <div class="panel panel-default">
 <div class="panel-heading">
 <p class="panel-title">
-<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRMarkdownfilestronguptodate">
-<span class="glyphicon glyphicon-ok text-success"
-aria-hidden="true"></span> <strong>R Markdown file:</strong> up-to-date
-</a>
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRMarkdownfilestronguncommittedchanges">
+<span class="glyphicon glyphicon-exclamation-sign text-danger"
+aria-hidden="true"></span> <strong>R Markdown file:</strong> uncommitted
+changes </a>
 </p>
 </div>
-<div id="strongRMarkdownfilestronguptodate"
+<div id="strongRMarkdownfilestronguncommittedchanges"
 class="panel-collapse collapse">
 <div class="panel-body">
-<p>Great! Since the R Markdown file has been committed to the Git
-repository, you know the exact version of the code that produced these
-results.</p>
+<p>The R Markdown file has unstaged changes. To know which version of
+the R Markdown file created these results, you’ll want to first commit
+it to the Git repo. If you’re still working on the analysis, you can
+ignore this warning. When you’re finished, you can run
+<code>wflow_publish</code> to commit the R Markdown file and build the
+HTML.</p>
 </div>
 </div>
 </div>
 <div class="panel panel-default">
 <div class="panel-heading">
 <p class="panel-title">
-<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRepositoryversionstrongahrefhttpsgithubcomTheAcetoLabdiamantopoulouctcdynamicstree34ee51371a3786d0f18c3d2c11ec3e41b9f8ea4ctargetblank34ee513a">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRepositoryversionstrongahrefhttpsgithubcomTheAcetoLabdiamantopoulouctcdynamicstree74b189131a39d49fd9e79eaee6c8e76575069de6targetblank74b1891a">
 <span class="glyphicon glyphicon-ok text-success"
 aria-hidden="true"></span> <strong>Repository version:</strong>
-<a href="https://github.com/TheAcetoLab/diamantopoulou-ctc-dynamics/tree/34ee51371a3786d0f18c3d2c11ec3e41b9f8ea4c" target="_blank">34ee513</a>
+<a href="https://github.com/TheAcetoLab/diamantopoulou-ctc-dynamics/tree/74b189131a39d49fd9e79eaee6c8e76575069de6" target="_blank">74b1891</a>
 </a>
 </p>
 </div>
 <div
-id="strongRepositoryversionstrongahrefhttpsgithubcomTheAcetoLabdiamantopoulouctcdynamicstree34ee51371a3786d0f18c3d2c11ec3e41b9f8ea4ctargetblank34ee513a"
+id="strongRepositoryversionstrongahrefhttpsgithubcomTheAcetoLabdiamantopoulouctcdynamicstree74b189131a39d49fd9e79eaee6c8e76575069de6targetblank74b1891a"
 class="panel-collapse collapse">
 <div class="panel-body">
 <p>
@@ -501,7 +504,7 @@ reproducibility.
 </p>
 <p>
 The results in this page were generated with repository version
-<a href="https://github.com/TheAcetoLab/diamantopoulou-ctc-dynamics/tree/34ee51371a3786d0f18c3d2c11ec3e41b9f8ea4c" target="_blank">34ee513</a>.
+<a href="https://github.com/TheAcetoLab/diamantopoulou-ctc-dynamics/tree/74b189131a39d49fd9e79eaee6c8e76575069de6" target="_blank">74b1891</a>.
 See the <em>Past versions</em> tab to see a history of the changes made
 to the R Markdown and HTML files.
 </p>
@@ -533,6 +536,10 @@ Untracked files:
     Untracked:  data/patients/
     Untracked:  data/resources/
     Untracked:  data/sce/
+
+Unstaged changes:
+    Modified:   analysis/gsea_across_models.Rmd
+    Modified:   analysis/index.Rmd
 
 </code></pre>
 <p>
@@ -577,6 +584,23 @@ Message
 </tr>
 </thead>
 <tbody>
+<tr>
+<td>
+html
+</td>
+<td>
+<a href="https://rawcdn.githack.com/TheAcetoLab/diamantopoulou-ctc-dynamics/74b189131a39d49fd9e79eaee6c8e76575069de6/docs/index.html" target="_blank">74b1891</a>
+</td>
+<td>
+fcg-bio
+</td>
+<td>
+2022-04-26
+</td>
+<td>
+Build site.
+</td>
+</tr>
 <tr>
 <td>
 Rmd
@@ -779,7 +803,7 @@ R package and can be reproduced in its totality using <a
 href="https://cran.r-project.org/web/packages/workflowr/index.html">workflowr</a>
 <a
 href="https://jdblischak.github.io/workflowrBeta/reference/wflow_build.html">wflow_build</a>
-command after the installation of the proper R-packages. Session info,
+command after the installation of the proper R packages. Session info,
 including R and package versions, was automatically included at the end
 of each analysis file.</p>
 <p>Files containing pre-computed results from differential expression or
@@ -796,10 +820,7 @@ specific code chunk from the R Markdown file.</p>
 <li><a href="0_differential_expression_gsea_gsva.html">Run differential
 gene expression analysis, GSEA and GSVA</a></li>
 <li><a href="patients_ctc_counts_distribution.html">CTC counts
-distribution in breast cancer patients</a> : Generate the radial
-histograms show the percent of single CTCs, CTC clusters and CTC-WBC
-clusters isolated during the rest or active phase in early- or
-late-stage breast cancer patients.</li>
+distribution in breast cancer patients</a></li>
 <li><a href="br16_pca.html">PCA analysis of CTC gene expression in
 NSG-CDX-BR16 mice</a></li>
 <li><a href="br16_dge.html">Differential gene expression report for
@@ -871,6 +892,12 @@ href="br16_dge.html#Genes_differentially_expressed_in_CTCs_of_NSG-CDX-BR16">Supp
 Table 2</a></li>
 <li><a
 href="gsea_across_models.html#NSG-CDX-BR16_GSEA_results">Supplementary
+Table 3</a></li>
+<li><a href="gsea_across_models.html#Table_GSEA_in_NSG-LM2">Source files
+Table 1</a></li>
+<li><a href="gsea_across_models.html#Table_GSEA_in_Patients">Source
+files Table 2</a></li>
+<li><a href="gsea_across_models.html#GSVA_table_of_results">Source files
 Table 3</a></li>
 </ul></li>
 </ul>

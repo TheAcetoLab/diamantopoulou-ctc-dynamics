@@ -116,7 +116,8 @@ p$metadata <- p$metadata %>%
 ```
 
 ## Correlation of PC eigenvectors with metadata
-Heatmap showing the Pearson’s correlation coefficient of PC1-`r elbow_point` eigenvectors from gene expression with technical and biological variables in BR16-CDX CTCs. P values by two-sided Pearson’s correlation test (\*P < 0.01, \*\*P <0.001, \*\*\*P <0.0001).
+Heatmap showing the Pearson’s correlation coefficient of PC1-7 eigenvectors from gene expression with technical and biological variables in BR16-CDX CTCs. *P* values by two-sided Pearson’s correlation test (\**P* < 0.01, \*\**P* <0.001, \*\*\**P* <0.0001).
+
 ```{r br16_pca_eigencorplot, fig.width = 5.1}
 use_cex <- 8/12
 eigencorplot(
@@ -165,7 +166,8 @@ pca_cor_val$pvals_format %>% t %>%
 ```
 
 ## Biplot PC4 and PC5
-Scatter plot showing the principal component PC4 and PC5 of gene expression in CTCs from NSG-CDX-BR16 mice. Upper (PC4) and right (PC5) panels show the density of PC values for active (blue) and rest phase (red) samples.
+Plot showing the principal components PC4 and PC5 of gene expression in CTCs from NSG-CDX-BR16 mice. *Upper* and *right* panels show the density of values for active (*blue*) and rest phase (*red*). 
+
 ```{r br16_pca_4_5_conf}
 PCx <- 'PC4'
 PCy<- 'PC5'
@@ -224,8 +226,6 @@ biplot_res <- circle_data %>%
     axis.ticks = element_line(size = rel(0.25)), 
     panel.border = element_rect(size = rel(1), fill = NA, colour = "black")
     ) +
-  # guides(shape = FALSE) +
-  # background_grid() +
   labs(
     x = xlab_name,
     y = ylab_name
