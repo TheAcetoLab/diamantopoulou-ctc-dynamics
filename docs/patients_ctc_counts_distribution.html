@@ -673,15 +673,15 @@ project makes it easier to run your code on other machines.</p>
 <div class="panel panel-default">
 <div class="panel-heading">
 <p class="panel-title">
-<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRepositoryversionstrongahrefhttpsgithubcomTheAcetoLabdiamantopoulouctcdynamicstree34ee51371a3786d0f18c3d2c11ec3e41b9f8ea4ctargetblank34ee513a">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRepositoryversionstrongahrefhttpsgithubcomTheAcetoLabdiamantopoulouctcdynamicstree545ee28878a043453ec828b26ef18d6c110d8906targetblank545ee28a">
 <span class="glyphicon glyphicon-ok text-success"
 aria-hidden="true"></span> <strong>Repository version:</strong>
-<a href="https://github.com/TheAcetoLab/diamantopoulou-ctc-dynamics/tree/34ee51371a3786d0f18c3d2c11ec3e41b9f8ea4c" target="_blank">34ee513</a>
+<a href="https://github.com/TheAcetoLab/diamantopoulou-ctc-dynamics/tree/545ee28878a043453ec828b26ef18d6c110d8906" target="_blank">545ee28</a>
 </a>
 </p>
 </div>
 <div
-id="strongRepositoryversionstrongahrefhttpsgithubcomTheAcetoLabdiamantopoulouctcdynamicstree34ee51371a3786d0f18c3d2c11ec3e41b9f8ea4ctargetblank34ee513a"
+id="strongRepositoryversionstrongahrefhttpsgithubcomTheAcetoLabdiamantopoulouctcdynamicstree545ee28878a043453ec828b26ef18d6c110d8906targetblank545ee28a"
 class="panel-collapse collapse">
 <div class="panel-body">
 <p>
@@ -691,7 +691,7 @@ reproducibility.
 </p>
 <p>
 The results in this page were generated with repository version
-<a href="https://github.com/TheAcetoLab/diamantopoulou-ctc-dynamics/tree/34ee51371a3786d0f18c3d2c11ec3e41b9f8ea4c" target="_blank">34ee513</a>.
+<a href="https://github.com/TheAcetoLab/diamantopoulou-ctc-dynamics/tree/545ee28878a043453ec828b26ef18d6c110d8906" target="_blank">545ee28</a>.
 See the <em>Past versions</em> tab to see a history of the changes made
 to the R Markdown and HTML files.
 </p>
@@ -769,6 +769,40 @@ Message
 </tr>
 </thead>
 <tbody>
+<tr>
+<td>
+Rmd
+</td>
+<td>
+<a href="https://github.com/TheAcetoLab/diamantopoulou-ctc-dynamics/blob/545ee28878a043453ec828b26ef18d6c110d8906/analysis/patients_ctc_counts_distribution.Rmd" target="_blank">545ee28</a>
+</td>
+<td>
+fcg-bio
+</td>
+<td>
+2022-04-26
+</td>
+<td>
+release v1.0
+</td>
+</tr>
+<tr>
+<td>
+html
+</td>
+<td>
+<a href="https://rawcdn.githack.com/TheAcetoLab/diamantopoulou-ctc-dynamics/74b189131a39d49fd9e79eaee6c8e76575069de6/docs/patients_ctc_counts_distribution.html" target="_blank">74b1891</a>
+</td>
+<td>
+fcg-bio
+</td>
+<td>
+2022-04-26
+</td>
+<td>
+Build site.
+</td>
+</tr>
 <tr>
 <td>
 html
@@ -958,19 +992,17 @@ class="section level2">
 <span id="cb7-33"><a href="#cb7-33" aria-hidden="true" tabindex="-1"></a>  <span class="fu">annotate</span>(<span class="st">&quot;text&quot;</span>, <span class="at">x =</span> <span class="fu">rep</span>(grid_data<span class="sc">$</span>end <span class="sc">+</span> <span class="dv">3</span> ,<span class="dv">5</span>), <span class="at">y =</span> <span class="fu">c</span>(<span class="dv">0</span>, <span class="fl">0.25</span>, <span class="fl">0.50</span>, <span class="fl">0.75</span>, <span class="dv">1</span>), <span class="at">label =</span> <span class="fu">c</span>(<span class="st">&#39;0%&#39;</span>, <span class="st">&#39;25%&#39;</span>, <span class="st">&#39;50%&#39;</span>, <span class="st">&#39;75%&#39;</span>, <span class="st">&#39;100%&#39;</span>) , <span class="at">color=</span><span class="st">&quot;black&quot;</span>, <span class="at">size=</span>geom_text_size , <span class="at">angle=</span><span class="dv">0</span>, <span class="at">fontface=</span><span class="st">&quot;plain&quot;</span>, <span class="at">hjust=</span><span class="dv">1</span>) <span class="sc">+</span></span>
 <span id="cb7-34"><a href="#cb7-34" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_bar</span>(<span class="at">stat=</span><span class="st">&quot;identity&quot;</span>, <span class="at">position =</span> <span class="st">&quot;fill&quot;</span>, <span class="at">width=</span><span class="fl">0.8</span>, <span class="at">color =</span> <span class="st">&#39;white&#39;</span>, <span class="at">size =</span> <span class="fl">0.2</span>) <span class="sc">+</span></span>
 <span id="cb7-35"><a href="#cb7-35" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_fill_manual</span>(<span class="at">values =</span> timepoint_sample_type_legend_palette_2) <span class="sc">+</span></span>
-<span id="cb7-36"><a href="#cb7-36" aria-hidden="true" tabindex="-1"></a>  <span class="co"># scale_y_continuous(breaks = seq(0 , 1, 0.1), minor_breaks = seq(0 , 1, 0.1)) +</span></span>
-<span id="cb7-37"><a href="#cb7-37" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ylim</span>(<span class="sc">-</span><span class="fl">0.5</span>, <span class="fl">1.5</span>) <span class="sc">+</span></span>
-<span id="cb7-38"><a href="#cb7-38" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span> (<span class="at">fill =</span> <span class="st">&#39;&#39;</span>) <span class="sc">+</span></span>
-<span id="cb7-39"><a href="#cb7-39" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme</span>(</span>
-<span id="cb7-40"><a href="#cb7-40" aria-hidden="true" tabindex="-1"></a>    <span class="at">axis.text =</span> <span class="fu">element_blank</span>(),</span>
-<span id="cb7-41"><a href="#cb7-41" aria-hidden="true" tabindex="-1"></a>    <span class="at">axis.title =</span> <span class="fu">element_blank</span>(),</span>
-<span id="cb7-42"><a href="#cb7-42" aria-hidden="true" tabindex="-1"></a>    <span class="at">axis.ticks =</span> <span class="fu">element_blank</span>(),</span>
-<span id="cb7-43"><a href="#cb7-43" aria-hidden="true" tabindex="-1"></a>    <span class="at">axis.line =</span> <span class="fu">element_blank</span>(),</span>
-<span id="cb7-44"><a href="#cb7-44" aria-hidden="true" tabindex="-1"></a>    <span class="at">panel.grid =</span> <span class="fu">element_blank</span>(),</span>
-<span id="cb7-45"><a href="#cb7-45" aria-hidden="true" tabindex="-1"></a>    <span class="at">plot.margin =</span> <span class="fu">unit</span>(<span class="fu">rep</span>(<span class="sc">-</span><span class="dv">1</span>,<span class="dv">4</span>), <span class="st">&quot;cm&quot;</span>)</span>
-<span id="cb7-46"><a href="#cb7-46" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">+</span></span>
-<span id="cb7-47"><a href="#cb7-47" aria-hidden="true" tabindex="-1"></a>  <span class="fu">coord_polar</span>(<span class="at">start =</span> <span class="dv">0</span>) <span class="co">#+</span></span>
-<span id="cb7-48"><a href="#cb7-48" aria-hidden="true" tabindex="-1"></a>  <span class="co"># geom_text(data=label_data, aes(x=id, y=1+0.1, label=donor, hjust=hjust), color=&quot;black&quot;, fontface=&quot;plain&quot;,alpha=0.6, size=geom_text_size, angle= label_data$angle, inherit.aes = FALSE )</span></span></code></pre></div>
+<span id="cb7-36"><a href="#cb7-36" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ylim</span>(<span class="sc">-</span><span class="fl">0.5</span>, <span class="fl">1.5</span>) <span class="sc">+</span></span>
+<span id="cb7-37"><a href="#cb7-37" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span> (<span class="at">fill =</span> <span class="st">&#39;&#39;</span>) <span class="sc">+</span></span>
+<span id="cb7-38"><a href="#cb7-38" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme</span>(</span>
+<span id="cb7-39"><a href="#cb7-39" aria-hidden="true" tabindex="-1"></a>    <span class="at">axis.text =</span> <span class="fu">element_blank</span>(),</span>
+<span id="cb7-40"><a href="#cb7-40" aria-hidden="true" tabindex="-1"></a>    <span class="at">axis.title =</span> <span class="fu">element_blank</span>(),</span>
+<span id="cb7-41"><a href="#cb7-41" aria-hidden="true" tabindex="-1"></a>    <span class="at">axis.ticks =</span> <span class="fu">element_blank</span>(),</span>
+<span id="cb7-42"><a href="#cb7-42" aria-hidden="true" tabindex="-1"></a>    <span class="at">axis.line =</span> <span class="fu">element_blank</span>(),</span>
+<span id="cb7-43"><a href="#cb7-43" aria-hidden="true" tabindex="-1"></a>    <span class="at">panel.grid =</span> <span class="fu">element_blank</span>(),</span>
+<span id="cb7-44"><a href="#cb7-44" aria-hidden="true" tabindex="-1"></a>    <span class="at">plot.margin =</span> <span class="fu">unit</span>(<span class="fu">rep</span>(<span class="sc">-</span><span class="dv">1</span>,<span class="dv">4</span>), <span class="st">&quot;cm&quot;</span>)</span>
+<span id="cb7-45"><a href="#cb7-45" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">+</span></span>
+<span id="cb7-46"><a href="#cb7-46" aria-hidden="true" tabindex="-1"></a>  <span class="fu">coord_polar</span>(<span class="at">start =</span> <span class="dv">0</span>)</span></code></pre></div>
 </div>
 <div id="setup-polar-plot-early-status-1" class="section level2">
 <h2>Setup polar plot early status</h2>
@@ -993,32 +1025,29 @@ class="section level2">
 <span id="cb8-17"><a href="#cb8-17" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb8-18"><a href="#cb8-18" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb8-19"><a href="#cb8-19" aria-hidden="true" tabindex="-1"></a>ctc_dist_plot_late <span class="ot">&lt;-</span> use_data_to_plot <span class="sc">%&gt;%</span> </span>
-<span id="cb8-20"><a href="#cb8-20" aria-hidden="true" tabindex="-1"></a>  <span class="co"># mutate(donor = fct_reorder(donor, t)) %&gt;% </span></span>
-<span id="cb8-21"><a href="#cb8-21" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(<span class="at">x =</span> donor, <span class="at">y =</span> p, <span class="at">fill =</span> timepoint_sample_type_legend, <span class="at">label =</span> donor)) <span class="sc">+</span></span>
-<span id="cb8-22"><a href="#cb8-22" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_bar</span>(<span class="at">stat=</span><span class="st">&quot;identity&quot;</span>, <span class="at">position =</span> <span class="st">&quot;fill&quot;</span>, <span class="at">width=</span><span class="fl">0.8</span>, <span class="at">size =</span> <span class="fl">0.2</span>) <span class="sc">+</span></span>
-<span id="cb8-23"><a href="#cb8-23" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Add a val=100/75/50/25 lines. I do it at the beginning to make sur barplots are OVER it.</span></span>
-<span id="cb8-24"><a href="#cb8-24" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_segment</span>(<span class="at">data=</span>grid_data, <span class="fu">aes</span>(<span class="at">x =</span> end, <span class="at">y =</span> <span class="dv">0</span>, <span class="at">xend =</span> start<span class="fl">-0.5</span>, <span class="at">yend =</span> <span class="dv">0</span>), <span class="at">colour =</span> <span class="st">&quot;grey50&quot;</span>, <span class="at">alpha=</span><span class="dv">1</span>, <span class="at">size=</span><span class="fl">0.2</span>, <span class="at">inherit.aes =</span> <span class="cn">FALSE</span> ) <span class="sc">+</span></span>
-<span id="cb8-25"><a href="#cb8-25" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_segment</span>(<span class="at">data=</span>grid_data, <span class="fu">aes</span>(<span class="at">x =</span> end, <span class="at">y =</span> <span class="fl">0.25</span>, <span class="at">xend =</span> start<span class="fl">-0.5</span>, <span class="at">yend =</span> <span class="fl">0.25</span>), <span class="at">colour =</span> <span class="st">&quot;grey50&quot;</span>, <span class="at">alpha=</span><span class="dv">1</span>, <span class="at">size=</span><span class="fl">0.2</span> , <span class="at">inherit.aes =</span> <span class="cn">FALSE</span> ) <span class="sc">+</span></span>
-<span id="cb8-26"><a href="#cb8-26" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_segment</span>(<span class="at">data=</span>grid_data, <span class="fu">aes</span>(<span class="at">x =</span> end, <span class="at">y =</span> <span class="fl">0.50</span>, <span class="at">xend =</span> start<span class="fl">-0.5</span>, <span class="at">yend =</span> <span class="fl">0.50</span>), <span class="at">colour =</span> <span class="st">&quot;grey50&quot;</span>, <span class="at">alpha=</span><span class="dv">1</span>, <span class="at">size=</span><span class="fl">0.2</span> , <span class="at">inherit.aes =</span> <span class="cn">FALSE</span> ) <span class="sc">+</span></span>
-<span id="cb8-27"><a href="#cb8-27" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_segment</span>(<span class="at">data=</span>grid_data, <span class="fu">aes</span>(<span class="at">x =</span> end, <span class="at">y =</span> <span class="fl">0.75</span>, <span class="at">xend =</span> start<span class="fl">-0.5</span>, <span class="at">yend =</span> <span class="fl">0.75</span>), <span class="at">colour =</span> <span class="st">&quot;grey50&quot;</span>, <span class="at">alpha=</span><span class="dv">1</span>, <span class="at">size=</span><span class="fl">0.2</span> , <span class="at">inherit.aes =</span> <span class="cn">FALSE</span> ) <span class="sc">+</span></span>
-<span id="cb8-28"><a href="#cb8-28" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_segment</span>(<span class="at">data=</span>grid_data, <span class="fu">aes</span>(<span class="at">x =</span> end, <span class="at">y =</span> <span class="dv">1</span>, <span class="at">xend =</span> start<span class="fl">-0.5</span>, <span class="at">yend =</span> <span class="dv">1</span>), <span class="at">colour =</span> <span class="st">&quot;grey50&quot;</span>, <span class="at">alpha=</span><span class="dv">1</span>, <span class="at">size=</span><span class="fl">0.2</span> , <span class="at">inherit.aes =</span> <span class="cn">FALSE</span> ) <span class="sc">+</span></span>
-<span id="cb8-29"><a href="#cb8-29" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Add text showing the value of each 100/75/50/25 lines</span></span>
-<span id="cb8-30"><a href="#cb8-30" aria-hidden="true" tabindex="-1"></a>  <span class="fu">annotate</span>(<span class="st">&quot;text&quot;</span>, <span class="at">x =</span> <span class="fu">rep</span>(grid_data<span class="sc">$</span>end <span class="sc">+</span> <span class="dv">2</span> ,<span class="dv">5</span>), <span class="at">y =</span> <span class="fu">c</span>(<span class="dv">0</span>, <span class="fl">0.25</span>, <span class="fl">0.50</span>, <span class="fl">0.75</span>, <span class="dv">1</span>), <span class="at">label =</span> <span class="fu">c</span>(<span class="st">&#39;0%&#39;</span>, <span class="st">&#39;25%&#39;</span>, <span class="st">&#39;50%&#39;</span>, <span class="st">&#39;75%&#39;</span>, <span class="st">&#39;100%&#39;</span>) , <span class="at">color=</span><span class="st">&quot;black&quot;</span>, <span class="at">size=</span>geom_text_size , <span class="at">angle=</span><span class="dv">0</span>, <span class="at">fontface=</span><span class="st">&quot;plain&quot;</span>, <span class="at">hjust=</span><span class="dv">1</span>) <span class="sc">+</span></span>
-<span id="cb8-31"><a href="#cb8-31" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_bar</span>(<span class="at">stat=</span><span class="st">&quot;identity&quot;</span>, <span class="at">position =</span> <span class="st">&quot;fill&quot;</span>, <span class="at">width=</span><span class="fl">0.8</span>, <span class="at">color =</span> <span class="st">&#39;white&#39;</span>, <span class="at">size =</span> <span class="fl">0.2</span>) <span class="sc">+</span></span>
-<span id="cb8-32"><a href="#cb8-32" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_fill_manual</span>(<span class="at">values =</span> timepoint_sample_type_legend_palette_2) <span class="sc">+</span></span>
-<span id="cb8-33"><a href="#cb8-33" aria-hidden="true" tabindex="-1"></a>  <span class="co"># scale_y_continuous(breaks = seq(0 , 1, 0.1), minor_breaks = seq(0 , 1, 0.1)) +</span></span>
-<span id="cb8-34"><a href="#cb8-34" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ylim</span>(<span class="sc">-</span><span class="fl">0.5</span>, <span class="fl">1.5</span>) <span class="sc">+</span></span>
-<span id="cb8-35"><a href="#cb8-35" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span> (<span class="at">fill =</span> <span class="st">&#39;&#39;</span>) <span class="sc">+</span></span>
-<span id="cb8-36"><a href="#cb8-36" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme</span>(</span>
-<span id="cb8-37"><a href="#cb8-37" aria-hidden="true" tabindex="-1"></a>    <span class="at">axis.text =</span> <span class="fu">element_blank</span>(),</span>
-<span id="cb8-38"><a href="#cb8-38" aria-hidden="true" tabindex="-1"></a>    <span class="at">axis.title =</span> <span class="fu">element_blank</span>(),</span>
-<span id="cb8-39"><a href="#cb8-39" aria-hidden="true" tabindex="-1"></a>    <span class="at">axis.ticks =</span> <span class="fu">element_blank</span>(),</span>
-<span id="cb8-40"><a href="#cb8-40" aria-hidden="true" tabindex="-1"></a>    <span class="at">axis.line =</span> <span class="fu">element_blank</span>(),</span>
-<span id="cb8-41"><a href="#cb8-41" aria-hidden="true" tabindex="-1"></a>    <span class="at">panel.grid =</span> <span class="fu">element_blank</span>(),</span>
-<span id="cb8-42"><a href="#cb8-42" aria-hidden="true" tabindex="-1"></a>    <span class="at">plot.margin =</span> <span class="fu">unit</span>(<span class="fu">rep</span>(<span class="sc">-</span><span class="dv">1</span>,<span class="dv">4</span>), <span class="st">&quot;cm&quot;</span>)</span>
-<span id="cb8-43"><a href="#cb8-43" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">+</span></span>
-<span id="cb8-44"><a href="#cb8-44" aria-hidden="true" tabindex="-1"></a>  <span class="fu">coord_polar</span>(<span class="at">start =</span> <span class="dv">0</span>) <span class="co">#+</span></span>
-<span id="cb8-45"><a href="#cb8-45" aria-hidden="true" tabindex="-1"></a>  <span class="co"># geom_text(data=label_data, aes(x=id-5, y=1+0.1, label=donor, hjust=hjust), color=&quot;black&quot;, fontface=&quot;plain&quot;,alpha=0.6, size=geom_text_size, angle= label_data$angle, inherit.aes = FALSE )</span></span></code></pre></div>
+<span id="cb8-20"><a href="#cb8-20" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(<span class="at">x =</span> donor, <span class="at">y =</span> p, <span class="at">fill =</span> timepoint_sample_type_legend, <span class="at">label =</span> donor)) <span class="sc">+</span></span>
+<span id="cb8-21"><a href="#cb8-21" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_bar</span>(<span class="at">stat=</span><span class="st">&quot;identity&quot;</span>, <span class="at">position =</span> <span class="st">&quot;fill&quot;</span>, <span class="at">width=</span><span class="fl">0.8</span>, <span class="at">size =</span> <span class="fl">0.2</span>) <span class="sc">+</span></span>
+<span id="cb8-22"><a href="#cb8-22" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Add a val=100/75/50/25 lines. I do it at the beginning to make sur barplots are OVER it.</span></span>
+<span id="cb8-23"><a href="#cb8-23" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_segment</span>(<span class="at">data=</span>grid_data, <span class="fu">aes</span>(<span class="at">x =</span> end, <span class="at">y =</span> <span class="dv">0</span>, <span class="at">xend =</span> start<span class="fl">-0.5</span>, <span class="at">yend =</span> <span class="dv">0</span>), <span class="at">colour =</span> <span class="st">&quot;grey50&quot;</span>, <span class="at">alpha=</span><span class="dv">1</span>, <span class="at">size=</span><span class="fl">0.2</span>, <span class="at">inherit.aes =</span> <span class="cn">FALSE</span> ) <span class="sc">+</span></span>
+<span id="cb8-24"><a href="#cb8-24" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_segment</span>(<span class="at">data=</span>grid_data, <span class="fu">aes</span>(<span class="at">x =</span> end, <span class="at">y =</span> <span class="fl">0.25</span>, <span class="at">xend =</span> start<span class="fl">-0.5</span>, <span class="at">yend =</span> <span class="fl">0.25</span>), <span class="at">colour =</span> <span class="st">&quot;grey50&quot;</span>, <span class="at">alpha=</span><span class="dv">1</span>, <span class="at">size=</span><span class="fl">0.2</span> , <span class="at">inherit.aes =</span> <span class="cn">FALSE</span> ) <span class="sc">+</span></span>
+<span id="cb8-25"><a href="#cb8-25" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_segment</span>(<span class="at">data=</span>grid_data, <span class="fu">aes</span>(<span class="at">x =</span> end, <span class="at">y =</span> <span class="fl">0.50</span>, <span class="at">xend =</span> start<span class="fl">-0.5</span>, <span class="at">yend =</span> <span class="fl">0.50</span>), <span class="at">colour =</span> <span class="st">&quot;grey50&quot;</span>, <span class="at">alpha=</span><span class="dv">1</span>, <span class="at">size=</span><span class="fl">0.2</span> , <span class="at">inherit.aes =</span> <span class="cn">FALSE</span> ) <span class="sc">+</span></span>
+<span id="cb8-26"><a href="#cb8-26" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_segment</span>(<span class="at">data=</span>grid_data, <span class="fu">aes</span>(<span class="at">x =</span> end, <span class="at">y =</span> <span class="fl">0.75</span>, <span class="at">xend =</span> start<span class="fl">-0.5</span>, <span class="at">yend =</span> <span class="fl">0.75</span>), <span class="at">colour =</span> <span class="st">&quot;grey50&quot;</span>, <span class="at">alpha=</span><span class="dv">1</span>, <span class="at">size=</span><span class="fl">0.2</span> , <span class="at">inherit.aes =</span> <span class="cn">FALSE</span> ) <span class="sc">+</span></span>
+<span id="cb8-27"><a href="#cb8-27" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_segment</span>(<span class="at">data=</span>grid_data, <span class="fu">aes</span>(<span class="at">x =</span> end, <span class="at">y =</span> <span class="dv">1</span>, <span class="at">xend =</span> start<span class="fl">-0.5</span>, <span class="at">yend =</span> <span class="dv">1</span>), <span class="at">colour =</span> <span class="st">&quot;grey50&quot;</span>, <span class="at">alpha=</span><span class="dv">1</span>, <span class="at">size=</span><span class="fl">0.2</span> , <span class="at">inherit.aes =</span> <span class="cn">FALSE</span> ) <span class="sc">+</span></span>
+<span id="cb8-28"><a href="#cb8-28" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Add text showing the value of each 100/75/50/25 lines</span></span>
+<span id="cb8-29"><a href="#cb8-29" aria-hidden="true" tabindex="-1"></a>  <span class="fu">annotate</span>(<span class="st">&quot;text&quot;</span>, <span class="at">x =</span> <span class="fu">rep</span>(grid_data<span class="sc">$</span>end <span class="sc">+</span> <span class="dv">2</span> ,<span class="dv">5</span>), <span class="at">y =</span> <span class="fu">c</span>(<span class="dv">0</span>, <span class="fl">0.25</span>, <span class="fl">0.50</span>, <span class="fl">0.75</span>, <span class="dv">1</span>), <span class="at">label =</span> <span class="fu">c</span>(<span class="st">&#39;0%&#39;</span>, <span class="st">&#39;25%&#39;</span>, <span class="st">&#39;50%&#39;</span>, <span class="st">&#39;75%&#39;</span>, <span class="st">&#39;100%&#39;</span>) , <span class="at">color=</span><span class="st">&quot;black&quot;</span>, <span class="at">size=</span>geom_text_size , <span class="at">angle=</span><span class="dv">0</span>, <span class="at">fontface=</span><span class="st">&quot;plain&quot;</span>, <span class="at">hjust=</span><span class="dv">1</span>) <span class="sc">+</span></span>
+<span id="cb8-30"><a href="#cb8-30" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_bar</span>(<span class="at">stat=</span><span class="st">&quot;identity&quot;</span>, <span class="at">position =</span> <span class="st">&quot;fill&quot;</span>, <span class="at">width=</span><span class="fl">0.8</span>, <span class="at">color =</span> <span class="st">&#39;white&#39;</span>, <span class="at">size =</span> <span class="fl">0.2</span>) <span class="sc">+</span></span>
+<span id="cb8-31"><a href="#cb8-31" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_fill_manual</span>(<span class="at">values =</span> timepoint_sample_type_legend_palette_2) <span class="sc">+</span></span>
+<span id="cb8-32"><a href="#cb8-32" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ylim</span>(<span class="sc">-</span><span class="fl">0.5</span>, <span class="fl">1.5</span>) <span class="sc">+</span></span>
+<span id="cb8-33"><a href="#cb8-33" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span> (<span class="at">fill =</span> <span class="st">&#39;&#39;</span>) <span class="sc">+</span></span>
+<span id="cb8-34"><a href="#cb8-34" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme</span>(</span>
+<span id="cb8-35"><a href="#cb8-35" aria-hidden="true" tabindex="-1"></a>    <span class="at">axis.text =</span> <span class="fu">element_blank</span>(),</span>
+<span id="cb8-36"><a href="#cb8-36" aria-hidden="true" tabindex="-1"></a>    <span class="at">axis.title =</span> <span class="fu">element_blank</span>(),</span>
+<span id="cb8-37"><a href="#cb8-37" aria-hidden="true" tabindex="-1"></a>    <span class="at">axis.ticks =</span> <span class="fu">element_blank</span>(),</span>
+<span id="cb8-38"><a href="#cb8-38" aria-hidden="true" tabindex="-1"></a>    <span class="at">axis.line =</span> <span class="fu">element_blank</span>(),</span>
+<span id="cb8-39"><a href="#cb8-39" aria-hidden="true" tabindex="-1"></a>    <span class="at">panel.grid =</span> <span class="fu">element_blank</span>(),</span>
+<span id="cb8-40"><a href="#cb8-40" aria-hidden="true" tabindex="-1"></a>    <span class="at">plot.margin =</span> <span class="fu">unit</span>(<span class="fu">rep</span>(<span class="sc">-</span><span class="dv">1</span>,<span class="dv">4</span>), <span class="st">&quot;cm&quot;</span>)</span>
+<span id="cb8-41"><a href="#cb8-41" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">+</span></span>
+<span id="cb8-42"><a href="#cb8-42" aria-hidden="true" tabindex="-1"></a>  <span class="fu">coord_polar</span>(<span class="at">start =</span> <span class="dv">0</span>)</span></code></pre></div>
 </div>
 <div id="plot-polar-distribution" class="section level2">
 <h2>Plot polar distribution</h2>

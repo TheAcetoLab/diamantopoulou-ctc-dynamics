@@ -673,15 +673,15 @@ project makes it easier to run your code on other machines.</p>
 <div class="panel panel-default">
 <div class="panel-heading">
 <p class="panel-title">
-<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRepositoryversionstrongahrefhttpsgithubcomTheAcetoLabdiamantopoulouctcdynamicstree34ee51371a3786d0f18c3d2c11ec3e41b9f8ea4ctargetblank34ee513a">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRepositoryversionstrongahrefhttpsgithubcomTheAcetoLabdiamantopoulouctcdynamicstree545ee28878a043453ec828b26ef18d6c110d8906targetblank545ee28a">
 <span class="glyphicon glyphicon-ok text-success"
 aria-hidden="true"></span> <strong>Repository version:</strong>
-<a href="https://github.com/TheAcetoLab/diamantopoulou-ctc-dynamics/tree/34ee51371a3786d0f18c3d2c11ec3e41b9f8ea4c" target="_blank">34ee513</a>
+<a href="https://github.com/TheAcetoLab/diamantopoulou-ctc-dynamics/tree/545ee28878a043453ec828b26ef18d6c110d8906" target="_blank">545ee28</a>
 </a>
 </p>
 </div>
 <div
-id="strongRepositoryversionstrongahrefhttpsgithubcomTheAcetoLabdiamantopoulouctcdynamicstree34ee51371a3786d0f18c3d2c11ec3e41b9f8ea4ctargetblank34ee513a"
+id="strongRepositoryversionstrongahrefhttpsgithubcomTheAcetoLabdiamantopoulouctcdynamicstree545ee28878a043453ec828b26ef18d6c110d8906targetblank545ee28a"
 class="panel-collapse collapse">
 <div class="panel-body">
 <p>
@@ -691,7 +691,7 @@ reproducibility.
 </p>
 <p>
 The results in this page were generated with repository version
-<a href="https://github.com/TheAcetoLab/diamantopoulou-ctc-dynamics/tree/34ee51371a3786d0f18c3d2c11ec3e41b9f8ea4c" target="_blank">34ee513</a>.
+<a href="https://github.com/TheAcetoLab/diamantopoulou-ctc-dynamics/tree/545ee28878a043453ec828b26ef18d6c110d8906" target="_blank">545ee28</a>.
 See the <em>Past versions</em> tab to see a history of the changes made
 to the R Markdown and HTML files.
 </p>
@@ -768,6 +768,40 @@ Message
 </tr>
 </thead>
 <tbody>
+<tr>
+<td>
+Rmd
+</td>
+<td>
+<a href="https://github.com/TheAcetoLab/diamantopoulou-ctc-dynamics/blob/545ee28878a043453ec828b26ef18d6c110d8906/analysis/core_gene_sets.Rmd" target="_blank">545ee28</a>
+</td>
+<td>
+fcg-bio
+</td>
+<td>
+2022-04-26
+</td>
+<td>
+release v1.0
+</td>
+</tr>
+<tr>
+<td>
+html
+</td>
+<td>
+<a href="https://rawcdn.githack.com/TheAcetoLab/diamantopoulou-ctc-dynamics/74b189131a39d49fd9e79eaee6c8e76575069de6/docs/core_gene_sets.html" target="_blank">74b1891</a>
+</td>
+<td>
+fcg-bio
+</td>
+<td>
+2022-04-26
+</td>
+<td>
+Build site.
+</td>
+</tr>
 <tr>
 <td>
 html
@@ -920,9 +954,9 @@ id="expression-distribution-of-core-circadian-genes-in-nsg-cdx-br16"
 class="section level3">
 <h3>Expression distribution of core circadian genes in NSG-CDX-BR16</h3>
 <p>Plot showing the expression distribution of core circadian genes in
-CTCs from NSG-CDX-BR16 mice. The fold change (FC, in log2 scale) and P
-value from the differential expression analysis are shown for each
-gene.</p>
+CTCs from NSG-CDX-BR16 mice. The fold change (FC, in log2 scale) and
+<em>P</em> value from the differential expression analysis are shown for
+each gene.</p>
 <div class="sourceCode" id="cb13"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a>expr_long <span class="ot">&lt;-</span> <span class="fu">logcounts</span>(use_sce) <span class="sc">%&gt;%</span> data.frame <span class="sc">%&gt;%</span> <span class="fu">rownames_to_column</span>(<span class="st">&#39;gene&#39;</span>) <span class="sc">%&gt;%</span> <span class="fu">pivot_longer</span>(<span class="sc">-</span>gene, <span class="at">names_to =</span> <span class="st">&#39;sample_alias&#39;</span>, <span class="at">values_to =</span> <span class="st">&#39;exprs&#39;</span>)</span>
 <span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a>use_data <span class="ot">&lt;-</span> <span class="fu">colData</span>(use_sce) <span class="sc">%&gt;%</span> </span>
 <span id="cb13-3"><a href="#cb13-3" aria-hidden="true" tabindex="-1"></a>  data.frame <span class="sc">%&gt;%</span> </span>
@@ -1087,8 +1121,9 @@ fcg-bio
 class="section level2">
 <h2>Expression of TEAD genes in CTCs from NSG-CDX-BR16</h2>
 <p>Plot showing the expression distribution of TEAD genes in CTCs from
-NSG-CDX-BR16 mice. The fold change (FC, in log2 scale) and P value from
-the differential expression analysis are shown for each gene.</p>
+NSG-CDX-BR16 mice. The fold change (FC, in log2 scale) and <em>P</em>
+value from the differential expression analysis are shown for each
+gene.</p>
 <div class="sourceCode" id="cb15"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a>use_sce <span class="ot">&lt;-</span> sce_br16</span>
 <span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a>use_dge <span class="ot">&lt;-</span> dge_br16</span>
 <span id="cb15-3"><a href="#cb15-3" aria-hidden="true" tabindex="-1"></a></span>

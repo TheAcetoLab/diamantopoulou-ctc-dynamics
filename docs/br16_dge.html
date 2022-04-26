@@ -692,15 +692,15 @@ project makes it easier to run your code on other machines.</p>
 <div class="panel panel-default">
 <div class="panel-heading">
 <p class="panel-title">
-<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRepositoryversionstrongahrefhttpsgithubcomTheAcetoLabdiamantopoulouctcdynamicstree34ee51371a3786d0f18c3d2c11ec3e41b9f8ea4ctargetblank34ee513a">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRepositoryversionstrongahrefhttpsgithubcomTheAcetoLabdiamantopoulouctcdynamicstree545ee28878a043453ec828b26ef18d6c110d8906targetblank545ee28a">
 <span class="glyphicon glyphicon-ok text-success"
 aria-hidden="true"></span> <strong>Repository version:</strong>
-<a href="https://github.com/TheAcetoLab/diamantopoulou-ctc-dynamics/tree/34ee51371a3786d0f18c3d2c11ec3e41b9f8ea4c" target="_blank">34ee513</a>
+<a href="https://github.com/TheAcetoLab/diamantopoulou-ctc-dynamics/tree/545ee28878a043453ec828b26ef18d6c110d8906" target="_blank">545ee28</a>
 </a>
 </p>
 </div>
 <div
-id="strongRepositoryversionstrongahrefhttpsgithubcomTheAcetoLabdiamantopoulouctcdynamicstree34ee51371a3786d0f18c3d2c11ec3e41b9f8ea4ctargetblank34ee513a"
+id="strongRepositoryversionstrongahrefhttpsgithubcomTheAcetoLabdiamantopoulouctcdynamicstree545ee28878a043453ec828b26ef18d6c110d8906targetblank545ee28a"
 class="panel-collapse collapse">
 <div class="panel-body">
 <p>
@@ -710,7 +710,7 @@ reproducibility.
 </p>
 <p>
 The results in this page were generated with repository version
-<a href="https://github.com/TheAcetoLab/diamantopoulou-ctc-dynamics/tree/34ee51371a3786d0f18c3d2c11ec3e41b9f8ea4c" target="_blank">34ee513</a>.
+<a href="https://github.com/TheAcetoLab/diamantopoulou-ctc-dynamics/tree/545ee28878a043453ec828b26ef18d6c110d8906" target="_blank">545ee28</a>.
 See the <em>Past versions</em> tab to see a history of the changes made
 to the R Markdown and HTML files.
 </p>
@@ -787,6 +787,40 @@ Message
 </tr>
 </thead>
 <tbody>
+<tr>
+<td>
+Rmd
+</td>
+<td>
+<a href="https://github.com/TheAcetoLab/diamantopoulou-ctc-dynamics/blob/545ee28878a043453ec828b26ef18d6c110d8906/analysis/br16_dge.Rmd" target="_blank">545ee28</a>
+</td>
+<td>
+fcg-bio
+</td>
+<td>
+2022-04-26
+</td>
+<td>
+release v1.0
+</td>
+</tr>
+<tr>
+<td>
+html
+</td>
+<td>
+<a href="https://rawcdn.githack.com/TheAcetoLab/diamantopoulou-ctc-dynamics/74b189131a39d49fd9e79eaee6c8e76575069de6/docs/br16_dge.html" target="_blank">74b1891</a>
+</td>
+<td>
+fcg-bio
+</td>
+<td>
+2022-04-26
+</td>
+<td>
+Build site.
+</td>
+</tr>
 <tr>
 <td>
 html
@@ -911,11 +945,13 @@ class="section level2">
 <div id="genes-differentially-expressed-in-ctcs-of-nsg-cdx-br16"
 class="section level2">
 <h2>Genes differentially expressed in CTCs of NSG-CDX-BR16</h2>
-<p>Genes differentially expressed in CTCs of NSG-CDX-BR16 mice during
-the rest phase versus active phase. Table listing the differentially
-expressed genes comparing CTCs obtained in the rest phase (n = 65)
-versus the active phase (n = 73) of NSG-CDX-BR16 mice. All genes
-evaluated are included in the table (n = 12,261). For fold-change
+<p><strong>Genes differentially expressed in CTCs of NSG-CDX-BR16 mice
+during the rest phase versus active phase</strong>. Table listing the
+differentially expressed genes comparing CTCs obtained in the rest phase
+(n = 65) versus the active phase (n = 73) of NSG-CDX-BR16 mice. All
+genes evaluated are included in the table (n = 12,261). Fold-change and
+<em>P</em> values were computed with the quasi-likelihood (QL) approach
+from edgeR using robust dispersion estimates. For fold-change
 calculation, active phase samples were used in the denominator.</p>
 <div class="sourceCode" id="cb8"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a>dge_all<span class="sc">$</span>results <span class="sc">%&gt;%</span> </span>
 <span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a>  dplyr<span class="sc">::</span><span class="fu">select</span>(gene_name, gene_type, logFC, logCPM, PValue, FDR, description) <span class="sc">%&gt;%</span> </span>
@@ -958,63 +994,61 @@ from NSG-BR16-CDX mice.</p>
 <span id="cb9-5"><a href="#cb9-5" aria-hidden="true" tabindex="-1"></a>n_down <span class="ot">&lt;-</span> dge<span class="sc">$</span>results <span class="sc">%&gt;%</span> <span class="fu">filter</span>(FDR <span class="sc">&lt;=</span> <span class="fl">0.05</span> <span class="sc">&amp;</span> logFC <span class="sc">&lt;=</span> <span class="sc">-</span><span class="fl">0.5</span>) <span class="sc">%&gt;%</span> nrow</span>
 <span id="cb9-6"><a href="#cb9-6" aria-hidden="true" tabindex="-1"></a>expr_values <span class="ot">&lt;-</span> <span class="fu">logcounts</span>(use_sce[use_genes,])</span>
 <span id="cb9-7"><a href="#cb9-7" aria-hidden="true" tabindex="-1"></a>heat_values <span class="ot">&lt;-</span> <span class="fu">t</span>(<span class="fu">apply</span>(expr_values, <span class="dv">1</span>, scale, <span class="at">center =</span> <span class="cn">TRUE</span>, <span class="at">scale =</span> <span class="cn">TRUE</span>)) <span class="co"># Z-score</span></span>
-<span id="cb9-8"><a href="#cb9-8" aria-hidden="true" tabindex="-1"></a><span class="co"># heat_values &lt;- expr_values - rowMeans2(expr_values)</span></span>
-<span id="cb9-9"><a href="#cb9-9" aria-hidden="true" tabindex="-1"></a><span class="fu">rownames</span>(heat_values) <span class="ot">&lt;-</span> use_genes_name</span>
-<span id="cb9-10"><a href="#cb9-10" aria-hidden="true" tabindex="-1"></a><span class="fu">colnames</span>(heat_values) <span class="ot">&lt;-</span> <span class="fu">colnames</span>(expr_values)</span>
-<span id="cb9-11"><a href="#cb9-11" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb9-12"><a href="#cb9-12" aria-hidden="true" tabindex="-1"></a>coldata_ord <span class="ot">&lt;-</span> <span class="fu">colData</span>(use_sce) <span class="sc">%&gt;%</span> data.frame <span class="sc">%&gt;%</span> <span class="fu">arrange</span>(zt_sample_type_legend) </span>
-<span id="cb9-13"><a href="#cb9-13" aria-hidden="true" tabindex="-1"></a>heat_values <span class="ot">&lt;-</span> heat_values[,coldata_ord<span class="sc">$</span>sample_alias]</span>
-<span id="cb9-14"><a href="#cb9-14" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb9-15"><a href="#cb9-15" aria-hidden="true" tabindex="-1"></a>ha_top <span class="ot">&lt;-</span> <span class="fu">HeatmapAnnotation</span>(</span>
-<span id="cb9-16"><a href="#cb9-16" aria-hidden="true" tabindex="-1"></a>  <span class="at">show_legend =</span> <span class="cn">FALSE</span>,</span>
-<span id="cb9-17"><a href="#cb9-17" aria-hidden="true" tabindex="-1"></a>  <span class="st">`</span><span class="at">CTC type</span><span class="st">`</span> <span class="ot">=</span> coldata_ord<span class="sc">$</span>zt_sample_type_legend,</span>
-<span id="cb9-18"><a href="#cb9-18" aria-hidden="true" tabindex="-1"></a>  <span class="at">col =</span> <span class="fu">list</span>(<span class="st">`</span><span class="at">CTC type</span><span class="st">`</span> <span class="ot">=</span> zt_sample_type_legend_palette),</span>
-<span id="cb9-19"><a href="#cb9-19" aria-hidden="true" tabindex="-1"></a>  <span class="at">annotation_legend_param =</span> <span class="fu">list</span>(</span>
-<span id="cb9-20"><a href="#cb9-20" aria-hidden="true" tabindex="-1"></a>    <span class="at">title =</span> <span class="cn">NULL</span>,</span>
-<span id="cb9-21"><a href="#cb9-21" aria-hidden="true" tabindex="-1"></a>    <span class="at">title_gp =</span> <span class="fu">gpar</span>(<span class="at">fontsize =</span> <span class="dv">8</span>),</span>
-<span id="cb9-22"><a href="#cb9-22" aria-hidden="true" tabindex="-1"></a>    <span class="at">labels_gp =</span> <span class="fu">gpar</span>(<span class="at">col =</span> <span class="st">&quot;black&quot;</span>, <span class="at">fontsize =</span> <span class="dv">8</span>),</span>
-<span id="cb9-23"><a href="#cb9-23" aria-hidden="true" tabindex="-1"></a>    <span class="at">grid_width =</span> <span class="fu">unit</span>(<span class="dv">3</span>, <span class="st">&quot;mm&quot;</span>)</span>
-<span id="cb9-24"><a href="#cb9-24" aria-hidden="true" tabindex="-1"></a>    ),</span>
-<span id="cb9-25"><a href="#cb9-25" aria-hidden="true" tabindex="-1"></a>  <span class="at">show_annotation_name =</span> <span class="cn">FALSE</span>,</span>
-<span id="cb9-26"><a href="#cb9-26" aria-hidden="true" tabindex="-1"></a>  <span class="at">simple_anno_size =</span> <span class="fu">unit</span>(<span class="dv">3</span>, <span class="st">&quot;mm&quot;</span>)</span>
-<span id="cb9-27"><a href="#cb9-27" aria-hidden="true" tabindex="-1"></a>  )</span>
-<span id="cb9-28"><a href="#cb9-28" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb9-29"><a href="#cb9-29" aria-hidden="true" tabindex="-1"></a><span class="co"># zlim &lt;- c(-max(abs(heat_values)), max(abs(heat_values)))</span></span>
-<span id="cb9-30"><a href="#cb9-30" aria-hidden="true" tabindex="-1"></a>zlim <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="sc">-</span><span class="dv">3</span>, <span class="dv">3</span>)</span>
-<span id="cb9-31"><a href="#cb9-31" aria-hidden="true" tabindex="-1"></a>heat_values[heat_values <span class="sc">&lt;</span> zlim[<span class="dv">1</span>]] <span class="ot">&lt;-</span> zlim[<span class="dv">1</span>]</span>
-<span id="cb9-32"><a href="#cb9-32" aria-hidden="true" tabindex="-1"></a>heat_values[heat_values <span class="sc">&gt;</span> zlim[<span class="dv">2</span>]] <span class="ot">&lt;-</span> zlim[<span class="dv">2</span>]</span>
+<span id="cb9-8"><a href="#cb9-8" aria-hidden="true" tabindex="-1"></a><span class="fu">rownames</span>(heat_values) <span class="ot">&lt;-</span> use_genes_name</span>
+<span id="cb9-9"><a href="#cb9-9" aria-hidden="true" tabindex="-1"></a><span class="fu">colnames</span>(heat_values) <span class="ot">&lt;-</span> <span class="fu">colnames</span>(expr_values)</span>
+<span id="cb9-10"><a href="#cb9-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-11"><a href="#cb9-11" aria-hidden="true" tabindex="-1"></a>coldata_ord <span class="ot">&lt;-</span> <span class="fu">colData</span>(use_sce) <span class="sc">%&gt;%</span> data.frame <span class="sc">%&gt;%</span> <span class="fu">arrange</span>(zt_sample_type_legend) </span>
+<span id="cb9-12"><a href="#cb9-12" aria-hidden="true" tabindex="-1"></a>heat_values <span class="ot">&lt;-</span> heat_values[,coldata_ord<span class="sc">$</span>sample_alias]</span>
+<span id="cb9-13"><a href="#cb9-13" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-14"><a href="#cb9-14" aria-hidden="true" tabindex="-1"></a>ha_top <span class="ot">&lt;-</span> <span class="fu">HeatmapAnnotation</span>(</span>
+<span id="cb9-15"><a href="#cb9-15" aria-hidden="true" tabindex="-1"></a>  <span class="at">show_legend =</span> <span class="cn">FALSE</span>,</span>
+<span id="cb9-16"><a href="#cb9-16" aria-hidden="true" tabindex="-1"></a>  <span class="st">`</span><span class="at">CTC type</span><span class="st">`</span> <span class="ot">=</span> coldata_ord<span class="sc">$</span>zt_sample_type_legend,</span>
+<span id="cb9-17"><a href="#cb9-17" aria-hidden="true" tabindex="-1"></a>  <span class="at">col =</span> <span class="fu">list</span>(<span class="st">`</span><span class="at">CTC type</span><span class="st">`</span> <span class="ot">=</span> zt_sample_type_legend_palette),</span>
+<span id="cb9-18"><a href="#cb9-18" aria-hidden="true" tabindex="-1"></a>  <span class="at">annotation_legend_param =</span> <span class="fu">list</span>(</span>
+<span id="cb9-19"><a href="#cb9-19" aria-hidden="true" tabindex="-1"></a>    <span class="at">title =</span> <span class="cn">NULL</span>,</span>
+<span id="cb9-20"><a href="#cb9-20" aria-hidden="true" tabindex="-1"></a>    <span class="at">title_gp =</span> <span class="fu">gpar</span>(<span class="at">fontsize =</span> <span class="dv">8</span>),</span>
+<span id="cb9-21"><a href="#cb9-21" aria-hidden="true" tabindex="-1"></a>    <span class="at">labels_gp =</span> <span class="fu">gpar</span>(<span class="at">col =</span> <span class="st">&quot;black&quot;</span>, <span class="at">fontsize =</span> <span class="dv">8</span>),</span>
+<span id="cb9-22"><a href="#cb9-22" aria-hidden="true" tabindex="-1"></a>    <span class="at">grid_width =</span> <span class="fu">unit</span>(<span class="dv">3</span>, <span class="st">&quot;mm&quot;</span>)</span>
+<span id="cb9-23"><a href="#cb9-23" aria-hidden="true" tabindex="-1"></a>    ),</span>
+<span id="cb9-24"><a href="#cb9-24" aria-hidden="true" tabindex="-1"></a>  <span class="at">show_annotation_name =</span> <span class="cn">FALSE</span>,</span>
+<span id="cb9-25"><a href="#cb9-25" aria-hidden="true" tabindex="-1"></a>  <span class="at">simple_anno_size =</span> <span class="fu">unit</span>(<span class="dv">3</span>, <span class="st">&quot;mm&quot;</span>)</span>
+<span id="cb9-26"><a href="#cb9-26" aria-hidden="true" tabindex="-1"></a>  )</span>
+<span id="cb9-27"><a href="#cb9-27" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-28"><a href="#cb9-28" aria-hidden="true" tabindex="-1"></a>zlim <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="sc">-</span><span class="dv">3</span>, <span class="dv">3</span>)</span>
+<span id="cb9-29"><a href="#cb9-29" aria-hidden="true" tabindex="-1"></a>heat_values[heat_values <span class="sc">&lt;</span> zlim[<span class="dv">1</span>]] <span class="ot">&lt;-</span> zlim[<span class="dv">1</span>]</span>
+<span id="cb9-30"><a href="#cb9-30" aria-hidden="true" tabindex="-1"></a>heat_values[heat_values <span class="sc">&gt;</span> zlim[<span class="dv">2</span>]] <span class="ot">&lt;-</span> zlim[<span class="dv">2</span>]</span>
+<span id="cb9-31"><a href="#cb9-31" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-32"><a href="#cb9-32" aria-hidden="true" tabindex="-1"></a>col_fun <span class="ot">&lt;-</span>  <span class="fu">colorRamp2</span>(<span class="fu">seq</span>(zlim[<span class="dv">1</span>], zlim[<span class="dv">2</span>], <span class="at">length.out =</span> <span class="dv">11</span>), <span class="fu">rev</span>(<span class="fu">brewer.pal</span>(<span class="at">n =</span> <span class="dv">11</span>, <span class="at">name =</span><span class="st">&quot;BrBG&quot;</span>)))</span>
 <span id="cb9-33"><a href="#cb9-33" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb9-34"><a href="#cb9-34" aria-hidden="true" tabindex="-1"></a>col_fun <span class="ot">&lt;-</span>  <span class="fu">colorRamp2</span>(<span class="fu">seq</span>(zlim[<span class="dv">1</span>], zlim[<span class="dv">2</span>], <span class="at">length.out =</span> <span class="dv">11</span>), <span class="fu">rev</span>(<span class="fu">brewer.pal</span>(<span class="at">n =</span> <span class="dv">11</span>, <span class="at">name =</span><span class="st">&quot;BrBG&quot;</span>)))</span>
-<span id="cb9-35"><a href="#cb9-35" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb9-36"><a href="#cb9-36" aria-hidden="true" tabindex="-1"></a><span class="fu">Heatmap</span>(</span>
-<span id="cb9-37"><a href="#cb9-37" aria-hidden="true" tabindex="-1"></a>  heat_values,</span>
-<span id="cb9-38"><a href="#cb9-38" aria-hidden="true" tabindex="-1"></a>  <span class="at">name =</span> <span class="st">&#39;z</span><span class="sc">\n</span><span class="st">score&#39;</span>,</span>
-<span id="cb9-39"><a href="#cb9-39" aria-hidden="true" tabindex="-1"></a>  <span class="at">col =</span>  col_fun,</span>
-<span id="cb9-40"><a href="#cb9-40" aria-hidden="true" tabindex="-1"></a>  <span class="at">row_split =</span> <span class="dv">2</span>, </span>
-<span id="cb9-41"><a href="#cb9-41" aria-hidden="true" tabindex="-1"></a>  <span class="at">row_gap =</span> <span class="fu">unit</span>(<span class="dv">2</span>, <span class="st">&quot;mm&quot;</span>),</span>
-<span id="cb9-42"><a href="#cb9-42" aria-hidden="true" tabindex="-1"></a>  <span class="at">cluster_columns =</span> <span class="cn">FALSE</span>,</span>
-<span id="cb9-43"><a href="#cb9-43" aria-hidden="true" tabindex="-1"></a>  <span class="at">column_title =</span> <span class="cn">NULL</span>,</span>
-<span id="cb9-44"><a href="#cb9-44" aria-hidden="true" tabindex="-1"></a>  <span class="at">row_title =</span> <span class="cn">NULL</span>,</span>
-<span id="cb9-45"><a href="#cb9-45" aria-hidden="true" tabindex="-1"></a>  <span class="at">show_column_dend =</span> <span class="cn">FALSE</span>,</span>
-<span id="cb9-46"><a href="#cb9-46" aria-hidden="true" tabindex="-1"></a>  <span class="at">show_column_names =</span> <span class="cn">FALSE</span>, </span>
-<span id="cb9-47"><a href="#cb9-47" aria-hidden="true" tabindex="-1"></a>  <span class="at">show_row_dend =</span> <span class="cn">FALSE</span>,</span>
-<span id="cb9-48"><a href="#cb9-48" aria-hidden="true" tabindex="-1"></a>  <span class="at">show_row_names =</span> <span class="cn">FALSE</span>, </span>
-<span id="cb9-49"><a href="#cb9-49" aria-hidden="true" tabindex="-1"></a>  <span class="at">top_annotation =</span> ha_top,</span>
-<span id="cb9-50"><a href="#cb9-50" aria-hidden="true" tabindex="-1"></a>  <span class="at">left_annotation =</span> <span class="fu">rowAnnotation</span>(<span class="at">foo =</span> <span class="fu">anno_block</span>(</span>
-<span id="cb9-51"><a href="#cb9-51" aria-hidden="true" tabindex="-1"></a>        <span class="at">labels =</span> <span class="fu">c</span>(</span>
-<span id="cb9-52"><a href="#cb9-52" aria-hidden="true" tabindex="-1"></a>          <span class="fu">paste0</span>(<span class="st">&quot;Upregulated in</span><span class="sc">\n</span><span class="st">ZT4 (N=&quot;</span>, n_up, <span class="st">&quot;)&quot;</span>), </span>
-<span id="cb9-53"><a href="#cb9-53" aria-hidden="true" tabindex="-1"></a>          <span class="fu">paste0</span>(<span class="st">&quot;Upregulated in</span><span class="sc">\n</span><span class="st">ZT16 (N=&quot;</span>, n_down, <span class="st">&quot;)&quot;</span>)</span>
-<span id="cb9-54"><a href="#cb9-54" aria-hidden="true" tabindex="-1"></a>        ),</span>
-<span id="cb9-55"><a href="#cb9-55" aria-hidden="true" tabindex="-1"></a>        <span class="at">labels_gp =</span> <span class="fu">gpar</span>(<span class="at">col =</span> <span class="st">&quot;black&quot;</span>, <span class="at">fontsize =</span> <span class="dv">8</span>),</span>
-<span id="cb9-56"><a href="#cb9-56" aria-hidden="true" tabindex="-1"></a>        <span class="at">gp =</span> <span class="fu">gpar</span>(<span class="at">lwd =</span> <span class="dv">0</span>, <span class="at">lty =</span> <span class="dv">0</span>)</span>
-<span id="cb9-57"><a href="#cb9-57" aria-hidden="true" tabindex="-1"></a>        )</span>
-<span id="cb9-58"><a href="#cb9-58" aria-hidden="true" tabindex="-1"></a>  ),</span>
-<span id="cb9-59"><a href="#cb9-59" aria-hidden="true" tabindex="-1"></a>  <span class="at">heatmap_legend_param =</span> <span class="fu">list</span>(</span>
-<span id="cb9-60"><a href="#cb9-60" aria-hidden="true" tabindex="-1"></a>    <span class="at">title_gp =</span> <span class="fu">gpar</span>(<span class="at">fontsize =</span> <span class="dv">8</span>),</span>
-<span id="cb9-61"><a href="#cb9-61" aria-hidden="true" tabindex="-1"></a>    <span class="at">labels_gp =</span> <span class="fu">gpar</span>(<span class="at">fontsize =</span> <span class="dv">8</span>),</span>
-<span id="cb9-62"><a href="#cb9-62" aria-hidden="true" tabindex="-1"></a>    <span class="at">grid_width =</span> <span class="fu">unit</span>(<span class="dv">3</span>, <span class="st">&quot;mm&quot;</span>)</span>
-<span id="cb9-63"><a href="#cb9-63" aria-hidden="true" tabindex="-1"></a>    )</span>
-<span id="cb9-64"><a href="#cb9-64" aria-hidden="true" tabindex="-1"></a>)</span></code></pre></div>
+<span id="cb9-34"><a href="#cb9-34" aria-hidden="true" tabindex="-1"></a><span class="fu">Heatmap</span>(</span>
+<span id="cb9-35"><a href="#cb9-35" aria-hidden="true" tabindex="-1"></a>  heat_values,</span>
+<span id="cb9-36"><a href="#cb9-36" aria-hidden="true" tabindex="-1"></a>  <span class="at">name =</span> <span class="st">&#39;z</span><span class="sc">\n</span><span class="st">score&#39;</span>,</span>
+<span id="cb9-37"><a href="#cb9-37" aria-hidden="true" tabindex="-1"></a>  <span class="at">col =</span>  col_fun,</span>
+<span id="cb9-38"><a href="#cb9-38" aria-hidden="true" tabindex="-1"></a>  <span class="at">row_split =</span> <span class="dv">2</span>, </span>
+<span id="cb9-39"><a href="#cb9-39" aria-hidden="true" tabindex="-1"></a>  <span class="at">row_gap =</span> <span class="fu">unit</span>(<span class="dv">2</span>, <span class="st">&quot;mm&quot;</span>),</span>
+<span id="cb9-40"><a href="#cb9-40" aria-hidden="true" tabindex="-1"></a>  <span class="at">cluster_columns =</span> <span class="cn">FALSE</span>,</span>
+<span id="cb9-41"><a href="#cb9-41" aria-hidden="true" tabindex="-1"></a>  <span class="at">column_title =</span> <span class="cn">NULL</span>,</span>
+<span id="cb9-42"><a href="#cb9-42" aria-hidden="true" tabindex="-1"></a>  <span class="at">row_title =</span> <span class="cn">NULL</span>,</span>
+<span id="cb9-43"><a href="#cb9-43" aria-hidden="true" tabindex="-1"></a>  <span class="at">show_column_dend =</span> <span class="cn">FALSE</span>,</span>
+<span id="cb9-44"><a href="#cb9-44" aria-hidden="true" tabindex="-1"></a>  <span class="at">show_column_names =</span> <span class="cn">FALSE</span>, </span>
+<span id="cb9-45"><a href="#cb9-45" aria-hidden="true" tabindex="-1"></a>  <span class="at">show_row_dend =</span> <span class="cn">FALSE</span>,</span>
+<span id="cb9-46"><a href="#cb9-46" aria-hidden="true" tabindex="-1"></a>  <span class="at">show_row_names =</span> <span class="cn">FALSE</span>, </span>
+<span id="cb9-47"><a href="#cb9-47" aria-hidden="true" tabindex="-1"></a>  <span class="at">top_annotation =</span> ha_top,</span>
+<span id="cb9-48"><a href="#cb9-48" aria-hidden="true" tabindex="-1"></a>  <span class="at">left_annotation =</span> <span class="fu">rowAnnotation</span>(<span class="at">foo =</span> <span class="fu">anno_block</span>(</span>
+<span id="cb9-49"><a href="#cb9-49" aria-hidden="true" tabindex="-1"></a>        <span class="at">labels =</span> <span class="fu">c</span>(</span>
+<span id="cb9-50"><a href="#cb9-50" aria-hidden="true" tabindex="-1"></a>          <span class="fu">paste0</span>(<span class="st">&quot;Upregulated in</span><span class="sc">\n</span><span class="st">ZT4 (N=&quot;</span>, n_up, <span class="st">&quot;)&quot;</span>), </span>
+<span id="cb9-51"><a href="#cb9-51" aria-hidden="true" tabindex="-1"></a>          <span class="fu">paste0</span>(<span class="st">&quot;Upregulated in</span><span class="sc">\n</span><span class="st">ZT16 (N=&quot;</span>, n_down, <span class="st">&quot;)&quot;</span>)</span>
+<span id="cb9-52"><a href="#cb9-52" aria-hidden="true" tabindex="-1"></a>        ),</span>
+<span id="cb9-53"><a href="#cb9-53" aria-hidden="true" tabindex="-1"></a>        <span class="at">labels_gp =</span> <span class="fu">gpar</span>(<span class="at">col =</span> <span class="st">&quot;black&quot;</span>, <span class="at">fontsize =</span> <span class="dv">8</span>),</span>
+<span id="cb9-54"><a href="#cb9-54" aria-hidden="true" tabindex="-1"></a>        <span class="at">gp =</span> <span class="fu">gpar</span>(<span class="at">lwd =</span> <span class="dv">0</span>, <span class="at">lty =</span> <span class="dv">0</span>)</span>
+<span id="cb9-55"><a href="#cb9-55" aria-hidden="true" tabindex="-1"></a>        )</span>
+<span id="cb9-56"><a href="#cb9-56" aria-hidden="true" tabindex="-1"></a>  ),</span>
+<span id="cb9-57"><a href="#cb9-57" aria-hidden="true" tabindex="-1"></a>  <span class="at">heatmap_legend_param =</span> <span class="fu">list</span>(</span>
+<span id="cb9-58"><a href="#cb9-58" aria-hidden="true" tabindex="-1"></a>    <span class="at">title_gp =</span> <span class="fu">gpar</span>(<span class="at">fontsize =</span> <span class="dv">8</span>),</span>
+<span id="cb9-59"><a href="#cb9-59" aria-hidden="true" tabindex="-1"></a>    <span class="at">labels_gp =</span> <span class="fu">gpar</span>(<span class="at">fontsize =</span> <span class="dv">8</span>),</span>
+<span id="cb9-60"><a href="#cb9-60" aria-hidden="true" tabindex="-1"></a>    <span class="at">grid_width =</span> <span class="fu">unit</span>(<span class="dv">3</span>, <span class="st">&quot;mm&quot;</span>)</span>
+<span id="cb9-61"><a href="#cb9-61" aria-hidden="true" tabindex="-1"></a>    )</span>
+<span id="cb9-62"><a href="#cb9-62" aria-hidden="true" tabindex="-1"></a>)</span></code></pre></div>
 <p><img src="figure/br16_dge.Rmd/br16_dge_heatmap-1.png" style="display: block; margin: auto;" /></p>
 <p>
 <button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-br16_dge_heatmap-1">
@@ -1059,64 +1093,62 @@ fcg-bio
 <span id="cb10-4"><a href="#cb10-4" aria-hidden="true" tabindex="-1"></a>n_down <span class="ot">&lt;-</span> dge<span class="sc">$</span>results <span class="sc">%&gt;%</span> <span class="fu">filter</span>(FDR <span class="sc">&lt;=</span> <span class="fl">0.05</span> <span class="sc">&amp;</span> logFC <span class="sc">&lt;=</span> <span class="sc">-</span><span class="fl">0.5</span>) <span class="sc">%&gt;%</span> nrow</span>
 <span id="cb10-5"><a href="#cb10-5" aria-hidden="true" tabindex="-1"></a>expr_values <span class="ot">&lt;-</span> <span class="fu">logcounts</span>(use_sce[use_genes,])</span>
 <span id="cb10-6"><a href="#cb10-6" aria-hidden="true" tabindex="-1"></a>heat_values <span class="ot">&lt;-</span> <span class="fu">t</span>(<span class="fu">apply</span>(expr_values, <span class="dv">1</span>, scale, <span class="at">center =</span> <span class="cn">TRUE</span>, <span class="at">scale =</span> <span class="cn">TRUE</span>)) <span class="co"># Z-score</span></span>
-<span id="cb10-7"><a href="#cb10-7" aria-hidden="true" tabindex="-1"></a><span class="co"># heat_values &lt;- expr_values - rowMeans2(expr_values)</span></span>
-<span id="cb10-8"><a href="#cb10-8" aria-hidden="true" tabindex="-1"></a><span class="fu">rownames</span>(heat_values) <span class="ot">&lt;-</span> use_genes_name</span>
-<span id="cb10-9"><a href="#cb10-9" aria-hidden="true" tabindex="-1"></a><span class="fu">colnames</span>(heat_values) <span class="ot">&lt;-</span> <span class="fu">colnames</span>(expr_values)</span>
-<span id="cb10-10"><a href="#cb10-10" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb10-11"><a href="#cb10-11" aria-hidden="true" tabindex="-1"></a>coldata_ord <span class="ot">&lt;-</span> <span class="fu">colData</span>(use_sce) <span class="sc">%&gt;%</span> data.frame <span class="sc">%&gt;%</span> <span class="fu">arrange</span>(zt_sample_type_legend) </span>
-<span id="cb10-12"><a href="#cb10-12" aria-hidden="true" tabindex="-1"></a>heat_values <span class="ot">&lt;-</span> heat_values[,coldata_ord<span class="sc">$</span>sample_alias]</span>
-<span id="cb10-13"><a href="#cb10-13" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb10-14"><a href="#cb10-14" aria-hidden="true" tabindex="-1"></a>ha_top <span class="ot">&lt;-</span> <span class="fu">HeatmapAnnotation</span>(</span>
-<span id="cb10-15"><a href="#cb10-15" aria-hidden="true" tabindex="-1"></a>  <span class="at">show_legend =</span> <span class="cn">TRUE</span>,</span>
-<span id="cb10-16"><a href="#cb10-16" aria-hidden="true" tabindex="-1"></a>  <span class="st">`</span><span class="at">CTC type</span><span class="st">`</span> <span class="ot">=</span> coldata_ord<span class="sc">$</span>zt_sample_type_legend,</span>
-<span id="cb10-17"><a href="#cb10-17" aria-hidden="true" tabindex="-1"></a>  <span class="at">col =</span> <span class="fu">list</span>(<span class="st">`</span><span class="at">CTC type</span><span class="st">`</span> <span class="ot">=</span> zt_sample_type_legend_palette),</span>
-<span id="cb10-18"><a href="#cb10-18" aria-hidden="true" tabindex="-1"></a>  <span class="at">annotation_legend_param =</span> <span class="fu">list</span>(</span>
-<span id="cb10-19"><a href="#cb10-19" aria-hidden="true" tabindex="-1"></a>    <span class="at">title =</span> <span class="cn">NULL</span>,</span>
-<span id="cb10-20"><a href="#cb10-20" aria-hidden="true" tabindex="-1"></a>    <span class="at">title_gp =</span> <span class="fu">gpar</span>(<span class="at">fontsize =</span> <span class="dv">8</span>),</span>
-<span id="cb10-21"><a href="#cb10-21" aria-hidden="true" tabindex="-1"></a>    <span class="at">labels_gp =</span> <span class="fu">gpar</span>(<span class="at">col =</span> <span class="st">&quot;black&quot;</span>, <span class="at">fontsize =</span> <span class="dv">8</span>),</span>
-<span id="cb10-22"><a href="#cb10-22" aria-hidden="true" tabindex="-1"></a>    <span class="at">grid_width =</span> <span class="fu">unit</span>(<span class="dv">3</span>, <span class="st">&quot;mm&quot;</span>)</span>
-<span id="cb10-23"><a href="#cb10-23" aria-hidden="true" tabindex="-1"></a>    ),</span>
-<span id="cb10-24"><a href="#cb10-24" aria-hidden="true" tabindex="-1"></a>  <span class="at">show_annotation_name =</span> <span class="cn">FALSE</span>,</span>
-<span id="cb10-25"><a href="#cb10-25" aria-hidden="true" tabindex="-1"></a>  <span class="at">simple_anno_size =</span> <span class="fu">unit</span>(<span class="dv">3</span>, <span class="st">&quot;mm&quot;</span>)</span>
-<span id="cb10-26"><a href="#cb10-26" aria-hidden="true" tabindex="-1"></a>  )</span>
-<span id="cb10-27"><a href="#cb10-27" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb10-28"><a href="#cb10-28" aria-hidden="true" tabindex="-1"></a><span class="co"># zlim &lt;- c(-max(abs(heat_values)), max(abs(heat_values)))</span></span>
-<span id="cb10-29"><a href="#cb10-29" aria-hidden="true" tabindex="-1"></a>zlim <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="sc">-</span><span class="dv">3</span>, <span class="dv">3</span>)</span>
-<span id="cb10-30"><a href="#cb10-30" aria-hidden="true" tabindex="-1"></a>heat_values[heat_values <span class="sc">&lt;</span> zlim[<span class="dv">1</span>]] <span class="ot">&lt;-</span> zlim[<span class="dv">1</span>]</span>
-<span id="cb10-31"><a href="#cb10-31" aria-hidden="true" tabindex="-1"></a>heat_values[heat_values <span class="sc">&gt;</span> zlim[<span class="dv">2</span>]] <span class="ot">&lt;-</span> zlim[<span class="dv">2</span>]</span>
+<span id="cb10-7"><a href="#cb10-7" aria-hidden="true" tabindex="-1"></a><span class="fu">rownames</span>(heat_values) <span class="ot">&lt;-</span> use_genes_name</span>
+<span id="cb10-8"><a href="#cb10-8" aria-hidden="true" tabindex="-1"></a><span class="fu">colnames</span>(heat_values) <span class="ot">&lt;-</span> <span class="fu">colnames</span>(expr_values)</span>
+<span id="cb10-9"><a href="#cb10-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-10"><a href="#cb10-10" aria-hidden="true" tabindex="-1"></a>coldata_ord <span class="ot">&lt;-</span> <span class="fu">colData</span>(use_sce) <span class="sc">%&gt;%</span> data.frame <span class="sc">%&gt;%</span> <span class="fu">arrange</span>(zt_sample_type_legend) </span>
+<span id="cb10-11"><a href="#cb10-11" aria-hidden="true" tabindex="-1"></a>heat_values <span class="ot">&lt;-</span> heat_values[,coldata_ord<span class="sc">$</span>sample_alias]</span>
+<span id="cb10-12"><a href="#cb10-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-13"><a href="#cb10-13" aria-hidden="true" tabindex="-1"></a>ha_top <span class="ot">&lt;-</span> <span class="fu">HeatmapAnnotation</span>(</span>
+<span id="cb10-14"><a href="#cb10-14" aria-hidden="true" tabindex="-1"></a>  <span class="at">show_legend =</span> <span class="cn">TRUE</span>,</span>
+<span id="cb10-15"><a href="#cb10-15" aria-hidden="true" tabindex="-1"></a>  <span class="st">`</span><span class="at">CTC type</span><span class="st">`</span> <span class="ot">=</span> coldata_ord<span class="sc">$</span>zt_sample_type_legend,</span>
+<span id="cb10-16"><a href="#cb10-16" aria-hidden="true" tabindex="-1"></a>  <span class="at">col =</span> <span class="fu">list</span>(<span class="st">`</span><span class="at">CTC type</span><span class="st">`</span> <span class="ot">=</span> zt_sample_type_legend_palette),</span>
+<span id="cb10-17"><a href="#cb10-17" aria-hidden="true" tabindex="-1"></a>  <span class="at">annotation_legend_param =</span> <span class="fu">list</span>(</span>
+<span id="cb10-18"><a href="#cb10-18" aria-hidden="true" tabindex="-1"></a>    <span class="at">title =</span> <span class="cn">NULL</span>,</span>
+<span id="cb10-19"><a href="#cb10-19" aria-hidden="true" tabindex="-1"></a>    <span class="at">title_gp =</span> <span class="fu">gpar</span>(<span class="at">fontsize =</span> <span class="dv">8</span>),</span>
+<span id="cb10-20"><a href="#cb10-20" aria-hidden="true" tabindex="-1"></a>    <span class="at">labels_gp =</span> <span class="fu">gpar</span>(<span class="at">col =</span> <span class="st">&quot;black&quot;</span>, <span class="at">fontsize =</span> <span class="dv">8</span>),</span>
+<span id="cb10-21"><a href="#cb10-21" aria-hidden="true" tabindex="-1"></a>    <span class="at">grid_width =</span> <span class="fu">unit</span>(<span class="dv">3</span>, <span class="st">&quot;mm&quot;</span>)</span>
+<span id="cb10-22"><a href="#cb10-22" aria-hidden="true" tabindex="-1"></a>    ),</span>
+<span id="cb10-23"><a href="#cb10-23" aria-hidden="true" tabindex="-1"></a>  <span class="at">show_annotation_name =</span> <span class="cn">FALSE</span>,</span>
+<span id="cb10-24"><a href="#cb10-24" aria-hidden="true" tabindex="-1"></a>  <span class="at">simple_anno_size =</span> <span class="fu">unit</span>(<span class="dv">3</span>, <span class="st">&quot;mm&quot;</span>)</span>
+<span id="cb10-25"><a href="#cb10-25" aria-hidden="true" tabindex="-1"></a>  )</span>
+<span id="cb10-26"><a href="#cb10-26" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-27"><a href="#cb10-27" aria-hidden="true" tabindex="-1"></a>zlim <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="sc">-</span><span class="dv">3</span>, <span class="dv">3</span>)</span>
+<span id="cb10-28"><a href="#cb10-28" aria-hidden="true" tabindex="-1"></a>heat_values[heat_values <span class="sc">&lt;</span> zlim[<span class="dv">1</span>]] <span class="ot">&lt;-</span> zlim[<span class="dv">1</span>]</span>
+<span id="cb10-29"><a href="#cb10-29" aria-hidden="true" tabindex="-1"></a>heat_values[heat_values <span class="sc">&gt;</span> zlim[<span class="dv">2</span>]] <span class="ot">&lt;-</span> zlim[<span class="dv">2</span>]</span>
+<span id="cb10-30"><a href="#cb10-30" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-31"><a href="#cb10-31" aria-hidden="true" tabindex="-1"></a>col_fun <span class="ot">&lt;-</span>  <span class="fu">colorRamp2</span>(<span class="fu">seq</span>(zlim[<span class="dv">1</span>], zlim[<span class="dv">2</span>], <span class="at">length.out =</span> <span class="dv">11</span>), <span class="fu">rev</span>(RColorBrewer<span class="sc">::</span><span class="fu">brewer.pal</span>(<span class="at">n =</span> <span class="dv">11</span>, <span class="at">name =</span><span class="st">&quot;BrBG&quot;</span>)))</span>
 <span id="cb10-32"><a href="#cb10-32" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb10-33"><a href="#cb10-33" aria-hidden="true" tabindex="-1"></a>col_fun <span class="ot">&lt;-</span>  <span class="fu">colorRamp2</span>(<span class="fu">seq</span>(zlim[<span class="dv">1</span>], zlim[<span class="dv">2</span>], <span class="at">length.out =</span> <span class="dv">11</span>), <span class="fu">rev</span>(RColorBrewer<span class="sc">::</span><span class="fu">brewer.pal</span>(<span class="at">n =</span> <span class="dv">11</span>, <span class="at">name =</span><span class="st">&quot;BrBG&quot;</span>)))</span>
-<span id="cb10-34"><a href="#cb10-34" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb10-35"><a href="#cb10-35" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb10-36"><a href="#cb10-36" aria-hidden="true" tabindex="-1"></a><span class="fu">Heatmap</span>(</span>
-<span id="cb10-37"><a href="#cb10-37" aria-hidden="true" tabindex="-1"></a>  heat_values,</span>
-<span id="cb10-38"><a href="#cb10-38" aria-hidden="true" tabindex="-1"></a>  <span class="at">name =</span> <span class="st">&#39;z</span><span class="sc">\n</span><span class="st">score&#39;</span>,</span>
-<span id="cb10-39"><a href="#cb10-39" aria-hidden="true" tabindex="-1"></a>  <span class="at">col =</span>  col_fun,</span>
-<span id="cb10-40"><a href="#cb10-40" aria-hidden="true" tabindex="-1"></a>  <span class="at">row_split =</span> <span class="dv">2</span>, </span>
-<span id="cb10-41"><a href="#cb10-41" aria-hidden="true" tabindex="-1"></a>  <span class="at">row_gap =</span> <span class="fu">unit</span>(<span class="dv">2</span>, <span class="st">&quot;mm&quot;</span>),</span>
-<span id="cb10-42"><a href="#cb10-42" aria-hidden="true" tabindex="-1"></a>  <span class="at">cluster_columns =</span> <span class="cn">FALSE</span>,</span>
-<span id="cb10-43"><a href="#cb10-43" aria-hidden="true" tabindex="-1"></a>  <span class="at">column_title =</span> <span class="cn">NULL</span>,</span>
-<span id="cb10-44"><a href="#cb10-44" aria-hidden="true" tabindex="-1"></a>  <span class="at">row_title =</span> <span class="cn">NULL</span>,</span>
-<span id="cb10-45"><a href="#cb10-45" aria-hidden="true" tabindex="-1"></a>  <span class="at">show_column_dend =</span> <span class="cn">FALSE</span>,</span>
-<span id="cb10-46"><a href="#cb10-46" aria-hidden="true" tabindex="-1"></a>  <span class="at">show_column_names =</span> <span class="cn">FALSE</span>, </span>
-<span id="cb10-47"><a href="#cb10-47" aria-hidden="true" tabindex="-1"></a>  <span class="at">show_row_dend =</span> <span class="cn">FALSE</span>,</span>
-<span id="cb10-48"><a href="#cb10-48" aria-hidden="true" tabindex="-1"></a>  <span class="at">show_row_names =</span> <span class="cn">FALSE</span>, </span>
-<span id="cb10-49"><a href="#cb10-49" aria-hidden="true" tabindex="-1"></a>  <span class="at">top_annotation =</span> ha_top,</span>
-<span id="cb10-50"><a href="#cb10-50" aria-hidden="true" tabindex="-1"></a>  <span class="at">left_annotation =</span> <span class="fu">rowAnnotation</span>(<span class="at">foo =</span> <span class="fu">anno_block</span>(</span>
-<span id="cb10-51"><a href="#cb10-51" aria-hidden="true" tabindex="-1"></a>        <span class="at">labels =</span> <span class="fu">c</span>(</span>
-<span id="cb10-52"><a href="#cb10-52" aria-hidden="true" tabindex="-1"></a>          <span class="fu">paste0</span>(<span class="st">&quot;Upregulated in</span><span class="sc">\n</span><span class="st">rest phase</span><span class="sc">\n</span><span class="st">(N=&quot;</span>, n_up, <span class="st">&quot;)&quot;</span>), </span>
-<span id="cb10-53"><a href="#cb10-53" aria-hidden="true" tabindex="-1"></a>          <span class="fu">paste0</span>(<span class="st">&quot;Upregulated in</span><span class="sc">\n</span><span class="st">active phase</span><span class="sc">\n</span><span class="st">(N=&quot;</span>, n_down, <span class="st">&quot;)&quot;</span>)</span>
-<span id="cb10-54"><a href="#cb10-54" aria-hidden="true" tabindex="-1"></a>        ),</span>
-<span id="cb10-55"><a href="#cb10-55" aria-hidden="true" tabindex="-1"></a>        <span class="at">labels_gp =</span> <span class="fu">gpar</span>(<span class="at">col =</span> <span class="st">&quot;black&quot;</span>, <span class="at">fontsize =</span> <span class="dv">8</span>),</span>
-<span id="cb10-56"><a href="#cb10-56" aria-hidden="true" tabindex="-1"></a>        <span class="at">gp =</span> <span class="fu">gpar</span>(<span class="at">lwd =</span> <span class="dv">0</span>, <span class="at">lty =</span> <span class="dv">0</span>)</span>
-<span id="cb10-57"><a href="#cb10-57" aria-hidden="true" tabindex="-1"></a>        )</span>
-<span id="cb10-58"><a href="#cb10-58" aria-hidden="true" tabindex="-1"></a>  ),</span>
-<span id="cb10-59"><a href="#cb10-59" aria-hidden="true" tabindex="-1"></a>  <span class="at">heatmap_legend_param =</span> <span class="fu">list</span>(</span>
-<span id="cb10-60"><a href="#cb10-60" aria-hidden="true" tabindex="-1"></a>    <span class="at">title_gp =</span> <span class="fu">gpar</span>(<span class="at">fontsize =</span> <span class="dv">8</span>),</span>
-<span id="cb10-61"><a href="#cb10-61" aria-hidden="true" tabindex="-1"></a>    <span class="at">labels_gp =</span> <span class="fu">gpar</span>(<span class="at">fontsize =</span> <span class="dv">8</span>),</span>
-<span id="cb10-62"><a href="#cb10-62" aria-hidden="true" tabindex="-1"></a>    <span class="at">grid_width =</span> <span class="fu">unit</span>(<span class="dv">3</span>, <span class="st">&quot;mm&quot;</span>)</span>
-<span id="cb10-63"><a href="#cb10-63" aria-hidden="true" tabindex="-1"></a>    )</span>
-<span id="cb10-64"><a href="#cb10-64" aria-hidden="true" tabindex="-1"></a>)</span></code></pre></div>
+<span id="cb10-33"><a href="#cb10-33" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-34"><a href="#cb10-34" aria-hidden="true" tabindex="-1"></a><span class="fu">Heatmap</span>(</span>
+<span id="cb10-35"><a href="#cb10-35" aria-hidden="true" tabindex="-1"></a>  heat_values,</span>
+<span id="cb10-36"><a href="#cb10-36" aria-hidden="true" tabindex="-1"></a>  <span class="at">name =</span> <span class="st">&#39;z</span><span class="sc">\n</span><span class="st">score&#39;</span>,</span>
+<span id="cb10-37"><a href="#cb10-37" aria-hidden="true" tabindex="-1"></a>  <span class="at">col =</span>  col_fun,</span>
+<span id="cb10-38"><a href="#cb10-38" aria-hidden="true" tabindex="-1"></a>  <span class="at">row_split =</span> <span class="dv">2</span>, </span>
+<span id="cb10-39"><a href="#cb10-39" aria-hidden="true" tabindex="-1"></a>  <span class="at">row_gap =</span> <span class="fu">unit</span>(<span class="dv">2</span>, <span class="st">&quot;mm&quot;</span>),</span>
+<span id="cb10-40"><a href="#cb10-40" aria-hidden="true" tabindex="-1"></a>  <span class="at">cluster_columns =</span> <span class="cn">FALSE</span>,</span>
+<span id="cb10-41"><a href="#cb10-41" aria-hidden="true" tabindex="-1"></a>  <span class="at">column_title =</span> <span class="cn">NULL</span>,</span>
+<span id="cb10-42"><a href="#cb10-42" aria-hidden="true" tabindex="-1"></a>  <span class="at">row_title =</span> <span class="cn">NULL</span>,</span>
+<span id="cb10-43"><a href="#cb10-43" aria-hidden="true" tabindex="-1"></a>  <span class="at">show_column_dend =</span> <span class="cn">FALSE</span>,</span>
+<span id="cb10-44"><a href="#cb10-44" aria-hidden="true" tabindex="-1"></a>  <span class="at">show_column_names =</span> <span class="cn">FALSE</span>, </span>
+<span id="cb10-45"><a href="#cb10-45" aria-hidden="true" tabindex="-1"></a>  <span class="at">show_row_dend =</span> <span class="cn">FALSE</span>,</span>
+<span id="cb10-46"><a href="#cb10-46" aria-hidden="true" tabindex="-1"></a>  <span class="at">show_row_names =</span> <span class="cn">FALSE</span>, </span>
+<span id="cb10-47"><a href="#cb10-47" aria-hidden="true" tabindex="-1"></a>  <span class="at">top_annotation =</span> ha_top,</span>
+<span id="cb10-48"><a href="#cb10-48" aria-hidden="true" tabindex="-1"></a>  <span class="at">left_annotation =</span> <span class="fu">rowAnnotation</span>(<span class="at">foo =</span> <span class="fu">anno_block</span>(</span>
+<span id="cb10-49"><a href="#cb10-49" aria-hidden="true" tabindex="-1"></a>        <span class="at">labels =</span> <span class="fu">c</span>(</span>
+<span id="cb10-50"><a href="#cb10-50" aria-hidden="true" tabindex="-1"></a>          <span class="fu">paste0</span>(<span class="st">&quot;Upregulated in</span><span class="sc">\n</span><span class="st">rest phase</span><span class="sc">\n</span><span class="st">(N=&quot;</span>, n_up, <span class="st">&quot;)&quot;</span>), </span>
+<span id="cb10-51"><a href="#cb10-51" aria-hidden="true" tabindex="-1"></a>          <span class="fu">paste0</span>(<span class="st">&quot;Upregulated in</span><span class="sc">\n</span><span class="st">active phase</span><span class="sc">\n</span><span class="st">(N=&quot;</span>, n_down, <span class="st">&quot;)&quot;</span>)</span>
+<span id="cb10-52"><a href="#cb10-52" aria-hidden="true" tabindex="-1"></a>        ),</span>
+<span id="cb10-53"><a href="#cb10-53" aria-hidden="true" tabindex="-1"></a>        <span class="at">labels_gp =</span> <span class="fu">gpar</span>(<span class="at">col =</span> <span class="st">&quot;black&quot;</span>, <span class="at">fontsize =</span> <span class="dv">8</span>),</span>
+<span id="cb10-54"><a href="#cb10-54" aria-hidden="true" tabindex="-1"></a>        <span class="at">gp =</span> <span class="fu">gpar</span>(<span class="at">lwd =</span> <span class="dv">0</span>, <span class="at">lty =</span> <span class="dv">0</span>)</span>
+<span id="cb10-55"><a href="#cb10-55" aria-hidden="true" tabindex="-1"></a>        )</span>
+<span id="cb10-56"><a href="#cb10-56" aria-hidden="true" tabindex="-1"></a>  ),</span>
+<span id="cb10-57"><a href="#cb10-57" aria-hidden="true" tabindex="-1"></a>  <span class="at">heatmap_legend_param =</span> <span class="fu">list</span>(</span>
+<span id="cb10-58"><a href="#cb10-58" aria-hidden="true" tabindex="-1"></a>    <span class="at">title_gp =</span> <span class="fu">gpar</span>(<span class="at">fontsize =</span> <span class="dv">8</span>),</span>
+<span id="cb10-59"><a href="#cb10-59" aria-hidden="true" tabindex="-1"></a>    <span class="at">labels_gp =</span> <span class="fu">gpar</span>(<span class="at">fontsize =</span> <span class="dv">8</span>),</span>
+<span id="cb10-60"><a href="#cb10-60" aria-hidden="true" tabindex="-1"></a>    <span class="at">grid_width =</span> <span class="fu">unit</span>(<span class="dv">3</span>, <span class="st">&quot;mm&quot;</span>)</span>
+<span id="cb10-61"><a href="#cb10-61" aria-hidden="true" tabindex="-1"></a>    )</span>
+<span id="cb10-62"><a href="#cb10-62" aria-hidden="true" tabindex="-1"></a>)</span></code></pre></div>
 <p><img src="figure/br16_dge.Rmd/br16_dge_heatmap_legend-1.png" style="display: block; margin: auto;" /></p>
 <p>
 <button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-br16_dge_heatmap_legend-1">
@@ -1161,12 +1193,12 @@ class="section level2">
 <h2>Correlation DEG single CTC versus CTC clusters and CTC-WBC</h2>
 <p>Scatter plot showing the correlation of the fold-change between
 active and rest phase in single CTC (Y-axis) versus CTC clusters and
-CTC-WBC (X-axis), using genes with FDR ≤ 0.05 in any of the two sets
-(two-sided Pearson’s correlation coefficient 0.57, P value ≤ 2.22e-16).
-Points are colored according to the dataset where they were found with a
-FDR ≤ 0.05 (both, single CTC or CTC clusters and CTC-WBC clusters). The
-dashed red line represents the linear regression line using all the
-points in the plot.</p>
+CTC-WBC (X-axis), using genes with <em>FDR</em> ≤ 0.05 in any of the two
+sets (two-sided Pearson’s correlation coefficient 0.57, <em>P</em> value
+≤ 2.22e-16). Points are colored according to the dataset where they were
+found with a <em>FDR</em> ≤ 0.05 (both, single CTC or CTC clusters and
+CTC-WBC clusters). The dashed <em>red</em> line represents the linear
+regression line using all the points in the plot.</p>
 <div class="sourceCode" id="cb11"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Fold-change correlation</span></span>
 <span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a>res_cl <span class="ot">&lt;-</span> dge_cluster_g<span class="sc">$</span>results <span class="sc">%&gt;%</span> dplyr<span class="sc">::</span><span class="fu">select</span>(feature, gene_name, description, logFC, PValue, FDR) <span class="sc">%&gt;%</span> <span class="fu">mutate</span>(<span class="at">logFDR =</span> <span class="sc">-</span><span class="fu">log10</span>(FDR), <span class="at">logPValue =</span> <span class="sc">-</span><span class="fu">log10</span>(PValue))</span>
 <span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a>res_s <span class="ot">&lt;-</span> dge_single<span class="sc">$</span>results <span class="sc">%&gt;%</span> dplyr<span class="sc">::</span><span class="fu">select</span>(feature, logFC, PValue, FDR) <span class="sc">%&gt;%</span> <span class="fu">mutate</span>(<span class="at">logFDR =</span> <span class="sc">-</span><span class="fu">log10</span>(FDR), <span class="at">logPValue =</span> <span class="sc">-</span><span class="fu">log10</span>(PValue))</span>
@@ -1184,33 +1216,29 @@ points in the plot.</p>
 <span id="cb11-15"><a href="#cb11-15" aria-hidden="true" tabindex="-1"></a><span class="co"># Generate plot</span></span>
 <span id="cb11-16"><a href="#cb11-16" aria-hidden="true" tabindex="-1"></a>maxlogFC <span class="ot">&lt;-</span> <span class="fu">max</span>(<span class="fu">abs</span>(<span class="fu">c</span>(data_corrset<span class="sc">$</span>logFC.cl, data_corrset<span class="sc">$</span>logFC.s)), <span class="at">na.rm =</span> <span class="cn">TRUE</span>)</span>
 <span id="cb11-17"><a href="#cb11-17" aria-hidden="true" tabindex="-1"></a>use_palette <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">&#39;#1b9e77&#39;</span>, <span class="st">&#39;#e6ab02&#39;</span>, <span class="st">&#39;#7570b3&#39;</span>) <span class="sc">%&gt;%</span> <span class="fu">set_names</span>(data_corrset<span class="sc">$</span>sign <span class="sc">%&gt;%</span> levels)</span>
-<span id="cb11-18"><a href="#cb11-18" aria-hidden="true" tabindex="-1"></a><span class="co"># data_labels &lt;- data_corrset %&gt;% filter(sign != &#39;CTC cluster and CTC-WBC cluster&#39;)</span></span>
-<span id="cb11-19"><a href="#cb11-19" aria-hidden="true" tabindex="-1"></a>fc_plot <span class="ot">&lt;-</span> data_corrset <span class="sc">%&gt;%</span> </span>
-<span id="cb11-20"><a href="#cb11-20" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(logFC.cl,logFC.s, <span class="at">color =</span> sign, <span class="at">label =</span> gene_name)) <span class="sc">+</span></span>
-<span id="cb11-21"><a href="#cb11-21" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>(<span class="at">size =</span> <span class="dv">2</span>, <span class="at">alpha =</span> <span class="fl">0.3</span>) <span class="sc">+</span></span>
-<span id="cb11-22"><a href="#cb11-22" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_hline</span>(<span class="at">yintercept =</span> <span class="dv">0</span>, <span class="at">lty =</span> <span class="dv">3</span>, <span class="at">color =</span> <span class="st">&#39;grey80&#39;</span>) <span class="sc">+</span></span>
-<span id="cb11-23"><a href="#cb11-23" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_vline</span>(<span class="at">xintercept =</span> <span class="dv">0</span>, <span class="at">lty =</span> <span class="dv">3</span>, <span class="at">color =</span> <span class="st">&#39;grey80&#39;</span>) <span class="sc">+</span></span>
-<span id="cb11-24"><a href="#cb11-24" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_smooth</span>(<span class="at">method =</span> lm, <span class="at">se =</span> <span class="cn">FALSE</span>, <span class="at">inherit.aes =</span> <span class="cn">FALSE</span>, <span class="fu">aes</span>(logFC.cl, logFC.s), <span class="at">color =</span> <span class="st">&#39;firebrick&#39;</span>, <span class="at">lty =</span> <span class="dv">2</span>, <span class="at">fullrange =</span> <span class="cn">TRUE</span>, <span class="at">size =</span> <span class="fl">0.5</span>) <span class="sc">+</span></span>
-<span id="cb11-25"><a href="#cb11-25" aria-hidden="true" tabindex="-1"></a>  <span class="co"># geom_text_repel(data = data_labels, aes(label = gene_name), color = &#39;black&#39;, size=geom_text_size, box.padding = 0.1) +</span></span>
-<span id="cb11-26"><a href="#cb11-26" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>(<span class="at">size =</span> <span class="dv">2</span>, <span class="at">alpha =</span> <span class="dv">1</span>, <span class="at">pch =</span> <span class="dv">16</span>, <span class="at">data =</span> data_corrset[data_corrset<span class="sc">$</span>sign <span class="sc">!=</span> <span class="st">&#39;CTC clusters and CTC-WBC clusters&#39;</span>, ]) <span class="sc">+</span></span>
-<span id="cb11-27"><a href="#cb11-27" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_color_manual</span>(<span class="at">values =</span> use_palette) <span class="sc">+</span></span>
-<span id="cb11-28"><a href="#cb11-28" aria-hidden="true" tabindex="-1"></a>  <span class="co"># scale_color_brewer(palette = &#39;Dark2&#39;) +</span></span>
-<span id="cb11-29"><a href="#cb11-29" aria-hidden="true" tabindex="-1"></a>  <span class="fu">xlim</span>(<span class="fu">c</span>(<span class="sc">-</span>maxlogFC, maxlogFC)) <span class="sc">+</span></span>
-<span id="cb11-30"><a href="#cb11-30" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ylim</span>(<span class="fu">c</span>(<span class="sc">-</span>maxlogFC, maxlogFC)) <span class="sc">+</span></span>
-<span id="cb11-31"><a href="#cb11-31" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(</span>
-<span id="cb11-32"><a href="#cb11-32" aria-hidden="true" tabindex="-1"></a>    <span class="at">x =</span> <span class="fu">expression</span>(<span class="fu">paste</span>(<span class="st">&quot;lo&quot;</span>, g[<span class="dv">2</span>],<span class="st">&quot;(Fold change) in CTC clusters and CTC-WBC clusters&quot;</span>)),</span>
-<span id="cb11-33"><a href="#cb11-33" aria-hidden="true" tabindex="-1"></a>    <span class="at">y =</span> <span class="fu">expression</span>(<span class="fu">paste</span>(<span class="st">&quot;lo&quot;</span>, g[<span class="dv">2</span>],<span class="st">&quot;(Fold change) in Single CTCs&quot;</span>)),</span>
-<span id="cb11-34"><a href="#cb11-34" aria-hidden="true" tabindex="-1"></a>    <span class="at">color =</span> <span class="st">&#39;FDR &lt;= 0.05&#39;</span></span>
-<span id="cb11-35"><a href="#cb11-35" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">+</span></span>
-<span id="cb11-36"><a href="#cb11-36" aria-hidden="true" tabindex="-1"></a>  <span class="fu">guides</span>(<span class="at">alpha =</span> <span class="st">&quot;none&quot;</span>)</span>
-<span id="cb11-37"><a href="#cb11-37" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb11-38"><a href="#cb11-38" aria-hidden="true" tabindex="-1"></a>fc_plot_2_legend <span class="ot">&lt;-</span> data_corrset <span class="sc">%&gt;%</span> </span>
-<span id="cb11-39"><a href="#cb11-39" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(logFC.s,logFC.cl, <span class="at">color =</span> sign, <span class="at">label =</span> gene_name)) <span class="sc">+</span></span>
-<span id="cb11-40"><a href="#cb11-40" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>(<span class="at">size =</span> <span class="fl">1.5</span>, <span class="at">alpha =</span> <span class="fl">0.8</span>) <span class="sc">+</span></span>
-<span id="cb11-41"><a href="#cb11-41" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_color_manual</span>(<span class="at">values =</span> use_palette)</span>
-<span id="cb11-42"><a href="#cb11-42" aria-hidden="true" tabindex="-1"></a>  <span class="co"># scale_color_brewer(palette = &#39;Dark2&#39;) </span></span>
-<span id="cb11-43"><a href="#cb11-43" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb11-44"><a href="#cb11-44" aria-hidden="true" tabindex="-1"></a>fc_plot <span class="sc">+</span> <span class="fu">theme</span>(<span class="at">legend.position =</span> <span class="st">&quot;none&quot;</span>)</span></code></pre></div>
+<span id="cb11-18"><a href="#cb11-18" aria-hidden="true" tabindex="-1"></a>fc_plot <span class="ot">&lt;-</span> data_corrset <span class="sc">%&gt;%</span> </span>
+<span id="cb11-19"><a href="#cb11-19" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(logFC.cl,logFC.s, <span class="at">color =</span> sign, <span class="at">label =</span> gene_name)) <span class="sc">+</span></span>
+<span id="cb11-20"><a href="#cb11-20" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>(<span class="at">size =</span> <span class="dv">2</span>, <span class="at">alpha =</span> <span class="fl">0.3</span>) <span class="sc">+</span></span>
+<span id="cb11-21"><a href="#cb11-21" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_hline</span>(<span class="at">yintercept =</span> <span class="dv">0</span>, <span class="at">lty =</span> <span class="dv">3</span>, <span class="at">color =</span> <span class="st">&#39;grey80&#39;</span>) <span class="sc">+</span></span>
+<span id="cb11-22"><a href="#cb11-22" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_vline</span>(<span class="at">xintercept =</span> <span class="dv">0</span>, <span class="at">lty =</span> <span class="dv">3</span>, <span class="at">color =</span> <span class="st">&#39;grey80&#39;</span>) <span class="sc">+</span></span>
+<span id="cb11-23"><a href="#cb11-23" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_smooth</span>(<span class="at">method =</span> lm, <span class="at">se =</span> <span class="cn">FALSE</span>, <span class="at">inherit.aes =</span> <span class="cn">FALSE</span>, <span class="fu">aes</span>(logFC.cl, logFC.s), <span class="at">color =</span> <span class="st">&#39;firebrick&#39;</span>, <span class="at">lty =</span> <span class="dv">2</span>, <span class="at">fullrange =</span> <span class="cn">TRUE</span>, <span class="at">size =</span> <span class="fl">0.5</span>) <span class="sc">+</span></span>
+<span id="cb11-24"><a href="#cb11-24" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>(<span class="at">size =</span> <span class="dv">2</span>, <span class="at">alpha =</span> <span class="dv">1</span>, <span class="at">pch =</span> <span class="dv">16</span>, <span class="at">data =</span> data_corrset[data_corrset<span class="sc">$</span>sign <span class="sc">!=</span> <span class="st">&#39;CTC clusters and CTC-WBC clusters&#39;</span>, ]) <span class="sc">+</span></span>
+<span id="cb11-25"><a href="#cb11-25" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_color_manual</span>(<span class="at">values =</span> use_palette) <span class="sc">+</span></span>
+<span id="cb11-26"><a href="#cb11-26" aria-hidden="true" tabindex="-1"></a>  <span class="fu">xlim</span>(<span class="fu">c</span>(<span class="sc">-</span>maxlogFC, maxlogFC)) <span class="sc">+</span></span>
+<span id="cb11-27"><a href="#cb11-27" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ylim</span>(<span class="fu">c</span>(<span class="sc">-</span>maxlogFC, maxlogFC)) <span class="sc">+</span></span>
+<span id="cb11-28"><a href="#cb11-28" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(</span>
+<span id="cb11-29"><a href="#cb11-29" aria-hidden="true" tabindex="-1"></a>    <span class="at">x =</span> <span class="fu">expression</span>(<span class="fu">paste</span>(<span class="st">&quot;lo&quot;</span>, g[<span class="dv">2</span>],<span class="st">&quot;(Fold change) in CTC clusters and CTC-WBC clusters&quot;</span>)),</span>
+<span id="cb11-30"><a href="#cb11-30" aria-hidden="true" tabindex="-1"></a>    <span class="at">y =</span> <span class="fu">expression</span>(<span class="fu">paste</span>(<span class="st">&quot;lo&quot;</span>, g[<span class="dv">2</span>],<span class="st">&quot;(Fold change) in Single CTCs&quot;</span>)),</span>
+<span id="cb11-31"><a href="#cb11-31" aria-hidden="true" tabindex="-1"></a>    <span class="at">color =</span> <span class="st">&#39;FDR &lt;= 0.05&#39;</span></span>
+<span id="cb11-32"><a href="#cb11-32" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">+</span></span>
+<span id="cb11-33"><a href="#cb11-33" aria-hidden="true" tabindex="-1"></a>  <span class="fu">guides</span>(<span class="at">alpha =</span> <span class="st">&quot;none&quot;</span>)</span>
+<span id="cb11-34"><a href="#cb11-34" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-35"><a href="#cb11-35" aria-hidden="true" tabindex="-1"></a>fc_plot_2_legend <span class="ot">&lt;-</span> data_corrset <span class="sc">%&gt;%</span> </span>
+<span id="cb11-36"><a href="#cb11-36" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(logFC.s,logFC.cl, <span class="at">color =</span> sign, <span class="at">label =</span> gene_name)) <span class="sc">+</span></span>
+<span id="cb11-37"><a href="#cb11-37" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>(<span class="at">size =</span> <span class="fl">1.5</span>, <span class="at">alpha =</span> <span class="fl">0.8</span>) <span class="sc">+</span></span>
+<span id="cb11-38"><a href="#cb11-38" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_color_manual</span>(<span class="at">values =</span> use_palette)</span>
+<span id="cb11-39"><a href="#cb11-39" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-40"><a href="#cb11-40" aria-hidden="true" tabindex="-1"></a>fc_plot <span class="sc">+</span> <span class="fu">theme</span>(<span class="at">legend.position =</span> <span class="st">&quot;none&quot;</span>)</span></code></pre></div>
 <p><img src="figure/br16_dge.Rmd/br16_single_vs_cluster_g_fc_corr-1.png" style="display: block; margin: auto;" /></p>
 <p>
 <button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-br16_single_vs_cluster_g_fc_corr-1">
@@ -1297,9 +1325,9 @@ fcg-bio
 class="section level2">
 <h2>Compare DEG CTC versus CTC clusters and CTC-WBC</h2>
 <p>Bar plot showing the number of differentially expressed genes
-(absolute log2 fold change ≥ 0.5 and FDR ≤ 0.05) using all the samples
-(‘All’), using clustered CTCs (CTC clusters and CTC-WBC clusters) and
-using single CTCs.</p>
+(absolute log2 fold change ≥ 0.5 and <em>FDR</em> ≤ 0.05) using all the
+samples (‘All’), using clustered CTCs (CTC clusters and CTC-WBC
+clusters) and using single CTCs.</p>
 <div class="sourceCode" id="cb13"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a>results_comb <span class="ot">&lt;-</span> <span class="fu">rbind</span>(</span>
 <span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a>  dge_all<span class="sc">$</span>results <span class="sc">%&gt;%</span> <span class="fu">filter</span>(FDR <span class="sc">&lt;=</span> <span class="fl">0.05</span> <span class="sc">&amp;</span> <span class="fu">abs</span>(logFC) <span class="sc">&gt;=</span> <span class="fl">0.5</span>) <span class="sc">%&gt;%</span> <span class="fu">mutate</span>(<span class="at">sample_set =</span> <span class="st">&#39;All&#39;</span>),</span>
 <span id="cb13-3"><a href="#cb13-3" aria-hidden="true" tabindex="-1"></a>  dge_cluster_g<span class="sc">$</span>results <span class="sc">%&gt;%</span> <span class="fu">filter</span>(FDR <span class="sc">&lt;=</span> <span class="fl">0.05</span> <span class="sc">&amp;</span> <span class="fu">abs</span>(logFC) <span class="sc">&gt;=</span> <span class="fl">0.5</span>) <span class="sc">%&gt;%</span> <span class="fu">mutate</span>(<span class="at">sample_set =</span> <span class="st">&#39;CTC clusters and</span><span class="sc">\n</span><span class="st">CTC-WBC clusters&#39;</span>),</span>

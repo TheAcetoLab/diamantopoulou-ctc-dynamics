@@ -539,7 +539,7 @@ NSG-LM2 models and patient data</h1>
 <p>
 <button type="button" class="btn btn-default btn-workflowr btn-workflowr-report" data-toggle="collapse" data-target="#workflowr-report">
 <span class="glyphicon glyphicon-list" aria-hidden="true"></span>
-workflowr <span class="glyphicon glyphicon-exclamation-sign text-danger"
+workflowr <span class="glyphicon glyphicon-ok text-success"
 aria-hidden="true"></span>
 </button>
 </p>
@@ -550,8 +550,8 @@ aria-hidden="true"></span>
 </li>
 <li>
 <a data-toggle="tab" href="#checks"> Checks <span
-class="glyphicon glyphicon-exclamation-sign text-danger"
-aria-hidden="true"></span> </a>
+class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span>
+</a>
 </li>
 <li>
 <a data-toggle="tab" href="#versions">Past versions</a>
@@ -564,9 +564,9 @@ aria-hidden="true"></span> </a>
 </p>
 <p>
 <strong>Checks:</strong> <span
-class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> 6
+class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> 7
 <span class="glyphicon glyphicon-exclamation-sign text-danger"
-aria-hidden="true"></span> 1
+aria-hidden="true"></span> 0
 </p>
 <p>
 <strong>Knit directory:</strong>
@@ -590,21 +590,18 @@ versions</em> tab lists the development history.
 <div class="panel panel-default">
 <div class="panel-heading">
 <p class="panel-title">
-<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRMarkdownfilestronguncommittedchanges">
-<span class="glyphicon glyphicon-exclamation-sign text-danger"
-aria-hidden="true"></span> <strong>R Markdown file:</strong> uncommitted
-changes </a>
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRMarkdownfilestronguptodate">
+<span class="glyphicon glyphicon-ok text-success"
+aria-hidden="true"></span> <strong>R Markdown file:</strong> up-to-date
+</a>
 </p>
 </div>
-<div id="strongRMarkdownfilestronguncommittedchanges"
+<div id="strongRMarkdownfilestronguptodate"
 class="panel-collapse collapse">
 <div class="panel-body">
-<p>The R Markdown file has unstaged changes. To know which version of
-the R Markdown file created these results, you’ll want to first commit
-it to the Git repo. If you’re still working on the analysis, you can
-ignore this warning. When you’re finished, you can run
-<code>wflow_publish</code> to commit the R Markdown file and build the
-HTML.</p>
+<p>Great! Since the R Markdown file has been committed to the Git
+repository, you know the exact version of the code that produced these
+results.</p>
 </div>
 </div>
 </div>
@@ -695,15 +692,15 @@ project makes it easier to run your code on other machines.</p>
 <div class="panel panel-default">
 <div class="panel-heading">
 <p class="panel-title">
-<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRepositoryversionstrongahrefhttpsgithubcomTheAcetoLabdiamantopoulouctcdynamicstree74b189131a39d49fd9e79eaee6c8e76575069de6targetblank74b1891a">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRepositoryversionstrongahrefhttpsgithubcomTheAcetoLabdiamantopoulouctcdynamicstree545ee28878a043453ec828b26ef18d6c110d8906targetblank545ee28a">
 <span class="glyphicon glyphicon-ok text-success"
 aria-hidden="true"></span> <strong>Repository version:</strong>
-<a href="https://github.com/TheAcetoLab/diamantopoulou-ctc-dynamics/tree/74b189131a39d49fd9e79eaee6c8e76575069de6" target="_blank">74b1891</a>
+<a href="https://github.com/TheAcetoLab/diamantopoulou-ctc-dynamics/tree/545ee28878a043453ec828b26ef18d6c110d8906" target="_blank">545ee28</a>
 </a>
 </p>
 </div>
 <div
-id="strongRepositoryversionstrongahrefhttpsgithubcomTheAcetoLabdiamantopoulouctcdynamicstree74b189131a39d49fd9e79eaee6c8e76575069de6targetblank74b1891a"
+id="strongRepositoryversionstrongahrefhttpsgithubcomTheAcetoLabdiamantopoulouctcdynamicstree545ee28878a043453ec828b26ef18d6c110d8906targetblank545ee28a"
 class="panel-collapse collapse">
 <div class="panel-body">
 <p>
@@ -713,7 +710,7 @@ reproducibility.
 </p>
 <p>
 The results in this page were generated with repository version
-<a href="https://github.com/TheAcetoLab/diamantopoulou-ctc-dynamics/tree/74b189131a39d49fd9e79eaee6c8e76575069de6" target="_blank">74b1891</a>.
+<a href="https://github.com/TheAcetoLab/diamantopoulou-ctc-dynamics/tree/545ee28878a043453ec828b26ef18d6c110d8906" target="_blank">545ee28</a>.
 See the <em>Past versions</em> tab to see a history of the changes made
 to the R Markdown and HTML files.
 </p>
@@ -745,10 +742,6 @@ Untracked files:
     Untracked:  data/patients/
     Untracked:  data/resources/
     Untracked:  data/sce/
-
-Unstaged changes:
-    Modified:   analysis/gsea_across_models.Rmd
-    Modified:   analysis/index.Rmd
 
 </code></pre>
 <p>
@@ -794,6 +787,40 @@ Message
 </tr>
 </thead>
 <tbody>
+<tr>
+<td>
+Rmd
+</td>
+<td>
+<a href="https://github.com/TheAcetoLab/diamantopoulou-ctc-dynamics/blob/545ee28878a043453ec828b26ef18d6c110d8906/analysis/gsea_across_models.Rmd" target="_blank">545ee28</a>
+</td>
+<td>
+fcg-bio
+</td>
+<td>
+2022-04-26
+</td>
+<td>
+release v1.0
+</td>
+</tr>
+<tr>
+<td>
+html
+</td>
+<td>
+<a href="https://rawcdn.githack.com/TheAcetoLab/diamantopoulou-ctc-dynamics/545ee28878a043453ec828b26ef18d6c110d8906/docs/gsea_across_models.html" target="_blank">545ee28</a>
+</td>
+<td>
+fcg-bio
+</td>
+<td>
+2022-04-26
+</td>
+<td>
+release v1.0
+</td>
+</tr>
 <tr>
 <td>
 html
@@ -983,13 +1010,15 @@ class="section level2">
 </div>
 <div id="nsg-cdx-br16-gsea-results" class="section level2">
 <h2>NSG-CDX-BR16 GSEA results</h2>
-<p>Gene set enrichment analysis from differentially expressed genes in
-CTCs of NSG-CDX-BR16 mice during the rest phase versus active
-phase.Table listing the enriched gene sets (n = 138, adjusted P value
-&lt; 0.05) in CTCs obtained in rest versus active phase from
-NSG-CDX-BR16 mice. The gene set enrichment analysis (GSEA) was performed
-using ranking genes as input, according to fold-change as shown in
-Supplementary table 2.</p>
+<p><strong>Gene set enrichment analysis from differentially expressed
+genes in CTCs of NSG-CDX-BR16 mice during the rest phase versus active
+phase.</strong>Table listing the enriched gene sets (n = 138, adjusted
+<em>P</em> value &lt; 0.05) in CTCs obtained in rest <em>versus</em>
+active phase from NSG-CDX-BR16 mice. The gene set enrichment analysis
+(GSEA) was performed using ranking genes as input, according to
+fold-change as shown in Supplementary table 2. <em>P</em> values were
+obtained using FGSEA method with an eps parameter of
+1e<sup>-10</sup>.</p>
 <div class="sourceCode" id="cb11"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a>gse_gsea_br16<span class="sc">$</span>GSEA<span class="sc">$</span>msigdb.c2.cp.c5.bp<span class="sc">@</span>result <span class="sc">%&gt;%</span> </span>
 <span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(p.adjust <span class="sc">&lt;</span> <span class="fl">0.05</span>) <span class="sc">%&gt;%</span> </span>
 <span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a>  dplyr<span class="sc">::</span><span class="fu">select</span>(ID, setSize, enrichmentScore, NES, pvalue, p.adjust, leading_edge, core_enrichment) <span class="sc">%&gt;%</span> </span>
@@ -1112,11 +1141,11 @@ class="section level2">
 <div id="similarity-matrix-without-row-names" class="section level3">
 <h3>Similarity matrix without row names</h3>
 <p>Heatmap showing the pair-wise similarity matrix of enriched gene sets
-(gene set enrichment analysis (GSEA), adjusted P value ≤ 0.0001) using
-differential expression between CTCs of rest and active phase from
-NSG-CDX-BR16 mice. Heatmap colors represent the Jaccard similarity
-coefficient. The heatmap on the right represents the adjusted P value as
-obtained in GSEA.</p>
+(gene set enrichment analysis (GSEA), adjusted <em>P</em> value ≤
+0.0001) using differential expression between CTCs of rest and active
+phase from NSG-CDX-BR16 mice. Heatmap colors represent the Jaccard
+similarity coefficient. The heatmap on the right represents the adjusted
+P value as obtained in GSEA.</p>
 <div class="sourceCode" id="cb14"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a>col_fun <span class="ot">&lt;-</span> <span class="fu">colorRamp2</span>(<span class="fu">seq</span>(<span class="dv">0</span>, <span class="dv">1</span>, <span class="at">length.out =</span> <span class="dv">4</span>), <span class="fu">brewer.pal</span>(<span class="dv">4</span>, <span class="st">&quot;GnBu&quot;</span>))</span>
 <span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a>n_split <span class="ot">&lt;-</span> <span class="dv">2</span></span>
 <span id="cb14-3"><a href="#cb14-3" aria-hidden="true" tabindex="-1"></a>ha_top <span class="ot">&lt;-</span> <span class="fu">HeatmapAnnotation</span>(</span>
@@ -1288,19 +1317,17 @@ fcg-bio
 <h2>GSEA for NSG-LM2 and Patient</h2>
 <p>Run GSEA using candidate pathways from NSG-CDX-BR16.</p>
 <p>NSG-LM2</p>
-<div class="sourceCode" id="cb19"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a><span class="co"># use_sce &lt;- sce_lm2</span></span>
-<span id="cb19-2"><a href="#cb19-2" aria-hidden="true" tabindex="-1"></a>output_dir <span class="ot">&lt;-</span> <span class="fu">file.path</span>(params<span class="sc">$</span>dge_dir, <span class="st">&#39;lm2&#39;</span>)</span>
-<span id="cb19-3"><a href="#cb19-3" aria-hidden="true" tabindex="-1"></a>dge <span class="ot">&lt;-</span> dge_lm2</span>
-<span id="cb19-4"><a href="#cb19-4" aria-hidden="true" tabindex="-1"></a>fc_list <span class="ot">&lt;-</span> dge<span class="sc">$</span>results<span class="sc">$</span>logFC <span class="sc">%&gt;%</span> <span class="fu">set_names</span>(dge<span class="sc">$</span>results<span class="sc">$</span>gene_name) <span class="sc">%&gt;%</span> <span class="fu">sort</span>(<span class="at">decreasing =</span> <span class="cn">TRUE</span>)</span>
-<span id="cb19-5"><a href="#cb19-5" aria-hidden="true" tabindex="-1"></a>gsea_lm2 <span class="ot">&lt;-</span> <span class="fu">GSEA</span>(fc_list, <span class="at">TERM2GENE=</span>use_gmt_gsets, <span class="at">pvalueCutoff =</span> <span class="dv">1</span>)</span>
-<span id="cb19-6"><a href="#cb19-6" aria-hidden="true" tabindex="-1"></a>gsea_lm2 <span class="ot">&lt;-</span>  <span class="fu">pairwise_termsim</span>(gsea_lm2)</span></code></pre></div>
+<div class="sourceCode" id="cb19"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a>output_dir <span class="ot">&lt;-</span> <span class="fu">file.path</span>(params<span class="sc">$</span>dge_dir, <span class="st">&#39;lm2&#39;</span>)</span>
+<span id="cb19-2"><a href="#cb19-2" aria-hidden="true" tabindex="-1"></a>dge <span class="ot">&lt;-</span> dge_lm2</span>
+<span id="cb19-3"><a href="#cb19-3" aria-hidden="true" tabindex="-1"></a>fc_list <span class="ot">&lt;-</span> dge<span class="sc">$</span>results<span class="sc">$</span>logFC <span class="sc">%&gt;%</span> <span class="fu">set_names</span>(dge<span class="sc">$</span>results<span class="sc">$</span>gene_name) <span class="sc">%&gt;%</span> <span class="fu">sort</span>(<span class="at">decreasing =</span> <span class="cn">TRUE</span>)</span>
+<span id="cb19-4"><a href="#cb19-4" aria-hidden="true" tabindex="-1"></a>gsea_lm2 <span class="ot">&lt;-</span> <span class="fu">GSEA</span>(fc_list, <span class="at">TERM2GENE=</span>use_gmt_gsets, <span class="at">pvalueCutoff =</span> <span class="dv">1</span>)</span>
+<span id="cb19-5"><a href="#cb19-5" aria-hidden="true" tabindex="-1"></a>gsea_lm2 <span class="ot">&lt;-</span>  <span class="fu">pairwise_termsim</span>(gsea_lm2)</span></code></pre></div>
 <p>Patient</p>
-<div class="sourceCode" id="cb20"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a><span class="co"># use_sce &lt;- sce_lm2</span></span>
-<span id="cb20-2"><a href="#cb20-2" aria-hidden="true" tabindex="-1"></a>output_dir <span class="ot">&lt;-</span> <span class="fu">file.path</span>(params<span class="sc">$</span>dge_dir, <span class="st">&#39;patient&#39;</span>)</span>
-<span id="cb20-3"><a href="#cb20-3" aria-hidden="true" tabindex="-1"></a>dge <span class="ot">&lt;-</span> dge_patient</span>
-<span id="cb20-4"><a href="#cb20-4" aria-hidden="true" tabindex="-1"></a>fc_list <span class="ot">&lt;-</span> dge<span class="sc">$</span>results<span class="sc">$</span>logFC <span class="sc">%&gt;%</span> <span class="fu">set_names</span>(dge<span class="sc">$</span>results<span class="sc">$</span>gene_name) <span class="sc">%&gt;%</span> <span class="fu">sort</span>(<span class="at">decreasing =</span> <span class="cn">TRUE</span>)</span>
-<span id="cb20-5"><a href="#cb20-5" aria-hidden="true" tabindex="-1"></a>gsea_patient <span class="ot">&lt;-</span> <span class="fu">GSEA</span>(fc_list, <span class="at">TERM2GENE=</span>use_gmt_gsets, <span class="at">pvalueCutoff =</span> <span class="dv">1</span>)</span>
-<span id="cb20-6"><a href="#cb20-6" aria-hidden="true" tabindex="-1"></a>gsea_patient <span class="ot">&lt;-</span>  <span class="fu">pairwise_termsim</span>(gsea_patient)</span></code></pre></div>
+<div class="sourceCode" id="cb20"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a>output_dir <span class="ot">&lt;-</span> <span class="fu">file.path</span>(params<span class="sc">$</span>dge_dir, <span class="st">&#39;patient&#39;</span>)</span>
+<span id="cb20-2"><a href="#cb20-2" aria-hidden="true" tabindex="-1"></a>dge <span class="ot">&lt;-</span> dge_patient</span>
+<span id="cb20-3"><a href="#cb20-3" aria-hidden="true" tabindex="-1"></a>fc_list <span class="ot">&lt;-</span> dge<span class="sc">$</span>results<span class="sc">$</span>logFC <span class="sc">%&gt;%</span> <span class="fu">set_names</span>(dge<span class="sc">$</span>results<span class="sc">$</span>gene_name) <span class="sc">%&gt;%</span> <span class="fu">sort</span>(<span class="at">decreasing =</span> <span class="cn">TRUE</span>)</span>
+<span id="cb20-4"><a href="#cb20-4" aria-hidden="true" tabindex="-1"></a>gsea_patient <span class="ot">&lt;-</span> <span class="fu">GSEA</span>(fc_list, <span class="at">TERM2GENE=</span>use_gmt_gsets, <span class="at">pvalueCutoff =</span> <span class="dv">1</span>)</span>
+<span id="cb20-5"><a href="#cb20-5" aria-hidden="true" tabindex="-1"></a>gsea_patient <span class="ot">&lt;-</span>  <span class="fu">pairwise_termsim</span>(gsea_patient)</span></code></pre></div>
 <p>Combine NSG-CDX-BR16, NSG-LM2 and patient GSEA data</p>
 <div class="sourceCode" id="cb21"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a>gsea_lm2<span class="sc">@</span>result<span class="sc">$</span>donor <span class="ot">&lt;-</span> <span class="st">&#39;LM2&#39;</span></span>
 <span id="cb21-2"><a href="#cb21-2" aria-hidden="true" tabindex="-1"></a>gsea_patient<span class="sc">@</span>result<span class="sc">$</span>donor <span class="ot">&lt;-</span> <span class="st">&#39;Patient&#39;</span></span>
@@ -1316,6 +1343,14 @@ fcg-bio
 <div id="table-differential-expression-in-nsg-lm2"
 class="section level3">
 <h3>Table differential expression in NSG-LM2</h3>
+<p><strong>Genes differentially expressed in CTCs of NSG-LM26 mice
+during the rest phase versus active phase</strong>. Table listing the
+differentially expressed genes comparing CTCs obtained in the rest phase
+(n = 65) versus the active phase (n = 73) of NSG-CDX-BR16 mice. All
+genes evaluated are included in the table (n = 12,261). Fold-change and
+<em>P</em> values were computed with the quasi-likelihood (QL) approach
+from edgeR using robust dispersion estimates. For fold-change
+calculation, active phase samples were used in the denominator.</p>
 <div class="sourceCode" id="cb22"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a>dge_lm2<span class="sc">$</span>results <span class="sc">%&gt;%</span> </span>
 <span id="cb22-2"><a href="#cb22-2" aria-hidden="true" tabindex="-1"></a>  dplyr<span class="sc">::</span><span class="fu">select</span>(gene_name, gene_type, logFC, logCPM, PValue, FDR, description) <span class="sc">%&gt;%</span> </span>
 <span id="cb22-3"><a href="#cb22-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">rownames_to_column</span>(<span class="st">&#39;Ensemble ID&#39;</span>) <span class="sc">%&gt;%</span> </span>
@@ -1344,6 +1379,13 @@ class="section level3">
 </div>
 <div id="table-gsea-in-nsg-lm2" class="section level3">
 <h3>Table GSEA in NSG-LM2</h3>
+<p><strong>Gene set enrichment analysis from gene expression in CTCs of
+NSG-LM2 mice during the rest phase versus active phase.</strong> Table
+listing the gene set enrichment results in CTCs obtained in rest versus
+active phase from NSG-LM2 mice. Only gene sets enriched in NSG-CDX-BR16
+were analysed (n = 22, adjusted <em>P</em> value ≤ 0.0001). The gene set
+enrichment analysis (GSEA) was performed using ranked genes by
+fold-change as input.</p>
 <div class="sourceCode" id="cb23"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb23-1"><a href="#cb23-1" aria-hidden="true" tabindex="-1"></a>gsea_lm2<span class="sc">@</span>result <span class="sc">%&gt;%</span> </span>
 <span id="cb23-2"><a href="#cb23-2" aria-hidden="true" tabindex="-1"></a>  dplyr<span class="sc">::</span><span class="fu">select</span>(ID, setSize, enrichmentScore, NES, pvalue, p.adjust, leading_edge, core_enrichment) <span class="sc">%&gt;%</span> </span>
 <span id="cb23-3"><a href="#cb23-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(</span>
@@ -1375,6 +1417,15 @@ class="section level3">
 <div id="table-differential-expression-in-patients"
 class="section level3">
 <h3>Table differential expression in Patients</h3>
+<p><strong>Genes differentially expressed in CTCs of breast cancer
+patients during the rest phase versus active phase</strong>. Table
+listing the differentially expressed genes comparing CTCs obtained in
+the rest phase (n = 65) versus the active phase (n = 73) of NSG-CDX-BR16
+mice. All genes evaluated are included in the table (n = 12,261).
+Fold-change and <em>P</em> values were computed with the
+quasi-likelihood (QL) approach from edgeR using robust dispersion
+estimates. For fold-change calculation, active phase samples were used
+in the denominator.</p>
 <div class="sourceCode" id="cb24"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb24-1"><a href="#cb24-1" aria-hidden="true" tabindex="-1"></a>dge_patient<span class="sc">$</span>results <span class="sc">%&gt;%</span> </span>
 <span id="cb24-2"><a href="#cb24-2" aria-hidden="true" tabindex="-1"></a>  dplyr<span class="sc">::</span><span class="fu">select</span>(gene_name, gene_type, logFC, logCPM, PValue, FDR, description) <span class="sc">%&gt;%</span> </span>
 <span id="cb24-3"><a href="#cb24-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">rownames_to_column</span>(<span class="st">&#39;Ensemble ID&#39;</span>) <span class="sc">%&gt;%</span> </span>
@@ -1403,6 +1454,13 @@ class="section level3">
 </div>
 <div id="table-gsea-in-patients" class="section level3">
 <h3>Table GSEA in Patients</h3>
+<p><strong>Gene set enrichment analysis from gene expression in CTCs of
+breast cancer patients during the rest phase versus active
+phase.</strong> Table listing the gene set enrichment results in CTCs
+obtained in rest versus active phase from breast cancer patients. Only
+gene sets enriched in NSG-CDX-BR16 were analysed (n = 22, adjusted
+<em>P</em> value ≤ 0.0001). The gene set enrichment analysis (GSEA) was
+performed using ranked genes by fold-change as input.</p>
 <div class="sourceCode" id="cb25"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb25-1"><a href="#cb25-1" aria-hidden="true" tabindex="-1"></a>gsea_patient<span class="sc">@</span>result <span class="sc">%&gt;%</span> </span>
 <span id="cb25-2"><a href="#cb25-2" aria-hidden="true" tabindex="-1"></a>  dplyr<span class="sc">::</span><span class="fu">select</span>(ID, setSize, enrichmentScore, NES, pvalue, p.adjust, leading_edge, core_enrichment) <span class="sc">%&gt;%</span> </span>
 <span id="cb25-3"><a href="#cb25-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(</span>
@@ -1616,10 +1674,10 @@ fcg-bio
 <div id="gsea-for-nsg-cdx-br16-nsg-lm2-and-patient"
 class="section level2">
 <h2>GSEA for NSG-CDX-BR16, NSG-LM2 and patient</h2>
-<p>Plots comparing the normalized enrichment score (NES) and adjusted P
-value (dot size) obtained using GSEA for gene sets shown in “d”. Gene
-sets with an adjusted P value ≤ 0.05 in each sample set are highlighted
-in red</p>
+<p>Plots comparing the normalized enrichment score (NES) and adjusted
+<em>P</em> value (dot size) obtained using GSEA for gene sets shown in
+“d”. Gene sets with an adjusted P value ≤ 0.05 in each sample set are
+highlighted in red</p>
 <div class="sourceCode" id="cb28"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb28-1"><a href="#cb28-1" aria-hidden="true" tabindex="-1"></a>label_func <span class="ot">&lt;-</span> <span class="fu">default_labeller</span>(<span class="dv">18</span>)</span>
 <span id="cb28-2"><a href="#cb28-2" aria-hidden="true" tabindex="-1"></a>xlim <span class="ot">&lt;-</span> (gsea_comb<span class="sc">$</span>NES <span class="sc">%&gt;%</span> abs <span class="sc">%&gt;%</span> max) <span class="sc">+</span> <span class="fl">0.25</span></span>
 <span id="cb28-3"><a href="#cb28-3" aria-hidden="true" tabindex="-1"></a>gsea_comb <span class="sc">%&gt;%</span> </span>
@@ -1721,7 +1779,7 @@ vignette</a> Section 9.3</p>
 <span id="cb29-17"><a href="#cb29-17" aria-hidden="true" tabindex="-1"></a>contrast.matrix <span class="ot">&lt;-</span> <span class="fu">makeContrasts</span>(<span class="at">contrasts =</span> contrast_to_eval, <span class="at">levels =</span> <span class="fu">colnames</span>(design))                                  </span>
 <span id="cb29-18"><a href="#cb29-18" aria-hidden="true" tabindex="-1"></a>fit2 <span class="ot">&lt;-</span> <span class="fu">contrasts.fit</span>(fit, contrast.matrix)</span>
 <span id="cb29-19"><a href="#cb29-19" aria-hidden="true" tabindex="-1"></a>fit2 <span class="ot">&lt;-</span> <span class="fu">eBayes</span>(fit2)</span>
-<span id="cb29-20"><a href="#cb29-20" aria-hidden="true" tabindex="-1"></a><span class="co"># fit2$F.p.value</span></span>
+<span id="cb29-20"><a href="#cb29-20" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb29-21"><a href="#cb29-21" aria-hidden="true" tabindex="-1"></a>limma_res <span class="ot">&lt;-</span> <span class="fu">topTable</span>(fit2, <span class="at">number=</span><span class="dv">100000</span>) <span class="sc">%&gt;%</span> </span>
 <span id="cb29-22"><a href="#cb29-22" aria-hidden="true" tabindex="-1"></a>  <span class="fu">rownames_to_column</span>(<span class="st">&#39;Term&#39;</span>) <span class="sc">%&gt;%</span> </span>
 <span id="cb29-23"><a href="#cb29-23" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">to_rownames =</span> Term) <span class="sc">%&gt;%</span> </span>
@@ -1757,6 +1815,16 @@ vignette</a> Section 9.3</p>
 </div>
 <div id="gsva-table-of-results" class="section level3">
 <h3>GSVA table of results</h3>
+<p><strong>Gene set variation analysis in CTCs of theNSG-LM2
+time-kinetics experiment.</strong> Table listing the results from the
+differential analysis of gene set variation analysis (GSVA) scores in
+CTC of the NSG-LM2 time-kinetics experiment. Only gene sets enriched in
+NSG-CDX-BR16 were analysed (n = 22, adjusted <em>P</em> value ≤ 0.0001).
+The F statistic and the corresponding P value generated by limma,
+combine the pair-wise comparisons between all the time points in the
+experiment with more than three replicates (n = 6 comparisons). GSVA
+scores for each individual sample are listed at the end of the
+table.</p>
 <div class="sourceCode" id="cb31"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb31-1"><a href="#cb31-1" aria-hidden="true" tabindex="-1"></a>gsva_res_sel <span class="sc">%&gt;%</span> </span>
 <span id="cb31-2"><a href="#cb31-2" aria-hidden="true" tabindex="-1"></a>  as.data.frame <span class="sc">%&gt;%</span> </span>
 <span id="cb31-3"><a href="#cb31-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">rownames_to_column</span>(<span class="st">&#39;Term&#39;</span>) <span class="sc">%&gt;%</span> </span>
