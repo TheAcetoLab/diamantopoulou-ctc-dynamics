@@ -21,12 +21,12 @@ We isolated live circulating tumor cells (CTCs) from a breast cancer patient (nu
 
 ## Data pre-processing
 
-Raw data is available at Gene Expression Omnibus (GEO, NCBI; accession number [GSE180097](https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSE180097)). Data processing is computationally expensive and is not covered in this repository. We provide description of the data pre-processing workflow together with software version in the original publication. Processed data, large result files, additional functions, references and metadata are were archived at https://doi.org/10.5281/zenodo.6358987 .
+Raw data is available at Gene Expression Omnibus (GEO, NCBI; accession number [GSE180097](https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSE180097)). Data processing is computationally expensive and is not covered in this repository. We provide description of the data pre-processing workflow together with software version in the original publication. Processed data, large result files, additional functions, references and metadata are were archived at [![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.6358987.svg)](https://doi.org/10.5281/zenodo.6358987)
 
 
 ##  Data and code availability
 
-To reproduce our analysis, first clone source code from the [GitHub repository](https://github.com/TheAcetoLab/diamantopoulou-ctc-dynamics)
+To reproduce our analysis, first clone source code from the [GitHub repository](https://github.com/TheAcetoLab/diamantopoulou-ctc-dynamics). This repository is also archived at [![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.6484917.svg)](https://doi.org/10.5281/zenodo.6484917)
 
     git clone https://github.com/TheAcetoLab/diamantopoulou-ctc-dynamics.git
 
@@ -38,7 +38,7 @@ Next, download processed data deposited in [Zenodo](https://doi.org/10.5281/zeno
 
 The results form our analyses are listed below in webpage format. They were generated from R Markdown documents deposited in the [GitHub repository](https://github.com/TheAcetoLab/diamantopoulou-ctc-dynamics). The workflow of the analysis was created using the [workflowr](https://cran.r-project.org/web/packages/workflowr/index.html) R package and can be reproduced in its totality using [workflowr](https://cran.r-project.org/web/packages/workflowr/index.html) [wflow_build](https://jdblischak.github.io/workflowrBeta/reference/wflow_build.html) command after the installation of the proper R-packages. Session info, including R and package versions, was automatically included at the end of each analysis file.
 
-Some files containing results from differential expression or gene-set enrichment analyses were deposited in [Zenodo](https://doi.org/10.5281/zenodo.6358987). In order to generate those files again change the option `eval = FALSE` to `eval = TRUE` in the specific code chunk from the R Markdown file.
+Files containing pre-computed results from differential expression or gene-set enrichment analyses were deposited in [![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.6358987.svg)](https://doi.org/10.5281/zenodo.6358987). In order to generate those files again change the option `eval = FALSE` to `eval = TRUE` in the specific code chunk from the R Markdown file.
 
 ## Analyses
 
