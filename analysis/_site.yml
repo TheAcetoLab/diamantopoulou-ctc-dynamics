@@ -1,7 +1,7 @@
 name: diamantopoulou-ctc-circadian
 output_dir: ../docs
 navbar:
-  title: CIRCADIAN-CTCs
+  title: CIRCADIAN-CTC
   left: ~
   right:
   - text: Home
