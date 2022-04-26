@@ -638,15 +638,15 @@ project makes it easier to run your code on other machines.</p>
 <div class="panel panel-default">
 <div class="panel-heading">
 <p class="panel-title">
-<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRepositoryversionstrongahrefhttpsgithubcomTheAcetoLabdiamantopoulouctcdynamicstree0ded9f5eb929c7853186f31da3ed481e57e151e9targetblank0ded9f5a">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRepositoryversionstrongahrefhttpsgithubcomTheAcetoLabdiamantopoulouctcdynamicstree2ef6f7fe9f1db8fa120306d1a95ea136e23121a3targetblank2ef6f7fa">
 <span class="glyphicon glyphicon-ok text-success"
 aria-hidden="true"></span> <strong>Repository version:</strong>
-<a href="https://github.com/TheAcetoLab/diamantopoulou-ctc-dynamics/tree/0ded9f5eb929c7853186f31da3ed481e57e151e9" target="_blank">0ded9f5</a>
+<a href="https://github.com/TheAcetoLab/diamantopoulou-ctc-dynamics/tree/2ef6f7fe9f1db8fa120306d1a95ea136e23121a3" target="_blank">2ef6f7f</a>
 </a>
 </p>
 </div>
 <div
-id="strongRepositoryversionstrongahrefhttpsgithubcomTheAcetoLabdiamantopoulouctcdynamicstree0ded9f5eb929c7853186f31da3ed481e57e151e9targetblank0ded9f5a"
+id="strongRepositoryversionstrongahrefhttpsgithubcomTheAcetoLabdiamantopoulouctcdynamicstree2ef6f7fe9f1db8fa120306d1a95ea136e23121a3targetblank2ef6f7fa"
 class="panel-collapse collapse">
 <div class="panel-body">
 <p>
@@ -656,7 +656,7 @@ reproducibility.
 </p>
 <p>
 The results in this page were generated with repository version
-<a href="https://github.com/TheAcetoLab/diamantopoulou-ctc-dynamics/tree/0ded9f5eb929c7853186f31da3ed481e57e151e9" target="_blank">0ded9f5</a>.
+<a href="https://github.com/TheAcetoLab/diamantopoulou-ctc-dynamics/tree/2ef6f7fe9f1db8fa120306d1a95ea136e23121a3" target="_blank">2ef6f7f</a>.
 See the <em>Past versions</em> tab to see a history of the changes made
 to the R Markdown and HTML files.
 </p>
@@ -733,6 +733,23 @@ Message
 </tr>
 </thead>
 <tbody>
+<tr>
+<td>
+html
+</td>
+<td>
+<a href="https://rawcdn.githack.com/TheAcetoLab/diamantopoulou-ctc-dynamics/1006c84c731de8ffc432a602cb2472a755530e58/docs/br16_dge.html" target="_blank">1006c84</a>
+</td>
+<td>
+fcg-bio
+</td>
+<td>
+2022-04-26
+</td>
+<td>
+Build site.
+</td>
+</tr>
 <tr>
 <td>
 Rmd
@@ -894,6 +911,43 @@ from NSG-BR16-CDX mice.</p>
 <span id="cb9-63"><a href="#cb9-63" aria-hidden="true" tabindex="-1"></a>    )</span>
 <span id="cb9-64"><a href="#cb9-64" aria-hidden="true" tabindex="-1"></a>)</span></code></pre></div>
 <p><img src="figure/br16_dge.Rmd/br16_dge_heatmap-1.png" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-br16_dge_heatmap-1">
+Past versions of br16_dge_heatmap-1.png
+</button>
+</p>
+<div id="fig-br16_dge_heatmap-1" class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/TheAcetoLab/diamantopoulou-ctc-dynamics/blob/1006c84c731de8ffc432a602cb2472a755530e58/docs/figure/br16_dge.Rmd/br16_dge_heatmap-1.png" target="_blank">1006c84</a>
+</td>
+<td>
+fcg-bio
+</td>
+<td>
+2022-04-26
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
 <div class="sourceCode" id="cb10"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a>use_genes <span class="ot">&lt;-</span> dge<span class="sc">$</span>results <span class="sc">%&gt;%</span> <span class="fu">filter</span>(FDR <span class="sc">&lt;=</span> <span class="fl">0.05</span> <span class="sc">&amp;</span> <span class="fu">abs</span>(logFC) <span class="sc">&gt;=</span> <span class="fl">0.5</span>) <span class="sc">%&gt;%</span> collect <span class="sc">%&gt;%</span> .[[<span class="st">&#39;feature&#39;</span>]]</span>
 <span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a>use_genes_name <span class="ot">&lt;-</span> <span class="fu">rowData</span>(use_sce[use_genes,]) <span class="sc">%&gt;%</span> data.frame <span class="sc">%&gt;%</span> collect <span class="sc">%&gt;%</span> .[[<span class="st">&#39;gene_name&#39;</span>]]</span>
 <span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a>n_up <span class="ot">&lt;-</span> dge<span class="sc">$</span>results <span class="sc">%&gt;%</span> <span class="fu">filter</span>(FDR <span class="sc">&lt;=</span> <span class="fl">0.05</span> <span class="sc">&amp;</span> logFC <span class="sc">&gt;=</span> <span class="fl">0.5</span>) <span class="sc">%&gt;%</span> nrow</span>
@@ -959,6 +1013,43 @@ from NSG-BR16-CDX mice.</p>
 <span id="cb10-63"><a href="#cb10-63" aria-hidden="true" tabindex="-1"></a>    )</span>
 <span id="cb10-64"><a href="#cb10-64" aria-hidden="true" tabindex="-1"></a>)</span></code></pre></div>
 <p><img src="figure/br16_dge.Rmd/br16_dge_heatmap_legend-1.png" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-br16_dge_heatmap_legend-1">
+Past versions of br16_dge_heatmap_legend-1.png
+</button>
+</p>
+<div id="fig-br16_dge_heatmap_legend-1" class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/TheAcetoLab/diamantopoulou-ctc-dynamics/blob/1006c84c731de8ffc432a602cb2472a755530e58/docs/figure/br16_dge.Rmd/br16_dge_heatmap_legend-1.png" target="_blank">1006c84</a>
+</td>
+<td>
+fcg-bio
+</td>
+<td>
+2022-04-26
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
 </div>
 <div id="correlation-deg-single-ctc-versus-ctc-clusters-and-ctc-wbc"
 class="section level2">
@@ -1016,11 +1107,86 @@ points in the plot.</p>
 <span id="cb11-43"><a href="#cb11-43" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb11-44"><a href="#cb11-44" aria-hidden="true" tabindex="-1"></a>fc_plot <span class="sc">+</span> <span class="fu">theme</span>(<span class="at">legend.position =</span> <span class="st">&quot;none&quot;</span>)</span></code></pre></div>
 <p><img src="figure/br16_dge.Rmd/br16_single_vs_cluster_g_fc_corr-1.png" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-br16_single_vs_cluster_g_fc_corr-1">
+Past versions of br16_single_vs_cluster_g_fc_corr-1.png
+</button>
+</p>
+<div id="fig-br16_single_vs_cluster_g_fc_corr-1" class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/TheAcetoLab/diamantopoulou-ctc-dynamics/blob/1006c84c731de8ffc432a602cb2472a755530e58/docs/figure/br16_dge.Rmd/br16_single_vs_cluster_g_fc_corr-1.png" target="_blank">1006c84</a>
+</td>
+<td>
+fcg-bio
+</td>
+<td>
+2022-04-26
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
 <div class="sourceCode" id="cb12"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a>legend <span class="ot">&lt;-</span> cowplot<span class="sc">::</span><span class="fu">get_legend</span>(fc_plot_2_legend)</span>
 <span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb12-3"><a href="#cb12-3" aria-hidden="true" tabindex="-1"></a><span class="fu">grid.newpage</span>()</span>
 <span id="cb12-4"><a href="#cb12-4" aria-hidden="true" tabindex="-1"></a><span class="fu">grid.draw</span>(legend)</span></code></pre></div>
 <p><img src="figure/br16_dge.Rmd/br16_single_vs_cluster_g_fc_corr_legend-1.png" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-br16_single_vs_cluster_g_fc_corr_legend-1">
+Past versions of br16_single_vs_cluster_g_fc_corr_legend-1.png
+</button>
+</p>
+<div id="fig-br16_single_vs_cluster_g_fc_corr_legend-1"
+class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/TheAcetoLab/diamantopoulou-ctc-dynamics/blob/1006c84c731de8ffc432a602cb2472a755530e58/docs/figure/br16_dge.Rmd/br16_single_vs_cluster_g_fc_corr_legend-1.png" target="_blank">1006c84</a>
+</td>
+<td>
+fcg-bio
+</td>
+<td>
+2022-04-26
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
 </div>
 <div id="compare-deg-ctc-versus-ctc-clusters-and-ctc-wbc"
 class="section level2">
@@ -1053,6 +1219,44 @@ using single CTCs.</p>
 <span id="cb13-22"><a href="#cb13-22" aria-hidden="true" tabindex="-1"></a>      <span class="at">axis.line.y       =</span> <span class="fu">element_blank</span>(),</span>
 <span id="cb13-23"><a href="#cb13-23" aria-hidden="true" tabindex="-1"></a>    )</span></code></pre></div>
 <p><img src="figure/br16_dge.Rmd/br16_single_vs_cluster_g_ngenes_barplot-1.png" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-br16_single_vs_cluster_g_ngenes_barplot-1">
+Past versions of br16_single_vs_cluster_g_ngenes_barplot-1.png
+</button>
+</p>
+<div id="fig-br16_single_vs_cluster_g_ngenes_barplot-1"
+class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/TheAcetoLab/diamantopoulou-ctc-dynamics/blob/1006c84c731de8ffc432a602cb2472a755530e58/docs/figure/br16_dge.Rmd/br16_single_vs_cluster_g_ngenes_barplot-1.png" target="_blank">1006c84</a>
+</td>
+<td>
+fcg-bio
+</td>
+<td>
+2022-04-26
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
 <br>
 <p>
 <button type="button" class="btn btn-default btn-workflowr btn-workflowr-sessioninfo" data-toggle="collapse" data-target="#workflowr-sessioninfo" style="display: block;">
