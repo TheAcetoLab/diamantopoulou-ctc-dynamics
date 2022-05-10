@@ -1,4 +1,4 @@
-name: diamantopoulou-ctc-circadian
+name: diamantopoulou-ctc-dynamics
 output_dir: ../docs
 navbar:
   title: CIRCADIAN-CTC
@@ -31,7 +31,7 @@ navbar:
   - text: License
     href: license.html
   - icon: fa-github
-    href: https://github.com/TheAcetoLab/diamantopoulou-ctc-circadian
+    href: https://github.com/TheAcetoLab/diamantopoulou-ctc-dynamics
   - icon: fa-flask
     href: https://www.theacetolab.com
 output:
