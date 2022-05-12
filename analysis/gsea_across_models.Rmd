@@ -258,7 +258,7 @@ ha_top <- HeatmapAnnotation(
 
 ht <- Heatmap(
   use_mat, 
-  name = 'Similarity',
+  name = 'Jaccard index',
   column_split = n_split, 
   row_split = n_split, 
   column_title = NULL,
@@ -301,7 +301,7 @@ rownames(use_mat_rn) <- rownames(use_mat_rn) %>%
 
 ht <- Heatmap(
   use_mat_rn, 
-  name = 'Similarity',
+  name = 'Jaccard index',
   column_split = n_split, 
   row_split = n_split, 
   column_title = NULL,
